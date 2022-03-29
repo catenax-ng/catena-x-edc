@@ -8,8 +8,8 @@ data:
   configuration.properties: |-
     {{- range $k, $v := .Values.configuration.properties }}
     {{- if $v }}
-    {{ $k }}={{ $v }}
+    {{ $k | replace "_" "." }}={{ $v }}
     {{- else }}
-    # {{ $k }}=
+    # {{ $k | replace "_" "." }}=
     {{- end }}
     {{- end }}
