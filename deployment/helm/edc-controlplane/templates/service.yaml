@@ -7,13 +7,17 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: 8181
+      targetPort: default
       protocol: TCP
       name: http
     - port: 9090
       targetPort: metrics
       protocol: TCP
       name: metrics
+    - port: 8282
+      targetPort: ids
+      protocol: TCP
+      name: ids
   selector:
     {{- include "edc-controlplane.selectorLabels" . | nindent 4 }}

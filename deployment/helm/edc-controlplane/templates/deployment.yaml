@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,20 +40,35 @@ spec:
           image: "{{ .Values.image.repository }}{{- if .Values.flavor }}-{{ .Values.flavor }}{{- end -}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+            - name: default
+              containerPort: 8181
+              protocol: TCP
+            - name: ids
+              containerPort: 8282
               protocol: TCP
             - name: metrics
               containerPort: 9090
               protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /api/check/liveness
+              port: default
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: /api/check/readiness
+              port: default
+          {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/check/startup
+              port: default
+            failureThreshold: 12
+            initialDelaySeconds: 10
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

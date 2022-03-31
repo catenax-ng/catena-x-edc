@@ -42,25 +42,69 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+livenessProbe:
+  enabled: true
+
+readinessProbe:
+  enabled: true
+
+startupProbe:
+  enabled: true
+
 service:
   type: ClusterIP
-  port: 80
+  ports:
+    - port: 8181
+      targetPort: default
+      protocol: TCP
+      name: default
+    - port: 8282
+      targetPort: ids
+      protocol: TCP
+      name: ids
 
 ingress:
+  ##
+  ## Set to true to enable ingress record generation
+  ##
   enabled: false
+
+  ##
+  ## Defines the ingress class to use https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+  ##
   className: ""
+
+  ##
+  ## En
+  ##
+  tls: false
+
+  certManager:
+    ##
+    ## If preset enables certificate generation via cert-manager namespace scoped issuer
+    ##
+    issuer: ""
+    ##
+    ## If preset enables certificate generation via cert-manager cluster-wide issuer
+    ##
+    clusterIssuer: ""
+
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: controlplane-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+
+  hostname: ""
+  paths:
+    - path: /api/v1/ids
+      pathType: Prefix
+      service:
+        port:
+          number: 8282
+    - path: /api
+      pathType: Prefix
+      service:
+        port:
+          number: 8181
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
