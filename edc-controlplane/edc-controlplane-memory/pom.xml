@@ -64,10 +64,14 @@
     </build>
 
     <dependencies>
-        <!-- AAS Controller -->
+        <!-- CX Extensions -->
         <dependency>
             <groupId>net.catenax.edc.extensions</groupId>
             <artifactId>aas-controller</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.catenax.edc.extensions</groupId>
+            <artifactId>business-partner-validation</artifactId>
         </dependency>
 
         <!-- Config -->
@@ -78,7 +82,6 @@
 
         <!-- APIs -->
         <dependency>
-            <!-- Once org.eclipse.dataspaceconnector:data-management-api is ready this will go away -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>control-api</artifactId>
         </dependency>
@@ -166,7 +169,11 @@
         <!-- IAM -->
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>iam-mock</artifactId>
+            <artifactId>oauth2-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>iam-daps</artifactId>
         </dependency>
 
         <!-- Telemetry -->
@@ -187,6 +194,7 @@
 
         <!-- Logging -->
         <dependency>
+            <!-- http-posts EndpointDataReference to configured external service -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>jdk-logger-monitor</artifactId>
         </dependency>
