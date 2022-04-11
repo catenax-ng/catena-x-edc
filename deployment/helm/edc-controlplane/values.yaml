@@ -4,24 +4,36 @@
 
 replicaCount: 1
 
-# Flavor of edc-controlplane. values: [cosmosdb]
-flavor: ""
-
 image:
+  # Which derivate of the edc controlplane to use.
+  # One of:
+  # * ghcr.io/catenax-ng/catena-x-edc/edc-controlplane-memory
+  # * ghcr.io/catenax-ng/catena-x-edc/edc-controlplane-postgresql
+  # * ghcr.io/catenax-ng/catena-x-edc/edc-controlplane-cosmosdb
   repository: ghcr.io/catenax-ng/catena-x-edc/edc-controlplane
   pullPolicy: IfNotPresent
+  #
   # Overrides the image tag whose default is the chart appVersion.
+  #
   tag: ""
-
+#
+# Image pull secret to create to obtain the container image
+# Note: 'imagePullSecret.dockerconfigjson' takes precedence if configured together with 'imagePullSecrets'
+#
 imagePullSecret:
   dockerconfigjson: ""
-
+#
+# Existing image pull secret to use to obtain the container image
+#
 imagePullSecrets: []
+
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  #
+  # Specifies whether a service account should be created per release
+  #
   create: true
   # Annotations to add to the service account
   annotations: {}
