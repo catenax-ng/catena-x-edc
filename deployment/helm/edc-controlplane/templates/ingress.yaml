@@ -1,4 +1,5 @@
 {{- if .Values.ingress.enabled -}}
+---
 {{- $fullName := include "edc-controlplane.fullname" . -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -21,12 +22,12 @@ metadata:
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.ingress.certmanager -}}
-    {{- if .Values.ingress.certmanager.issuer -}}
-    cert-manager.io/issuer: {{ .Values.ingress.certmanager.issuer }}
+    {{- if .Values.ingress.certManager -}}
+    {{- if .Values.ingress.certManager.issuer -}}
+    cert-manager.io/issuer: {{ .Values.ingress.certManager.issuer }}
     {{- end }}
-    {{- if .Values.ingress.certmanager.clusterIssuer -}}
-    cert-manager.io/cluster-issuer: {{ .Values.ingress.certmanager.clusterIssuer }}
+    {{- if .Values.ingress.certManager.clusterIssuer -}}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
     {{- end }}
     {{- end }}
 spec:
@@ -44,21 +45,23 @@ spec:
     - host: {{ .Values.ingress.hostname }}
       http:
         paths:
-          {{- range .Values.ingress.paths }}
-          - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
-            {{- end }}
-            backend:
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: {{ .service.port.number }}
-              {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ .service.port.number }}
-              {{- end }}
+        {{ range  $name, $mapping := .Values.edc.endpoints }}
+        {{ if $mapping.ingress -}}
+        - path: {{ $mapping.path }}
+          {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+          pathType: Prefix
           {{- end }}
-    {{- end }}
+          backend:
+            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $mapping.port }}
+            {{- else }}
+            serviceName: {{ $fullName }}
+            servicePort: {{ $mapping.port }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+  {{- end }}
 {{- end }}

@@ -41,30 +41,36 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: default
-              containerPort: 8181
+              containerPort: {{ .Values.edc.endpoints.default.port }}
+              protocol: TCP
+            - name: control
+              containerPort: {{ .Values.edc.endpoints.control.port }}
+              protocol: TCP
+            - name: data
+              containerPort: {{ .Values.edc.endpoints.data.port }}
               protocol: TCP
             - name: ids
-              containerPort: 8282
+              containerPort: {{ .Values.edc.endpoints.ids.port }}
               protocol: TCP
             - name: metrics
-              containerPort: 9090
+              containerPort: {{ .Values.edc.endpoints.metrics.port }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /api/check/liveness
+              path: {{ .Values.edc.endpoints.default.path }}/check/liveness
               port: default
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /api/check/readiness
+              path: {{ .Values.edc.endpoints.default.path }}/check/readiness
               port: default
           {{- end }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             httpGet:
-              path: /api/check/startup
+              path: {{ .Values.edc.endpoints.default.path }}/check/startup
               port: default
             failureThreshold: 12
             initialDelaySeconds: 10
