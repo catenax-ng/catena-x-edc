@@ -89,7 +89,7 @@ Therefore, generate a PEM file that contains the private key and the certificate
 openssl genpkey -out con_key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048
 
 # Generate Certificate
-openssl req -config cert.conf -new -x509 -key con_key.pem -nodes -days 365 -out con_cert.pem
+openssl req -new -x509 -key con_key.pem -nodes -days 365 -out con_cert.pem
 
 # Create Cert+Key PEM file
 cat con_cert.pem >certkey.pem

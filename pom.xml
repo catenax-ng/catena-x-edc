@@ -24,6 +24,7 @@
         <module>edc-extensions</module>
         <module>edc-controlplane</module>
         <module>edc-dataplane</module>
+        <module>edc-qa</module>
     </modules>
 
     <properties>
@@ -43,6 +44,9 @@
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
         <mockito.version>1.10.19</mockito.version>
+        <cucumber.version>7.3.2</cucumber.version>
+        <lombok.version>1.18.24</lombok.version>
+        <io.rest.assured.version>5.0.1</io.rest.assured.version>
         <org.junit.platform.surefire.provider.version>1.1.0</org.junit.platform.surefire.provider.version>
     </properties>
 
@@ -139,6 +143,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
             <!-- CX Extensions -->
             <dependency>
                 <groupId>net.catenax.edc.extensions</groupId>
@@ -840,6 +850,23 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
                 <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit-platform-engine</artifactId>
+                <version>${cucumber.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${io.rest.assured.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

@@ -48,9 +48,7 @@ spec:
         {{ range  $name, $mapping := .Values.edc.endpoints }}
         {{ if $mapping.ingress -}}
         - path: {{ $mapping.path }}
-          {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
           pathType: Prefix
-          {{- end }}
           backend:
             {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
             service:

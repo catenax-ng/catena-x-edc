@@ -1,0 +1,281 @@
+---
+name: "Business Tests"
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+## Required Secrets
+#
+# CXNG_GHCR_PAT     GitHub Access Token
+# CXNG_AZCLI_NAME   Username for the Azure Client
+# CXNG_AZCLI_PW     Password for the Azure Client
+# CXNG_AZ_CL_ID     App Client Id for the Azure Key Vault
+# CXNG_AZ_CL_SC     App Client Secret for the Azure Key Vault
+# CXNG_AZ_TN_ID     Tenant Id for the Azure Key Vault
+# CXNG_AZ_KV_NAME   Azure Key Vault Name
+# CXNG_AZ_PK_C1     Secret name of the private key with certificate for connector 1
+# CXNG_AZ_DPK_C1    Secret name of the data plane private key with certificate for connector 1
+# CXNG_AZ_DK_C1     Secret name of the DAPS key for connector 1
+# CXNG_AZ_DC_C1     Secret name of the DAPS certificate for connector 1
+#
+##
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      ##############
+      ### Set-Up ###
+      ##############
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Login to Github Packages
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CXNG_GHCR_PAT }}
+      - name: Use specific edc version via git submodule # due to lack of release versions in maven central
+        run: |-
+          [ ! -d "edc" ] && git submodule add https://github.com/eclipse-dataspaceconnector/DataSpaceConnector.git edc
+          git submodule update --init
+          git -C edc fetch --all
+          git -C edc checkout 045c9a6c1f8dcde78dfcb0480cf49643cdb65401
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3.1.1
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: "maven"
+      - name: Build edc with Gradle to get latest snapshots
+        run: ./gradlew publishToMavenLocal
+        working-directory: edc
+      - name: Start minikube
+        id: minikube
+        uses: medyagh/setup-minikube@master
+
+      #################################
+      ### edc-controlplane-memory ###
+      #################################
+      - name: Build edc-controlplane-memory
+        run: |-
+          ./mvnw -s settings.xml -B -pl .,edc-controlplane/edc-controlplane-memory -am verify
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.CXNG_GHCR_PAT }}
+      - name: edc-controlplane-memory Docker Metadata
+        id: edc_controlplane_memory_meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            edc-controlplane-memory
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{raw}}
+            type=match,pattern=\d.\d.\d
+            type=sha
+            latest
+      - name: Build edc-controlplane-memory Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: edc-controlplane/edc-controlplane-memory/src/main/docker/Dockerfile
+          build-args: |
+            JAR=edc-controlplane/edc-controlplane-memory/target/edc-controlplane-memory.jar
+          push: false
+          tags: ${{ steps.edc_controlplane_memory_meta.outputs.tags }}
+          labels: ${{ steps.edc_controlplane_memory_meta.outputs.labels }}
+      - name: minikube load image
+        run: |
+          minikube image load edc-controlplane-memory:latest
+
+      #######################
+      ### Setup Key Vault ###
+      #######################
+
+      - name: create vault setup script
+        run: >-
+          cat << 'EOF' > setup_key_vault.sh
+
+          __username=${{ secrets.CXNG_AZCLI_NAME }}
+
+          __userpassword=${{ secrets.CXNG_AZCLI_PW }}
+
+          __keyvaultname=${{ secrets.CXNG_AZ_KV_NAME }}
+
+          __secret_private_key=$1
+
+          __secret_daps_key=$2
+
+          __secret_daps_certificate=$3
+
+          __secret_data_plane_key=$4
+
+          function addDataPlanePKeyToAzureVault() {
+
+              __secretName_key=$1
+
+              # Private Key
+              openssl genpkey -out key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -text 2>/dev/null
+              # Format Key
+              cat key.pem | sed "s/^-----BEGIN PRIVATE KEY-----//" | sed "s/-----END PRIVATE KEY-----$//" | sed "s/[[:space:]]*//" | tr -d \\n >key.txt
+
+              echo "set secret '$__secretName_key'"
+              az keyvault secret set \
+                  --name $__secretName_key \
+                  --vault-name $__keyvaultname \
+                  --file key.txt \
+                  --output none
+
+              # Remove key
+              rm key.pem
+              rm key.txt
+          }
+
+          function addPemCertificateToAzureVault() {
+
+              __secretName=$1
+
+              # Generate PKCS8 Key
+              openssl genpkey -out con_key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -text 2>/dev/null
+
+              # Generate Certificate
+              openssl req -new -x509 -key con_key.pem -nodes -days 365 -out con_cert.pem -subj "/C=GB/ST=London/L=London/O=Example/OU=Dev Department/CN=example.com"
+
+              # Create Cert+Key PEM file
+              cat con_cert.pem >certkey.pem
+              cat con_key.pem >>certkey.pem
+
+              echo "set secret '$__secretName'"
+              az keyvault secret set \
+                  --name $__secretName \
+                  --vault-name $__keyvaultname \
+                  --file certkey.pem \
+                  --output none
+
+              # Remove Cert+Key PEM file
+              rm con_cert.pem
+              rm con_key.pem
+              rm certkey.pem
+
+          }
+
+          function addDapsKeyAndCertificateToVault() {
+
+              __secretName_key=$1
+              __secretName_certificate=$2
+
+              # Private Key
+              openssl genpkey -out key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -text 2>/dev/null
+              # Format Key
+              cat key.pem | sed "s/^-----BEGIN PRIVATE KEY-----//" | sed "s/-----END PRIVATE KEY-----$//" | sed "s/[[:space:]]*//" | tr -d \\n >key.txt
+
+              # Certificate
+              openssl req -new -x509 -key key.pem -nodes -days 365 -out cert.pem -subj "/C=GB/ST=London/L=London/O=Example/OU=Dev Department/CN=example.com"
+
+              # Format Certificate
+              cat cert.pem | sed "s/[[:space:]]*//" | tr -d \\n >cert.txt
+
+              echo "set secret '$__secretName_key'"
+              az keyvault secret set \
+                  --name $__secretName_key \
+                  --vault-name $__keyvaultname \
+                  --file key.txt \
+                  --output none
+
+              echo "set secret '$__secretName_certificate'"
+              az keyvault secret set \
+                  --name $__secretName_certificate \
+                  --vault-name $__keyvaultname \
+                  --file cert.txt \
+                  --output none
+
+              # Remove key and certificate
+              rm key.pem
+              rm key.txt
+              rm cert.pem
+              rm cert.txt
+
+          }
+
+          az login -u $__username -p $__userpassword --allow-no-subscriptions --output none
+
+          addPemCertificateToAzureVault $__secret_private_key
+
+          addDapsKeyAndCertificateToVault $__secret_daps_key $__secret_daps_certificate
+
+          addDataPlanePKeyToAzureVault $__secret_data_plane_key
+
+          EOF
+
+      - name: setup secrets for control plane A
+        run: |
+          chmod 700 setup_key_vault.sh
+          ./setup_key_vault.sh ${{ secrets.CXNG_AZ_PK_C1 }} ${{ secrets.CXNG_AZ_DK_C1 }} ${{ secrets.CXNG_AZ_DC_C1 }} ${{ secrets.CXNG_AZ_DPK_C1 }}
+
+      ############################
+      ### Deploy Control Plane ###
+      ############################
+
+      - name: create values yaml
+        run: >-
+          cat << 'EOF' > minikube-values.yaml
+
+          image:
+            repository: edc-controlplane-memory
+            tag: latest
+
+          configuration:
+            properties: |-
+              edc.api.auth.key=pwd
+              edc.oauth.client.id=providerClient
+              edc.oauth.provider.audience=TestServer
+              edc.oauth.provider.jwks.url=http://localhost:4567/.well-known/jwks.json
+              edc.oauth.public.key.alias=${{ secrets.CXNG_AZ_DC_C1 }}
+              edc.oauth.private.key.alias=${{ secrets.CXNG_AZ_DK_C1 }}
+              edc.oauth.token.url=http://localhost:4567/token
+              edc.public.key.alias=${{ secrets.CXNG_AZ_PK_C1 }}
+              edc.receiver.http.endpoint=http://localhost:8181
+              edc.transfer.dataplane.sync.endpoint=http://localhost:8982/public
+              edc.transfer.dataplane.token.signer.privatekey.alias=${{ secrets.CXNG_AZ_DPK_C1 }}
+              edc.vault.clientid=${{ secrets.CXNG_AZ_CL_ID }}
+              edc.vault.clientsecret=${{ secrets.CXNG_AZ_CL_SC }}
+              edc.vault.name=${{ secrets.CXNG_AZ_KV_NAME }}
+              edc.vault.tenantid=${{ secrets.CXNG_AZ_TN_ID }}
+          EOF
+
+      - name: deploy control plane A (helm)
+        run: >-
+          helm install 
+          --values minikube-values.yaml
+          qs-edc-controlplane-a deployment/helm/edc-controlplane
+
+      - name: forward ports
+        run: |
+          minikube kubectl -- get pods
+          minikube kubectl -- describe pod -l app.kubernetes.io/instance=qs-edc-controlplane-a
+          minikube kubectl -- logs -l app.kubernetes.io/instance=qs-edc-controlplane-a --follow &
+          minikube kubectl -- wait --for=condition=ready pod -l app.kubernetes.io/instance=qs-edc-controlplane-a 
+          minikube kubectl -- port-forward service/qs-edc-controlplane-a 8181 &
+
+      ##########################
+      ### Run Business Tests ###
+      ##########################
+      - name: run tests
+        run: ./mvnw --am --projects edc-qa/business-tests test -Dtest="RunCucumberTest"
+        env:
+          CONNECTOR_A_DATA_MGMT_URL: http://localhost:8181/data
