@@ -15,7 +15,6 @@ spec:
   template:
     metadata:
       annotations:
-        rollme: {{ randAlphaNum 5 | quote }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/env-config: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
