@@ -23,7 +23,7 @@ ARG LIB
 WORKDIR /app
 
 COPY --from=otel /tmp/opentelemetry-javaagent.jar .
-COPY ${JAR} edc-dataplane.jar
+COPY ${JAR} edc-controlplane-postgresql-hashicorp-vault.jar
 COPY ${LIB} ./lib/
 
 CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
@@ -34,4 +34,4 @@ CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
      "-Dotel.exporter.prometheus.port=9090", \
      "-Djava.security.edg=file:/dev/.urandom", \
      "-jar", \
-     "edc-dataplane.jar"]
+     "edc-controlplane-postgresql-hashicorp-vault.jar"]

@@ -12,7 +12,8 @@
        Mercedes-Benz Tech Innovation GmbH - Initial POM
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>net.catenax.edc</groupId>
         <artifactId>edc-controlplane</artifactId>
@@ -20,7 +21,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>edc-controlplane-memory</artifactId>
+    <artifactId>edc-controlplane-postgresql-hashicorp-vault</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -51,9 +52,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>
-                            org.eclipse.dataspaceconnector.boot.system.runtime.BaseRuntime
-                        </mainClass>
+                            <mainClass>org.eclipse.dataspaceconnector.boot.system.runtime.BaseRuntime</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -76,11 +75,16 @@
         </plugins>
     </build>
 
+
     <dependencies>
         <!-- CX Extensions -->
         <dependency>
             <groupId>net.catenax.edc.extensions</groupId>
             <artifactId>business-partner-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.catenax.edc.extensions</groupId>
+            <artifactId>postgresql-migration</artifactId>
         </dependency>
 
         <!-- Config -->
@@ -97,18 +101,8 @@
 
         <!-- Vault -->
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>azure-vault</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-security-keyvault-secrets</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-identity</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>net.catenax.edc.extensions</groupId>
+            <artifactId>hashicorp-vault</artifactId>
         </dependency>
 
         <!-- APIs -->
@@ -153,6 +147,28 @@
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>ids-token-validation</artifactId>
+        </dependency>
+
+        <!-- Stores -->
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>asset-index-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>contractdefinition-store-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>contractnegotiation-store-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>transfer-process-store-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>policy-store-sql</artifactId>
         </dependency>
 
         <!-- Core -->
@@ -205,7 +221,6 @@
 
         <!-- Logging -->
         <dependency>
-            <!-- http-posts EndpointDataReference to configured external service -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>jdk-logger-monitor</artifactId>
         </dependency>
@@ -215,6 +230,15 @@
             <!-- includes jetty and jersey -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>http</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>apache-commons-pool-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>transaction-local</artifactId>
         </dependency>
 
         <dependency>
@@ -232,7 +256,12 @@
             <groupId>com.azure</groupId>
             <artifactId>azure-security-keyvault-secrets</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
     </dependencies>
+
 
     <profiles>
         <profile>
@@ -245,11 +274,11 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <!--
-                            NOTE: To build and tag docker images the `docker` executable needs to
-                                  be on the PATH to be used by the exec-maven-plugin plugin
-                        -->
                         <executions>
+                            <!--
+                                NOTE: To build and tag docker images the `docker` executable needs to
+                                      be on the PATH to be used by the exec-maven-plugin plugin
+                            -->
                             <execution>
                                 <id>docker-build-${project.artifactId}:${project.version}</id>
                                 <phase>package</phase>

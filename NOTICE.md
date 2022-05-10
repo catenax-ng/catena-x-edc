@@ -20,7 +20,7 @@ The project maintains the following source code repositoriy:
 
 * aas-controller under Apache License 2.0
 * aopalliance version 1.0 repackaged as a module under EPL 2.0 or GPL2 w/ CPE
-* Apache Commons Codec under Apache License, Version 2.0
+* Apache Commons Compress under Apache License, Version 2.0
 * Apache Commons Lang under Apache License, Version 2.0
 * Apache Commons Pool under Apache License, Version 2.0
 * apache-commons-pool-sql under Apache License, Version 2.0
@@ -42,6 +42,8 @@ The project maintains the following source code repositoriy:
 * Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs under Bouncy Castle Licence
 * Bouncy Castle Provider under Bouncy Castle Licence
 * business-partner-validation under Apache License 2.0
+* Byte Buddy (without dependencies) under Apache License, Version 2.0
+* Byte Buddy agent under Apache License, Version 2.0
 * catalog-api under Apache License, Version 2.0
 * catalog-spi under Apache License, Version 2.0
 * Checker Qual under The MIT License
@@ -73,15 +75,25 @@ The project maintains the following source code repositoriy:
 * data-plane-transfer-spi under Apache License, Version 2.0
 * data-plane-transfer-sync under Apache License, Version 2.0
 * dataloading under Apache License, Version 2.0
+* docker-java-api under The Apache Software License, Version 2.0
+* docker-java-transport under The Apache Software License, Version 2.0
+* docker-java-transport-zerodep under The Apache Software License, Version 2.0
+* Duct Tape under MIT
 * edc-controlplane under Apache License 2.0
 * edc-controlplane-cosmosdb under Apache License 2.0
 * edc-controlplane-memory under Apache License 2.0
 * edc-controlplane-postgresql under Apache License 2.0
+* edc-controlplane-postgresql-hashicorp-vault under Apache License 2.0
 * edc-dataplane under Apache License 2.0
+* edc-dataplane-azure-vault under Apache License 2.0
+* edc-dataplane-hashicorp-vault under Apache License 2.0
 * edc-extensions under Apache License 2.0
 * Failsafe under Apache License, Version 2.0
 * filesystem-configuration under Apache License, Version 2.0
 * flyway-core under Apache License, Version 2.0
+* Hamcrest under BSD License 3
+* Hamcrest Core under New BSD License
+* hashicorp-vault under Apache License 2.0
 * HdrHistogram under Public Domain, per Creative Commons CC0 or BSD-2-Clause
 * HK2 API module under EPL 2.0 or GPL2 w/ CPE
 * HK2 Implementation Utilities under EPL 2.0 or GPL2 w/ CPE
@@ -89,7 +101,6 @@ The project maintains the following source code repositoriy:
 * HTTP functionality for the Reactor Netty library under The Apache Software License, Version 2.0
 * http-receiver under Apache License, Version 2.0
 * iam-daps under Apache License, Version 2.0
-* iam-mock under Apache License, Version 2.0
 * ids-api-configuration under Apache License, Version 2.0
 * ids-api-multipart-dispatcher-v1 under Apache License, Version 2.0
 * ids-api-multipart-endpoint-v1 under Apache License, Version 2.0
@@ -114,7 +125,6 @@ The project maintains the following source code repositoriy:
 * Jakarta XML Binding API under Eclipse Distribution License - v 1.0
 * jakarta.transaction API under EPL 2.0 or GPL2 w/ CPE
 * java under Apache License, Version 2.0
-* java jwt under The MIT License (MIT)
 * Java Native Access under LGPL, version 2.1 or Apache License v2.0
 * Java Native Access Platform under LGPL, version 2.1 or Apache License v2.0
 * Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
@@ -156,18 +166,19 @@ The project maintains the following source code repositoriy:
 * Jetty :: XML utilities under Eclipse Public License - Version 2.0 or Apache Software License - Version 2.0
 * jetty-micrometer under Apache License, Version 2.0
 * JSON Small and Fast Parser under The Apache Software License, Version 2.0
+* JUL to SLF4J bridge under MIT License
+* JUnit under Eclipse Public License 1.0
+* JUnit Jupiter (Aggregator) under Eclipse Public License v2.0
 * JUnit Jupiter API under Eclipse Public License v2.0
 * JUnit Jupiter Engine under Eclipse Public License v2.0
 * JUnit Jupiter Params under Eclipse Public License v2.0
 * JUnit Platform Commons under Eclipse Public License v2.0
 * JUnit Platform Engine API under Eclipse Public License v2.0
-* JUnit Platform Launcher under Eclipse Public License v2.0
-* JUnit Platform Suite (Aggregator) under Eclipse Public License v2.0
-* JUnit Platform Suite API under Eclipse Public License v2.0
-* JUnit Platform Suite Commons under Eclipse Public License v2.0
-* JUnit Platform Suite Engine under Eclipse Public License v2.0
+* junit-extension under Apache License, Version 2.0
 * LatencyUtils under Public Domain, per Creative Commons CC0
 * lease-sql under Apache License, Version 2.0
+* Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
+* Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
 * Metrics Core under Apache License 2.0
 * micrometer-core under The Apache Software License, Version 2.0
 * Microsoft Azure client library for Identity under The MIT License (MIT)
@@ -176,7 +187,7 @@ The project maintains the following source code repositoriy:
 * Microsoft Azure Netty HTTP Client Library under The MIT License (MIT)
 * Microsoft Azure SDK for SQL API of Azure Cosmos DB Service under The MIT License (MIT)
 * MIME streaming extension under Eclipse Distribution License - v 1.0
-* Mockito under The MIT License
+* mockito-core under The MIT License
 * msal4j under MIT License
 * msal4j-persistence-extension under MIT License
 * Netty/Buffer under Apache License, Version 2.0
@@ -207,6 +218,7 @@ The project maintains the following source code repositoriy:
 * OAuth 2.0 SDK with OpenID Connect extensions under Apache License, version 2.0
 * oauth2-core under Apache License, Version 2.0
 * oauth2-spi under Apache License, Version 2.0
+* Objenesis under Apache License, Version 2.0
 * observability-api under Apache License, Version 2.0
 * okhttp under The Apache Software License, Version 2.0
 * Okio under The Apache Software License, Version 2.0
@@ -225,6 +237,7 @@ The project maintains the following source code repositoriy:
 * PostgreSQL JDBC Driver under BSD-2-Clause
 * postgresql-migration under Apache License 2.0
 * product-edc-parent under Apache License 2.0
+* Project Lombok under The MIT License
 * reactive-streams under CC0
 * ServiceLocator Default Implementation under EPL 2.0 or GPL2 w/ CPE
 * SLF4J API Module under MIT License
@@ -237,6 +250,9 @@ The project maintains the following source code repositoriy:
 * swagger-integration-jakarta under Apache License 2.0
 * swagger-jaxrs2-jakarta under Apache License 2.0
 * swagger-models-jakarta under Apache License 2.0
+* Testcontainers :: JUnit Jupiter Extension under MIT
+* Testcontainers :: Vault under MIT
+* Testcontainers Core under MIT
 * token-generation-lib under Apache License, Version 2.0
 * token-validation-lib under Apache License, Version 2.0
 * transaction-datasource-spi under Apache License, Version 2.0

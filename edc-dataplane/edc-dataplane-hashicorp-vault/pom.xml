@@ -12,15 +12,16 @@
        Mercedes-Benz Tech Innovation GmbH - Initial POM
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>net.catenax.edc</groupId>
-        <artifactId>edc-controlplane</artifactId>
+        <artifactId>edc-dataplane</artifactId>
         <version>0.0.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>edc-controlplane-memory</artifactId>
+    <artifactId>edc-dataplane-hashicorp-vault</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -77,82 +78,34 @@
     </build>
 
     <dependencies>
-        <!-- CX Extensions -->
-        <dependency>
-            <groupId>net.catenax.edc.extensions</groupId>
-            <artifactId>business-partner-validation</artifactId>
-        </dependency>
-
         <!-- Config -->
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>filesystem-configuration</artifactId>
         </dependency>
 
-        <!-- Security -->
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>auth-tokenbased</artifactId>
-        </dependency>
-
         <!-- Vault -->
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>azure-vault</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-security-keyvault-secrets</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.azure</groupId>
-                    <artifactId>azure-identity</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>net.catenax.edc.extensions</groupId>
+            <artifactId>hashicorp-vault</artifactId>
         </dependency>
 
         <!-- APIs -->
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>control-api</artifactId>
+            <artifactId>data-plane-framework</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>data-management-api</artifactId>
+            <artifactId>data-plane-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>data-plane-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>observability-api</artifactId>
-        </dependency>
-
-        <!-- IDS -->
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-api-configuration</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-api-multipart-dispatcher-v1</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-api-multipart-endpoint-v1</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-api-transform-v1</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-spi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>ids-token-validation</artifactId>
         </dependency>
 
         <!-- Core -->
@@ -163,30 +116,6 @@
         <dependency>
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>core-boot</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>transfer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>contract</artifactId>
-        </dependency>
-
-        <!-- Data-Plane -->
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>data-plane-transfer-sync</artifactId>
-        </dependency>
-
-        <!-- IAM -->
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>oauth2-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>iam-daps</artifactId>
         </dependency>
 
         <!-- Telemetry -->
@@ -205,7 +134,6 @@
 
         <!-- Logging -->
         <dependency>
-            <!-- http-posts EndpointDataReference to configured external service -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>jdk-logger-monitor</artifactId>
         </dependency>
@@ -215,22 +143,6 @@
             <!-- includes jetty and jersey -->
             <groupId>org.eclipse.dataspaceconnector</groupId>
             <artifactId>http</artifactId>
-        </dependency>
-
-        <dependency>
-            <!-- http-posts EndpointDataReference to configured external service -->
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>http-receiver</artifactId>
-        </dependency>
-
-        <!-- Other -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-identity</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-security-keyvault-secrets</artifactId>
         </dependency>
     </dependencies>
 
