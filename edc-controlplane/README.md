@@ -458,7 +458,7 @@ curl -X POST "$__connectorUrl/$__dataMgmtPath/policies" --header "$__apiKey: $__
 Get Contract Definition
 
 ```bash
-curl -X GET "$__connectorUrl/$__dataMg0mtPath/policies/$__policyId" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" | jq
+curl -X GET "$__connectorUrl/$__dataMgmtPath/policies/$__policyId" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" | jq
 ```
 
 ### 4. Get Contract Offer Catalog
