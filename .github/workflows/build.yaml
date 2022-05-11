@@ -16,12 +16,12 @@ jobs:
   secret-presence:
     runs-on: ubuntu-latest
     outputs:
-      CXNG_GHCR_PAT: ${{ steps.secret-present.outputs.CXNG_GHCR_PAT }}
-      VERACODE_ID: ${{ steps.secret-present.outputs.VERACODE_ID }}
-      VERACODE_SECRET_KEY: ${{ steps.secret-present.outputs.VERACODE_SECRET_KEY }}
+      CXNG_GHCR_PAT: ${{ steps.secret-presence.outputs.CXNG_GHCR_PAT }}
+      VERACODE_ID: ${{ steps.secret-presence.outputs.VERACODE_ID }}
+      VERACODE_SECRET_KEY: ${{ steps.secret-presence.outputs.VERACODE_SECRET_KEY }}
     steps:
       - name: Check whether secrets exist
-        id: secret-present
+        id: secret-presence
         run: |
           [ ! -z "${{ secrets.CXNG_GHCR_PAT }}" ] && echo "::set-output name=CXNG_GHCR_PAT::true"
           [ ! -z "${{ secrets.VERACODE_ID }}" ] && echo "::set-output name=VERACODE_ID::true"
@@ -45,7 +45,7 @@ jobs:
       name: Login to GitHub Container Registry
       if: |
         needs.secret-presence.outputs.CXNG_GHCR_PAT && github.event_name != 'pull_request'
-      uses: docker/login-action@v1
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -84,7 +84,7 @@ jobs:
           type=sha
     -
       name: Build edc-dataplane Docker Image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: .
         file: edc-dataplane/src/main/docker/Dockerfile
@@ -129,7 +129,7 @@ jobs:
       name: Login to GitHub Container Registry
       if: |
         needs.secret-presence.outputs.CXNG_GHCR_PAT && github.event_name != 'pull_request'
-      uses: docker/login-action@v1
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -168,7 +168,7 @@ jobs:
           type=sha
     -
       name: Build edc-controlplane-memory Docker Image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: .
         file: edc-controlplane/edc-controlplane-memory/src/main/docker/Dockerfile
@@ -213,7 +213,7 @@ jobs:
       name: Login to GitHub Container Registry
       if: |
         needs.secret-presence.outputs.CXNG_GHCR_PAT && github.event_name != 'pull_request'
-      uses: docker/login-action@v1
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -252,7 +252,7 @@ jobs:
           type=sha
     -
       name: Build edc-controlplane-cosmosdb Docker Image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: .
         file: edc-controlplane/edc-controlplane-cosmosdb/src/main/docker/Dockerfile
@@ -297,7 +297,7 @@ jobs:
       name: Login to Github Packages
       if: |
         needs.secret-presence.outputs.CXNG_GHCR_PAT && github.event_name != 'pull_request'
-      uses: docker/login-action@v1
+      uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
@@ -336,7 +336,7 @@ jobs:
           type=sha
     -
       name: Build edc-controlplane-postgresql Docker Image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v3
       with:
         context: .
         file: edc-controlplane/edc-controlplane-postgresql/src/main/docker/Dockerfile
