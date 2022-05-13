@@ -177,7 +177,7 @@
                                         <argument>-f</argument>
                                         <argument>src/main/docker/Dockerfile</argument>
                                         <argument>--build-arg</argument>
-                                        <argument>JAR=target/${project.artifactId}-${project.version}.jar</argument>
+                                        <argument>JAR=target/${project.artifactId}.jar</argument>
                                         <argument>--build-arg</argument>
                                         <argument>LIB=target/lib</argument>
                                         <argument>-t</argument>

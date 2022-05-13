@@ -23,8 +23,8 @@ ARG LIB
 WORKDIR /app
 
 COPY --from=otel /tmp/opentelemetry-javaagent.jar .
-COPY $JAR edc-dataplane.jar
-COPY $LIB ./lib/
+COPY ${JAR} edc-dataplane.jar
+COPY ${LIB} ./lib/
 
 CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
      "-Dedc.fs.config=/app/configuration.properties", \
