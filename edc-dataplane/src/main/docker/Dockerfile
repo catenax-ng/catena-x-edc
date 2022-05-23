@@ -20,11 +20,12 @@ FROM gcr.io/distroless/java11-debian11
 ARG JAR
 ARG LIB
 
+USER nonroot
 WORKDIR /app
 
-COPY --from=otel /tmp/opentelemetry-javaagent.jar .
-COPY ${JAR} edc-dataplane.jar
-COPY ${LIB} ./lib/
+COPY --chown=nonroot:nonroot --from=otel /tmp/opentelemetry-javaagent.jar .
+COPY --chown=nonroot:nonroot ${JAR} edc-dataplane.jar
+COPY --chown=nonroot:nonroot ${LIB} ./lib/
 
 CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
      "-Dedc.fs.config=/app/configuration.properties", \
