@@ -24,7 +24,6 @@ spec:
       labels:
         {{- include "edc-dataplane.selectorLabels" . | nindent 8 }}
     spec:
-      automountServiceAccountToken: false
       {{- if .Values.imagePullSecret.dockerconfigjson }}
       imagePullSecrets:
         - name: {{ include "edc-dataplane.fullname" . }}-imagepullsecret
@@ -35,6 +34,7 @@ spec:
       {{- end }}
       {{- end }}
       serviceAccountName: {{ include "edc-dataplane.serviceAccountName" . }}
+      automountServiceAccountToken: {{ if .Values.automountServiceAccountToken }}true{{ else }}false{{ end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
