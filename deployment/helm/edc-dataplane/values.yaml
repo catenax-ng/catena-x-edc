@@ -42,21 +42,24 @@ serviceAccount:
 podAnnotations: {}
 
 # -- The [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) defines privilege and access control settings for a Pod within the deployment
-podSecurityContext: {}
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
   # runAsUser: 1000
   # runAsGroup: 3000
-# fsGroup: 2000
+  # fsGroup: 2000
 
 # The [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) defines privilege and access control settings for a Container within a pod
 securityContext:
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
   # -- Requires the container to run without root privileges
   runAsNonRoot: true
   # -- The container's process will run with the specified uid
-  runAsUser: 1000
+  runAsUser: 10001
 
 livenessProbe:
   # -- Whether to enable kubernetes [liveness-probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
