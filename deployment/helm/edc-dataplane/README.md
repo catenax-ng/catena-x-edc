@@ -9,7 +9,7 @@ EDC Data-Plane - The Eclipse DataSpaceConnector data layer with responsibility o
 ## TL;DR
 ```shell
 $ helm repo add catenax-ng-product-edc https://catenax-ng.github.io/product-edc
-$ helm install my-release catenax-ng-product-edc/edc-dataplane
+$ helm install my-release catenax-ng-product-edc/edc-dataplane --version 0.0.3
 ```
 
 ## Values
