@@ -25,7 +25,7 @@ Details regarding each configuration property can be found at the [documentary s
 | edc.vault.url                                         | X         | http://vault | |
 | edc.vault.token                                       | X         | 55555555-6666-7777-8888-999999999999 | |
 | edc.vault.timeout.seconds                             |           | 30 | |
-| edc.controlplane.validation-endpoint                  | X         | http://controlplane:8182/validation | |
+| edc.controlplane.validation-endpoint                  | X         | http://controlplane:8182/validation/token | |
 
 #### Example configuration.properties
 
@@ -44,7 +44,7 @@ web.http.control.port=9999
 web.http.control.path=/api/dataplane/control
 
 # Validation endpoint of controlplane
-edc.controlplane.validation-endpoint=http://controlplane:8182/validation
+edc.controlplane.validation-endpoint=http://controlplane:8182/validation/token
 
 # EDC hostname
 edc.hostname=localhost
