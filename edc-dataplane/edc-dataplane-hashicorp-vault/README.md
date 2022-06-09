@@ -11,8 +11,8 @@
 Listed below are configuration keys needed to get the `edc-dataplane-hashicorp-vault` up and running.
 Details regarding each configuration property can be found at the [documentary section of the EDC](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/docs).
 
-| Key  	                                                | Required  | Example | Description |
-|---	                                                |---        |---	  |---          |
+| Key                                                   | Required  | Example | Description |
+|---                                                    |---        |---      |---          |
 | web.http.default.port                                 | X         | 8080    | |
 | web.http.default.path                                 | X         | /api    | |
 | web.http.public.port                                  | X         | 8181    | |
