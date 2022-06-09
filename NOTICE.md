@@ -18,7 +18,6 @@ The project maintains the following source code repositoriy:
 
 ## Third-party Content (Overarching All Modules)
 
-* aas-controller under Apache License 2.0
 * aopalliance version 1.0 repackaged as a module under EPL 2.0 or GPL2 w/ CPE
 * Apache Commons Compress under Apache License, Version 2.0
 * Apache Commons Lang under Apache License, Version 2.0
@@ -33,7 +32,6 @@ The project maintains the following source code repositoriy:
 * asm-tree under BSD-3-Clause
 * asset-api under Apache License, Version 2.0
 * asset-index-sql under Apache License, Version 2.0
-* assetindex-cosmos under Apache License, Version 2.0
 * auth-spi under Apache License, Version 2.0
 * auth-tokenbased under Apache License, Version 2.0
 * azure-vault under Apache License, Version 2.0
@@ -51,8 +49,6 @@ The project maintains the following source code repositoriy:
 * common-sql under Apache License, Version 2.0
 * common-util under Apache License, Version 2.0
 * contract under Apache License, Version 2.0
-* contract-definition-store-cosmos under Apache License, Version 2.0
-* contract-negotiation-store-cosmos under Apache License, Version 2.0
 * contract-spi under Apache License, Version 2.0
 * contractagreement-api under Apache License, Version 2.0
 * contractdefinition-api under Apache License, Version 2.0
@@ -66,7 +62,6 @@ The project maintains the following source code repositoriy:
 * core-defaults under Apache License, Version 2.0
 * core-micrometer under Apache License, Version 2.0
 * core-spi under Apache License, Version 2.0
-* cosmos-common under Apache License, Version 2.0
 * data-management-api under Apache License, Version 2.0
 * data-plane-api under Apache License, Version 2.0
 * data-plane-framework under Apache License, Version 2.0
@@ -80,7 +75,6 @@ The project maintains the following source code repositoriy:
 * docker-java-transport-zerodep under The Apache Software License, Version 2.0
 * Duct Tape under MIT
 * edc-controlplane under Apache License 2.0
-* edc-controlplane-cosmosdb under Apache License 2.0
 * edc-controlplane-memory under Apache License 2.0
 * edc-controlplane-postgresql under Apache License 2.0
 * edc-controlplane-postgresql-hashicorp-vault under Apache License 2.0
@@ -110,7 +104,6 @@ The project maintains the following source code repositoriy:
 * ids-token-validation under Apache License, Version 2.0
 * IntelliJ IDEA Annotations under The Apache Software License, Version 2.0
 * Jackson datatype: JSR310 under The Apache Software License, Version 2.0
-* Jackson module: Afterburner under The Apache Software License, Version 2.0
 * Jackson module: Jakarta XML Bind Annotations (jakarta.xml.bind) under The Apache Software License, Version 2.0
 * Jackson-annotations under The Apache Software License, Version 2.0
 * Jackson-core under The Apache Software License, Version 2.0
@@ -121,9 +114,9 @@ The project maintains the following source code repositoriy:
 * Jakarta Annotations API under EPL 2.0 or GPL2 w/ CPE
 * Jakarta Bean Validation API under Apache License 2.0
 * Jakarta Dependency Injection under The Apache Software License, Version 2.0
-* Jakarta RESTful WS API under EPL-2.0 or GPL-2.0-with-classpath-exception
 * Jakarta XML Binding API under Eclipse Distribution License - v 1.0
 * jakarta.transaction API under EPL 2.0 or GPL2 w/ CPE
+* jakarta.ws.rs-api under EPL-2.0 or GPL-2.0-with-classpath-exception
 * java under Apache License, Version 2.0
 * Java Native Access under LGPL, version 2.1 or Apache License v2.0
 * Java Native Access Platform under LGPL, version 2.1 or Apache License v2.0
@@ -179,15 +172,14 @@ The project maintains the following source code repositoriy:
 * lease-sql under Apache License, Version 2.0
 * Logback Classic Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
 * Logback Core Module under Eclipse Public License - v 1.0 or GNU Lesser General Public License
-* Metrics Core under Apache License 2.0
 * micrometer-core under The Apache Software License, Version 2.0
 * Microsoft Azure client library for Identity under The MIT License (MIT)
 * Microsoft Azure client library for KeyVault Secrets under The MIT License (MIT)
 * Microsoft Azure Java Core Library under The MIT License (MIT)
 * Microsoft Azure Netty HTTP Client Library under The MIT License (MIT)
-* Microsoft Azure SDK for SQL API of Azure Cosmos DB Service under The MIT License (MIT)
 * MIME streaming extension under Eclipse Distribution License - v 1.0
 * mockito-core under The MIT License
+* mockito-inline under The MIT License
 * msal4j under MIT License
 * msal4j-persistence-extension under MIT License
 * Netty/Buffer under Apache License, Version 2.0
@@ -231,7 +223,6 @@ The project maintains the following source code repositoriy:
 * policy-engine under Apache License, Version 2.0
 * policy-evaluator under Apache License, Version 2.0
 * policy-spi under Apache License, Version 2.0
-* policy-store-cosmos under Apache License, Version 2.0
 * policy-store-sql under Apache License, Version 2.0
 * policydefinition-api under Apache License, Version 2.0
 * PostgreSQL JDBC Driver under BSD-2-Clause
@@ -259,7 +250,6 @@ The project maintains the following source code repositoriy:
 * transaction-local under Apache License, Version 2.0
 * transaction-spi under Apache License, Version 2.0
 * transfer under Apache License, Version 2.0
-* transfer-process-store-cosmos under Apache License, Version 2.0
 * transfer-process-store-sql under Apache License, Version 2.0
 * transfer-spi under Apache License, Version 2.0
 * transferprocess-api under Apache License, Version 2.0
