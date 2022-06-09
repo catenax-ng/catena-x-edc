@@ -116,6 +116,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: "trivy-results-edc-controlplane-postgresql.sarif"
+
   ###################################################
   ### edc-controlplane-postgresql-hashicorp-vault ###
   ###################################################
@@ -146,10 +147,11 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: "trivy-results-edc-controlplane-postgresql-hashicorp-vault.sarif"
-  #####################
-  ### edc-dataplane ###
-  #####################
-  analyze-edc-dataplane:
+
+  #################################
+  ### edc-dataplane-azure-vault ###
+  #################################
+  analyze-edc-dataplane-azure-vault:
     needs: [ git-sha7 ]
     runs-on: ubuntu-latest
     permissions:
@@ -165,9 +167,9 @@ jobs:
         if: always()
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "ghcr.io/${{ github.repository }}/edc-dataplane:sha-${{ needs.git-sha7.outputs.value }}"
+          image-ref: "ghcr.io/${{ github.repository }}/edc-dataplane-azure-vault:sha-${{ needs.git-sha7.outputs.value }}"
           format: "sarif"
-          output: "trivy-results-edc-dataplane.sarif"
+          output: "trivy-results-edc-dataplane-azure-vault.sarif"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
       -
@@ -175,7 +177,8 @@ jobs:
         if: always()
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "trivy-results-edc-dataplane.sarif"
+          sarif_file: "trivy-results-edc-dataplane-azure-vault.sarif"
+
   #####################################
   ### edc-dataplane-hashicorp-vault ###
   #####################################
