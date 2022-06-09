@@ -33,15 +33,7 @@ class HashicorpVault implements Vault {
   public @Nullable String resolveSecret(@NonNull String key) {
     Result<String> result = hashicorpVaultClient.getSecretValue(key);
 
-    if (result == null) {
-      return null;
-    }
-
-    if (result.failed()) {
-      throw new HashicorpVaultException(
-          String.join(System.lineSeparator(), result.getFailure().getMessages()));
-    }
-    return result.getContent();
+    return result.succeeded() ? result.getContent() : null;
   }
 
   @Override

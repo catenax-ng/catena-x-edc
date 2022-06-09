@@ -45,6 +45,7 @@ class HashicorpVaultTest {
     Result<String> result = Mockito.mock(Result.class);
     Mockito.when(vaultClient.getSecretValue(key)).thenReturn(result);
     Mockito.when(result.getContent()).thenReturn(value);
+    Mockito.when(result.succeeded()).thenReturn(true);
 
     // invoke
     String returnValue = vault.resolveSecret(key);

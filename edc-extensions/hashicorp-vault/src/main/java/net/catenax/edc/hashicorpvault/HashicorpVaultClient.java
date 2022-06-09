@@ -30,8 +30,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.eclipse.dataspaceconnector.spi.result.Result;
+import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
 class HashicorpVaultClient {
@@ -43,63 +43,44 @@ class HashicorpVaultClient {
   private static final String VAULT_SECRET_PATH = "secret";
   private static final String VAULT_SECRET_DATA_PATH = "data";
   private static final String VAULT_SECRET_METADATA_PATH = "metadata";
-  private static final String CALL_UNKNOWN_ERROR_TEMPLATE = "Call unsuccessful: %s";
+  private static final String CALL_UNSUCCESSFUL_ERROR_TEMPLATE = "Call unsuccessful: %s";
   @NonNull private final HashicorpVaultClientConfig config;
   @NonNull private final OkHttpClient okHttpClient;
   @NonNull private final ObjectMapper objectMapper;
 
   Result<String> getSecretValue(@NonNull String key) {
-    key = URLEncoder.encode(key, StandardCharsets.UTF_8);
-    String requestURI = getSecretDataUrl(key);
-    Headers.Builder headersBuilder =
-        new Headers.Builder().add(VAULT_REQUEST_HEADER, Boolean.toString(true));
-    if (config.getVaultToken() != null) {
-      headersBuilder = headersBuilder.add(VAULT_TOKEN_HEADER, config.getVaultToken());
-    }
-    Headers headers = headersBuilder.build();
+    String requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
+    Headers headers = getHeaders();
     Request request = new Request.Builder().url(requestURI).headers(headers).get().build();
 
-    Response response;
-    try {
-      response = okHttpClient.newCall(request).execute();
-    } catch (IOException e) {
-      throw new HashicorpVaultException(e.getMessage(), e);
-    }
+    try (Response response = okHttpClient.newCall(request).execute()) {
 
-    if (response.code() == 404) {
-      return null;
-    }
-
-    if (response.isSuccessful()) {
-      try (ResponseBody body = response.body()) {
-        if (body == null) {
-          return Result.failure("Received an empty body response from vault");
+      if (response.isSuccessful()) {
+        if (response.code() == 404) {
+          return Result.failure(
+              String.format(CALL_UNSUCCESSFUL_ERROR_TEMPLATE, "Secret not found"));
         }
 
+        String responseBody = Objects.requireNonNull(response.body()).string();
         HashicorpVaultGetEntryResponsePayload payload =
-            objectMapper.readValue(body.string(), HashicorpVaultGetEntryResponsePayload.class);
-
+            objectMapper.readValue(responseBody, HashicorpVaultGetEntryResponsePayload.class);
         String value =
             Objects.requireNonNull(payload.getData().getData().get(VAULT_DATA_ENTRY_NAME));
 
         return Result.success(value);
-      } catch (Exception e) {
-        return Result.failure(String.format("Error unpacking response: %s", e.getMessage()));
+      } else {
+        return Result.failure(String.format(CALL_UNSUCCESSFUL_ERROR_TEMPLATE, response.code()));
       }
+
+    } catch (IOException e) {
+      return Result.failure(e.getMessage());
     }
-    return Result.failure(String.format(CALL_UNKNOWN_ERROR_TEMPLATE, response.code()));
   }
 
   Result<HashicorpVaultCreateEntryResponsePayload> setSecret(
       @NonNull String key, @NonNull String value) {
-    key = URLEncoder.encode(key, StandardCharsets.UTF_8);
-    String requestURI = getSecretDataUrl(key);
-    Headers.Builder headersBuilder =
-        new Headers.Builder().add(VAULT_REQUEST_HEADER, Boolean.toString(true));
-    if (config.getVaultToken() != null) {
-      headersBuilder = headersBuilder.add(VAULT_TOKEN_HEADER, config.getVaultToken());
-    }
-    Headers headers = headersBuilder.build();
+    String requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
+    Headers headers = getHeaders();
     HashicorpVaultCreateEntryRequestPayload requestPayload =
         HashicorpVaultCreateEntryRequestPayload.builder()
             .data(Collections.singletonMap(VAULT_DATA_ENTRY_NAME, value))
@@ -111,53 +92,42 @@ class HashicorpVaultClient {
             .post(createRequestBody(requestPayload))
             .build();
 
-    Response response;
-    try {
-      response = okHttpClient.newCall(request).execute();
-    } catch (IOException e) {
-      throw new HashicorpVaultException(e.getMessage(), e);
-    }
-
-    if (response.isSuccessful()) {
-      try (ResponseBody responseBody = response.body()) {
-        if (responseBody == null) {
-          return Result.failure("Received an empty body response from vault");
-        }
-
+    try (Response response = okHttpClient.newCall(request).execute()) {
+      if (response.isSuccessful()) {
+        String responseBody = Objects.requireNonNull(response.body()).string();
         HashicorpVaultCreateEntryResponsePayload responsePayload =
-            objectMapper.readValue(
-                responseBody.string(), HashicorpVaultCreateEntryResponsePayload.class);
-
+            objectMapper.readValue(responseBody, HashicorpVaultCreateEntryResponsePayload.class);
         return Result.success(responsePayload);
-      } catch (Exception e) {
-        return Result.failure(String.format("Error unpacking response: %s", e.getMessage()));
+      } else {
+        return Result.failure(String.format(CALL_UNSUCCESSFUL_ERROR_TEMPLATE, response.code()));
       }
+    } catch (IOException e) {
+      return Result.failure(e.getMessage());
     }
-    return Result.failure(String.format(CALL_UNKNOWN_ERROR_TEMPLATE, response.code()));
   }
 
   Result<Void> destroySecret(@NonNull String key) {
-    key = URLEncoder.encode(key, StandardCharsets.UTF_8);
-    String requestURI = getSecretMetadataUrl(key);
+    String requestURI = getSecretUrl(key, VAULT_SECRET_METADATA_PATH);
+    Headers headers = getHeaders();
+    Request request = new Request.Builder().url(requestURI).headers(headers).delete().build();
+
+    try (Response response = okHttpClient.newCall(request).execute()) {
+      return response.isSuccessful() || response.code() == 404
+          ? Result.success()
+          : Result.failure(String.format(CALL_UNSUCCESSFUL_ERROR_TEMPLATE, response.code()));
+    } catch (IOException e) {
+      return Result.failure(e.getMessage());
+    }
+  }
+
+  @NotNull
+  private Headers getHeaders() {
     Headers.Builder headersBuilder =
         new Headers.Builder().add(VAULT_REQUEST_HEADER, Boolean.toString(true));
     if (config.getVaultToken() != null) {
       headersBuilder = headersBuilder.add(VAULT_TOKEN_HEADER, config.getVaultToken());
     }
-    Headers headers = headersBuilder.build();
-    Request request = new Request.Builder().url(requestURI).headers(headers).delete().build();
-
-    Response response;
-    try {
-      response = okHttpClient.newCall(request).execute();
-    } catch (IOException e) {
-      throw new HashicorpVaultException(e.getMessage(), e);
-    }
-
-    if (response.isSuccessful() || response.code() == 404) {
-      return Result.success();
-    }
-    return Result.failure(String.format(CALL_UNKNOWN_ERROR_TEMPLATE, response.code()));
+    return headersBuilder.build();
   }
 
   private String getBaseUrl() {
@@ -170,23 +140,13 @@ class HashicorpVaultClient {
     return baseUrl;
   }
 
-  private String getSecretDataUrl(String key) {
-    return URI.create(
-            String.format(
-                "%s/%s/%s/%s/%s",
-                getBaseUrl(), VAULT_API_VERSION, VAULT_SECRET_PATH, VAULT_SECRET_DATA_PATH, key))
-        .toString();
-  }
+  private String getSecretUrl(String key, String entryType) {
 
-  private String getSecretMetadataUrl(String key) {
+    key = URLEncoder.encode(key, StandardCharsets.UTF_8);
     return URI.create(
             String.format(
                 "%s/%s/%s/%s/%s",
-                getBaseUrl(),
-                VAULT_API_VERSION,
-                VAULT_SECRET_PATH,
-                VAULT_SECRET_METADATA_PATH,
-                key))
+                getBaseUrl(), VAULT_API_VERSION, VAULT_SECRET_PATH, entryType, key))
         .toString();
   }
 
