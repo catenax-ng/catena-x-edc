@@ -28,12 +28,13 @@ import org.eclipse.dataspaceconnector.spi.system.VaultExtension;
 public class HashicorpVaultExtension implements VaultExtension {
 
   @EdcSetting(required = true)
-  public static final String VAULT_URL = "edc.vault.url";
+  public static final String VAULT_URL = "edc.vault.hashicorp.url";
 
   @EdcSetting(required = true)
-  public static final String VAULT_TOKEN = "edc.vault.token";
+  public static final String VAULT_TOKEN = "edc.vault.hashicorp.token";
 
-  @EdcSetting private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.timeout.seconds";
+  @EdcSetting
+  private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.hashicorp.timeout.seconds";
 
   private Vault vault;
   private CertificateResolver certificateResolver;

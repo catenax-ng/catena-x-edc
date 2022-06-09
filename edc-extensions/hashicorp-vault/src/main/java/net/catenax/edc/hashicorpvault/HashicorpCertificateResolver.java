@@ -18,12 +18,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.Provider;
 import java.security.cert.X509Certificate;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.CertificateResolver;
@@ -32,9 +29,6 @@ import org.eclipse.dataspaceconnector.spi.security.Vault;
 /** Resolves an X.509 certificate in Hashicorp vault. */
 @RequiredArgsConstructor
 public class HashicorpCertificateResolver implements CertificateResolver {
-  private static final Provider PROVIDER = new BouncyCastleProvider();
-  private static final JcaX509CertificateConverter CONVERTER =
-      new JcaX509CertificateConverter().setProvider(PROVIDER);
   @NonNull private final Vault vault;
   @NonNull private final Monitor monitor;
 

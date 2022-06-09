@@ -25,13 +25,4 @@ public class HashicorpVaultException extends EdcException {
   public HashicorpVaultException(String message, Throwable cause) {
     super(message, cause);
   }
-
-  public HashicorpVaultException(Throwable cause) {
-    super(cause);
-  }
-
-  public HashicorpVaultException(
-      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
 }

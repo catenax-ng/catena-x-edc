@@ -22,9 +22,9 @@ Details regarding each configuration property can be found at the [documentary s
 | edc.receiver.http.endpoint                            | X         | http://backend-service | |
 | edc.hostname                                          |           | localhost | |
 | edc.oauth.client.id                                   | X         | daps-oauth-client-id | |
-| edc.vault.url                                         | X         | http://vault | |
-| edc.vault.token                                       | X         | 55555555-6666-7777-8888-999999999999 | |
-| edc.vault.timeout.seconds                             |           | 30 | |
+| edc.vault.hashicorp.url                               | X         | http://vault | |
+| edc.vault.hashicorp.token                             | X         | 55555555-6666-7777-8888-999999999999 | |
+| edc.vault.hashicorp.timeout.seconds                   |           | 30 | |
 | edc.controlplane.validation-endpoint                  | X         | http://controlplane:8182/validation/token | |
 
 #### Example configuration.properties
@@ -50,9 +50,9 @@ edc.controlplane.validation-endpoint=http://controlplane:8182/validation/token
 edc.hostname=localhost
 
 # HashiCorp vault related configuration
-edc.vault.url=http://vault
-edc.vault.token=55555555-6666-7777-8888-999999999999
-edc.vault.timeout.seconds=30
+edc.vault.hashicorp.url=http://vault
+edc.vault.hashicorp.token=55555555-6666-7777-8888-999999999999
+edc.vault.hashicorp.timeout.seconds=30
 EOF
 ```
 

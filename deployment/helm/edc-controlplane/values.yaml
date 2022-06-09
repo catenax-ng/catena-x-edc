@@ -328,9 +328,9 @@ configuration:
     # edc.vault.clientsecret=
     # edc.vault.name=
     # edc.vault.tenantid=
-    # edc.vault.url=
-    # edc.vault.token=
-    # edc.vault.timeout.seconds=
+    # edc.vault.hashicorp.url=
+    # edc.vault.hashicorp.token=
+    # edc.vault.hashicorp.timeout.seconds=
     # edc.webdid.doh.url=
     # edc.web.rest.cors.enabled=
     # edc.web.rest.cors.headers=

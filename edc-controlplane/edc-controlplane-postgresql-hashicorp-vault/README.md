@@ -40,9 +40,9 @@ Details regarding each configuration property can be found at the [documentary s
 | edc.oauth.public.key.alias                            | X         | key-to-daps-certificate-in-keyvault | |
 | edc.oauth.private.key.alias                           | X         | key-to-private-key-in-keyvault | |
 | edc.oauth.client.id                                   | X         | daps-oauth-client-id | |
-| edc.vault.url                                         | X         | http://vault | |
-| edc.vault.token                                       | X         | 55555555-6666-7777-8888-999999999999 | |
-| edc.vault.timeout.seconds                             |           | 30 | |
+| edc.vault.hashicorp.url                               | X         | http://vault | |
+| edc.vault.hashicorp.token                             | X         | 55555555-6666-7777-8888-999999999999 | |
+| edc.vault.hashicorp.timeout.seconds                   |           | 30 | |
 | edc.datasource.asset.name                             | X         | asset | |
 | edc.datasource.asset.url                              | X         | jdbc:postgresql://postgres.svc.cluster.local:5432/edc_asset_db | |
 | edc.datasource.asset.user                             | X         | username | |
@@ -110,13 +110,13 @@ edc.oauth.private.key.alias=key-to-private-key-in-keyvault
 edc.oauth.client.id=daps-oauth-client-id
 
 # HashiCorp vault related configuration
-edc.vault.url=http://vault
-edc.vault.token=55555555-6666-7777-8888-999999999999
-edc.vault.timeout.seconds=30
+edc.vault.hashicorp.url=http://vault
+edc.vault.hashicorp.token=55555555-6666-7777-8888-999999999999
+edc.vault.hashicorp.timeout.seconds=30
 
 # Control- / Data- Plane configuration
 edc.transfer.proxy.endpoint=http://dataplane-public-endpoint/public
-edc.transfer.proxy.token.signer.privatekey.alias=azure-vault-token-signer-private-key
+edc.transfer.proxy.token.signer.privatekey.alias=token-signer-private-key
 
 # Postgresql related configuration
 edc.datasource.asset.name=asset
