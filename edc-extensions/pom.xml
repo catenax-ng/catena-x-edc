@@ -29,6 +29,7 @@
         <module>business-partner-validation</module>
         <module>aas-controller</module>
         <module>postgresql-migration</module>
+        <module>data-plane-cloud-http</module>
     </modules>
 
 </project>
