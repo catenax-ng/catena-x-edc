@@ -16,9 +16,10 @@
 
 package org.eclipse.dataspaceconnector.dataplane.cloud.http;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.jodah.failsafe.RetryPolicy;
 import okhttp3.OkHttpClient;
-import org.eclipse.dataspaceconnector.dataplane.cloud.http.pipeline.CloudHttpDataSinkFactory;
+import org.eclipse.dataspaceconnector.dataplane.cloud.http.pipeline.PresignedHttpDataSinkFactory;
 import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataTransferExecutorServiceContainer;
 import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.PipelineService;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -27,7 +28,7 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 
 /** Provides support for reading data from an HTTP endpoint and sending data to an HTTP endpoint. */
-public class CloudDataPlaneHttpExtension implements ServiceExtension {
+public class PresignedHttpDataPlaneHttpExtension implements ServiceExtension {
 
   @Inject private OkHttpClient httpClient;
 
@@ -51,7 +52,8 @@ public class CloudDataPlaneHttpExtension implements ServiceExtension {
     var monitor = context.getMonitor();
 
     var sinkFactory =
-        new CloudHttpDataSinkFactory(httpClient, executorContainer.getExecutorService(), monitor);
+        new PresignedHttpDataSinkFactory(
+            httpClient, new ObjectMapper(), executorContainer.getExecutorService(), monitor);
     pipelineService.registerFactory(sinkFactory);
   }
 }

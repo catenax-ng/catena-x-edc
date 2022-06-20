@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.invocation.InvocationOnMock;
 
-class CloudDataSourceToDataSinkTests {
+class PresignedHttpDataSourceToDataSinkTests {
   private static final String NULL_ENDPOINT = "https://example.com/sink";
 
   private ExecutorService executor;
@@ -76,7 +76,7 @@ class CloudDataSourceToDataSinkTests {
     var sinkClient = testOkHttpClient().newBuilder().addInterceptor(interceptor).build();
 
     var dataSink =
-        CloudHttpDataSink.Builder.newInstance()
+        PresignedHttpDataSink.Builder.newInstance()
             .endpoint("https://example.com/sink")
             .requestId("1")
             .httpClient(sinkClient)
@@ -117,7 +117,7 @@ class CloudDataSourceToDataSinkTests {
     var sinkClient = mock(OkHttpClient.class);
 
     var dataSink =
-        CloudHttpDataSink.Builder.newInstance()
+        PresignedHttpDataSink.Builder.newInstance()
             .endpoint("https://example.com/sink")
             .requestId("1")
             .httpClient(sinkClient)
@@ -161,7 +161,7 @@ class CloudDataSourceToDataSinkTests {
     var sinkClient = testOkHttpClient().newBuilder().addInterceptor(sinkInterceptor).build();
 
     var dataSink =
-        CloudHttpDataSink.Builder.newInstance()
+        PresignedHttpDataSink.Builder.newInstance()
             .endpoint(NULL_ENDPOINT)
             .requestId("1")
             .httpClient(sinkClient)

@@ -28,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -42,13 +43,13 @@ import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CloudHttpDataSinkFactoryTest {
-  private CloudHttpDataSinkFactory factory;
+class PresignedHttpDataSinkFactoryTest {
+  private PresignedHttpDataSinkFactory factory;
   private OkHttpClient httpClient;
 
   @Test
   void verifyCanHandle() {
-    var httpRequest = createRequest(CloudHttpDataAddressSchema.TYPE).build();
+    var httpRequest = createRequest(PresignedHttpDataAddressSchema.TYPE).build();
     var nonHttpRequest = createRequest("Unknown").build();
 
     assertThat(factory.canHandle(httpRequest)).isTrue();
@@ -60,10 +61,12 @@ class CloudHttpDataSinkFactoryTest {
     var dataAddress =
         DataAddress.Builder.newInstance()
             .property(ENDPOINT, "http://example.com")
-            .type(CloudHttpDataAddressSchema.TYPE)
+            .type(PresignedHttpDataAddressSchema.TYPE)
             .build();
     var validRequest =
-        createRequest(CloudHttpDataAddressSchema.TYPE).destinationDataAddress(dataAddress).build();
+        createRequest(PresignedHttpDataAddressSchema.TYPE)
+            .destinationDataAddress(dataAddress)
+            .build();
     assertThat(factory.validate(validRequest).succeeded()).isTrue();
 
     var missingEndpointRequest = createRequest("Unknown").build();
@@ -75,10 +78,12 @@ class CloudHttpDataSinkFactoryTest {
     var dataAddress =
         DataAddress.Builder.newInstance()
             .property(ENDPOINT, "http://example.com")
-            .type(CloudHttpDataAddressSchema.TYPE)
+            .type(PresignedHttpDataAddressSchema.TYPE)
             .build();
     var validRequest =
-        createRequest(CloudHttpDataAddressSchema.TYPE).destinationDataAddress(dataAddress).build();
+        createRequest(PresignedHttpDataAddressSchema.TYPE)
+            .destinationDataAddress(dataAddress)
+            .build();
     var missingEndpointRequest = createRequest("Unknown").build();
 
     assertThat(factory.createSink(validRequest)).isNotNull();
@@ -90,14 +95,16 @@ class CloudHttpDataSinkFactoryTest {
       throws InterruptedException, ExecutionException, IOException {
     var dataAddress =
         DataAddress.Builder.newInstance()
-            .type(CloudHttpDataAddressSchema.TYPE)
+            .type(PresignedHttpDataAddressSchema.TYPE)
             .property(ENDPOINT, "http://example.com")
             .property(AUTHENTICATION_KEY, "x-api-key")
             .property(AUTHENTICATION_CODE, "123")
             .build();
 
     var validRequest =
-        createRequest(CloudHttpDataAddressSchema.TYPE).destinationDataAddress(dataAddress).build();
+        createRequest(PresignedHttpDataAddressSchema.TYPE)
+            .destinationDataAddress(dataAddress)
+            .build();
 
     var call = mock(Call.class);
     when(call.execute()).thenReturn(createHttpResponse().build());
@@ -126,7 +133,7 @@ class CloudHttpDataSinkFactoryTest {
   void setUp() {
     httpClient = mock(OkHttpClient.class);
     factory =
-        new CloudHttpDataSinkFactory(
-            httpClient, Executors.newFixedThreadPool(1), mock(Monitor.class));
+        new PresignedHttpDataSinkFactory(
+            httpClient, new ObjectMapper(), Executors.newFixedThreadPool(1), mock(Monitor.class));
   }
 }

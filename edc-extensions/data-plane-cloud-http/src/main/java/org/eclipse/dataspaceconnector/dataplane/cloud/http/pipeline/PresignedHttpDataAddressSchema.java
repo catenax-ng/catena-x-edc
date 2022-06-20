@@ -16,7 +16,7 @@
 
 package org.eclipse.dataspaceconnector.dataplane.cloud.http.pipeline;
 
-public interface CloudHttpDataAddressSchema {
+public final class PresignedHttpDataAddressSchema {
   /** The HTTP transfer type. */
-  String TYPE = "CloudHttpData";
+  public static final String TYPE = "PresignedHttpData";
 }

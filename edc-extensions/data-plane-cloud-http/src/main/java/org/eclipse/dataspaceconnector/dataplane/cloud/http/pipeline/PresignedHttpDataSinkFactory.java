@@ -21,8 +21,13 @@ import static org.eclipse.dataspaceconnector.spi.types.domain.http.HttpDataAddre
 import static org.eclipse.dataspaceconnector.spi.types.domain.http.HttpDataAddressSchema.AUTHENTICATION_KEY;
 import static org.eclipse.dataspaceconnector.spi.types.domain.http.HttpDataAddressSchema.ENDPOINT;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import okhttp3.OkHttpClient;
+import org.eclipse.dataspaceconnector.common.string.StringUtils;
 import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSink;
 import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSinkFactory;
 import org.eclipse.dataspaceconnector.spi.EdcException;
@@ -33,29 +38,35 @@ import org.eclipse.dataspaceconnector.spi.types.domain.transfer.DataFlowRequest;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Instantiates {@link CloudHttpDataSink}s for requests whose source data type is {@link
+ * Instantiates {@link PresignedHttpDataSink}s for requests whose source data type is {@link
  * HttpDataAddressSchema#TYPE}.
  *
  * <p>Note: there is support only for 1 partition at this time - this means it cannot handle big
  * files upload primarily due to memory constraints
  */
-public class CloudHttpDataSinkFactory implements DataSinkFactory {
+public class PresignedHttpDataSinkFactory implements DataSinkFactory {
   private static final int ONE_PARTITION = 1;
 
   private final OkHttpClient httpClient;
   private final ExecutorService executorService;
   private final Monitor monitor;
+  private final ObjectMapper mapper;
 
-  public CloudHttpDataSinkFactory(
-      OkHttpClient httpClient, ExecutorService executorService, Monitor monitor) {
+  public PresignedHttpDataSinkFactory(
+      OkHttpClient httpClient,
+      ObjectMapper mapper,
+      ExecutorService executorService,
+      Monitor monitor) {
     this.httpClient = httpClient;
     this.executorService = executorService;
     this.monitor = monitor;
+    this.mapper = mapper;
   }
 
   @Override
   public boolean canHandle(DataFlowRequest request) {
-    return CloudHttpDataAddressSchema.TYPE.equals(request.getDestinationDataAddress().getType());
+    return PresignedHttpDataAddressSchema.TYPE.equals(
+        request.getDestinationDataAddress().getType());
   }
 
   @Override
@@ -70,6 +81,7 @@ public class CloudHttpDataSinkFactory implements DataSinkFactory {
   @Override
   public DataSink createSink(DataFlowRequest request) {
     var dataAddress = request.getDestinationDataAddress();
+    var additionalHeaders = dataAddress.getProperty("additionalHeaders");
     var requestId = request.getId();
     var endpoint = dataAddress.getProperty(ENDPOINT);
     if (endpoint == null) {
@@ -79,7 +91,7 @@ public class CloudHttpDataSinkFactory implements DataSinkFactory {
     var authKey = dataAddress.getProperty(AUTHENTICATION_KEY);
     var authCode = dataAddress.getProperty(AUTHENTICATION_CODE);
 
-    return CloudHttpDataSink.Builder.newInstance()
+    return PresignedHttpDataSink.Builder.newInstance()
         .endpoint(endpoint)
         .requestId(requestId)
         .partitionSize(ONE_PARTITION)
@@ -88,6 +100,18 @@ public class CloudHttpDataSinkFactory implements DataSinkFactory {
         .httpClient(httpClient)
         .executorService(executorService)
         .monitor(monitor)
+        .additionalHeaders(makeAdditionalHeaders(additionalHeaders))
         .build();
+  }
+
+  private Map<String, String> makeAdditionalHeaders(String additionalHeaders) {
+    try {
+      return mapper.readValue(
+          StringUtils.isNullOrBlank(additionalHeaders) ? "" : additionalHeaders, Map.class);
+    } catch (JsonProcessingException e) {
+      monitor.severe("Failed to set additional headers from " + additionalHeaders, e);
+    }
+
+    return new HashMap<>();
   }
 }
