@@ -13,7 +13,7 @@ Details regarding each configuration property can be found at the [documentary s
 
 | Key  	                                                | Required  | Example | Description |
 |---	                                                |---	    |---	  |---          |
-| edc.api.auth.key                                      |           | password | |
+| edc.api.auth.key                                      |           | password | default value: random UUID |
 | web.http.default.port                                 | X         | 8080    | |
 | web.http.default.path                                 | X         | /api    | |
 | web.http.data.port                                    | X         | 8181    | |
