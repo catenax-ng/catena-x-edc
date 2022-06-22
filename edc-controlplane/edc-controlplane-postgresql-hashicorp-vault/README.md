@@ -99,7 +99,7 @@ ids.webhook.address=http://localhost:8282/api/v1/ids
 
 edc.hostname=localhost
 
-edc.api.auth.key=pass
+edc.api.auth.key=password
 
 # OAuth / DAPS related configuration
 edc.oauth.token.url=https://daps.catena-x.net
