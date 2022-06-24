@@ -280,6 +280,195 @@ When another connector asks the EDC about its _ContractOffers_ it:
 - Maps the content of the _ContractOffer_ into the IDS domain and sends an IDS-ContractOffers to the other connector.
 - The other connector then maps the IDS-ContractOffers back into its EDC domain and can then processes the _ContractOffer_.
 
+# Data Management API
+
+The documentation of the Data Management API can be found in the official open
+source [EDC GitHub Repository](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector).
+
+The complete Eclipse Dataspace Connector API is described in the [EDC Open API Specification](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/blob/main/resources/openapi/openapi.yaml). Please be aware that this specification contains all APIs, that are implemented in the open source repository. The extensions, that implement those APIs, might not be part of the Control- and/or Data-Plane applications in this repository. Additionally, depending on the extension configuration, the documented paths might be only reachable using the configured ports.
+
+## Contract Offer Exchange
+
+----
+
+**Please note**</br>
+This chapter showcases the contract offer exchange between two connectors. It should function as starting point when working the Eclipse Dataspace Connector API. For a more detailed explanation of the various topics, that are touched in this section, please consolidate the official documentation in the [EDC GitHub Repository](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector).
+
+----
+
+As described in the chapter about the EDC domain, the following resources must be created at the data provider:
+
+- **Asset** (& DataAddress), describing the data and how it can be transferred
+- **Policy**, as Contract- and/or AccessPolicy of the _ContractDefinition_
+- **ContractDefinition**, for the contract offer generation
+
+### 0. Calling the Data Management API
+
+The Data Management API is secured with an API key. The value of this key can be configured in `edc.api.auth.key` and
+should then be passed in the header as `X-API-Key: <api-auth-key>`.
+Additionally, most or all of the API methods accept only JSON content, therefore adding `Content-Type: application/json`
+to the header for most of the calls is recommended.
+
+### 1. Create Asset using Data Mgmt API
+
+#### Bash Script
+
+```bash
+# Variables (please update before running the script)
+__connectorUrl=http://localhost:8181
+__dataMgmtPath=data-mgmt
+__apiKey=X-Api-Key
+__apiKeyValue=pwd
+__assetId=1
+__assetDescription="Demo Asset"
+__assetDataEndpoint="https://jsonplaceholder.typicode.com/todos/3"
+
+__asset="{
+        \"asset\": {
+            \"properties\": {
+                \"asset:prop:id\": \"$__assetId\",
+                \"asset:prop:description\": \"$__assetDescription\"
+            }
+        },
+        \"dataAddress\": {
+            \"properties\": {
+                \"type\": \"HttpProxy\",
+                \"endpoint\": \"$__assetDataEndpoint\"
+            }
+        }
+    }"
+
+# Call Data Management API
+curl -X POST "$__connectorUrl/$__dataMgmtPath/assets" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" --data "$__asset"
+```
+
+#### Bash Parameters
+
+| Name                 | Description                                                                               |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| $__connectorUrl      | URL of the Connector with the Data Management API port configured in `web.http.data.port` |
+| $__dataMgmtPath      | Path of the Data Management API as configured in `web.http.data.path`                     |
+| $__apiKey            | Should always be _X-Api-Key_ for the Data Management API                                  |
+| $__apiKeyValue       | The API Key Value as configured in `edc.api.auth.key`                                     |
+| $__assetId           | Unique identifier of the asset                                                            |
+| $__assetDescription  | Description of the asset                                                                  |
+| $__assetDataEndpoint | Endpoint that might be used when data is transferred. Irrelevant in this context / sample |
+
+#### Control Call
+
+Get Asset
+
+```bash
+curl -X GET "$__connectorUrl/$__dataMgmtPath/assets/$__assetId" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" | jq
+```
+
+### 2. Create Policy
+
+**Please be aware that the following policy make the data offer public for everyone and should be used with caution outside of this showcase!**
+
+Create a policy that can be used by the __ContractDefinition__. As the same policy may be used as contract- and access policy of the ContractDefinition, creating only one policy for both cases is totally fine for this demo.
+
+#### Bash Script
+
+```bash
+# Variables
+__connectorUrl=http://localhost:8181
+__dataMgmtPath=data-mgmt
+__apiKey=X-Api-Key
+__apiKeyValue=pwd
+__policyId=1
+
+__publicPolicy="
+{
+    \"uid\": \"$__policyId\",
+    \"prohibitions\": [],
+    \"obligations\": [],
+    \"permissions\": [
+        {
+            \"edctype\": \"dataspaceconnector:permission\",
+            \"action\": {
+                \"type\": \"USE\" 
+            },
+        }
+    ]
+}"
+
+# Call Data Mgmt API
+curl -X POST "$__connectorUrl/$__dataMgmtPath/policies" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" --data "$__publicPolicy"
+```
+
+#### Bash Parameters
+
+| Name            | Description                                                                               |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| $__connectorUrl | URL of the Connector with the Data Management API port configured in `web.http.data.port` |
+| $__dataMgmtPath | Path of the Data Management API as configured in `web.http.data.path`                     |
+| $__apiKey       | Should always be _X-Api-Key_ for the Data Management API                                  |
+| $__apiKeyValue  | The API Key Value as configured in `edc.api.auth.key`                                     |
+| $__policyId     | Unique identifier of the policy.                                                          |
+
+#### Control Call
+
+Get Policy
+
+```bash
+curl -X GET "$__connectorUrl/$__dataMgmtPath/policies/$__policyId" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" | jq
+```
+
+### 3. Create Contract Definition
+
+The following uses the previously created public policy make the data offer available for everyone.
+
+#### Bash Script
+
+```bash
+# Variables
+__connectorUrl=http://localhost:8181
+__dataMgmtPath=data-mgmt
+__apiKey=X-Api-Key
+__apiKeyValue=pwd
+__contractDefinitionId=1
+__policyId=1
+__assetId=1
+
+__publicContractDefinition="
+        {
+            \"id\": \"$__contractDefinitionId\",
+            \"accessPolicyId\": \"$__policyId\",
+            \"contractPolicyId\": \"$__policyId\",
+            \"criteria\": [
+                {
+                    \"left\": \"asset:prop:id\",
+                    \"op\": \"=\",
+                    \"right\": \"$__assetId\"
+                }
+            ]
+        }"
+
+# Call Data Mgmt API
+curl -X POST "$__connectorUrl/$__dataMgmtPath/contractdefinitions" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" --data "$__publicContractDefinition"
+```
+
+#### Bash Parameters
+
+| Name                    | Description                                                                               |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| $__connectorUrl         | URL of the Connector with the Data Management API port configured in `web.http.data.port` |
+| $__dataMgmtPath         | Path of the Data Management API as configured in `web.http.data.path`                     |
+| $__apiKey               | Should always be _X-Api-Key_ for the Data Management API                                  |
+| $__apiKeyValue          | The API Key Value as configured in `edc.api.auth.key`                                     |
+| $__contractDefinitionId | Unique identifier of the contract definition.                                             |
+| $__policyId             | Unique identifier of the policy. Must be the same ID as in step 2.                        |
+| $__assetId              | Unique identifier of the asset. Must be the same ID as in step 1.                         |
+
+#### Control Call
+
+Get Contract Definition
+
+```bash
+curl -X GET "$__connectorUrl/$__dataMgmtPath/contractdefinitions/$__contractDefinitionId" --header "$__apiKey: $__apiKeyValue" --header "Content-Type: application/json" | jq
+```
+
 # Secure your connector
 
 ## API Security
