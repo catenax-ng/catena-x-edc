@@ -28,6 +28,10 @@ import org.eclipse.dataspaceconnector.spi.policy.PolicyContext;
  */
 public abstract class AbstractBusinessPartnerValidation {
 
+  // Developer Note:
+  // Problems reported to the policy context are not logged. Therefore, everything
+  // that is reported to the policy context should be logged, too.
+
   private static final String SKIP_EVALUATION_BECAUSE_ITERABLE_VALUE_NOT_STRING_S =
       "Skipping evaluation of iterable value in BusinessPartnerNumber constraint. Right values used in an iterable must be of type 'String'. Unsupported Type: '%s'";
   private static final String FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_STRING_S =
@@ -66,11 +70,11 @@ public abstract class AbstractBusinessPartnerValidation {
 
     if (policyContext.hasProblems() && policyContext.getProblems().size() > 0) {
       String problems = String.join(", ", policyContext.getProblems());
-      String logMessage =
+      String message =
           String.format(
               "BusinessPartnerNumberValidation: Rejecting PolicyContext with problems. Problems: %s",
               problems);
-      monitor.debug(logMessage);
+      monitor.debug(message);
       return false;
     }
 
@@ -87,11 +91,14 @@ public abstract class AbstractBusinessPartnerValidation {
     }
 
     if (operator == Operator.EQ) {
-      return isBusinessPartnerNumber(referringConnectorClaim, rightValue);
+      return isBusinessPartnerNumber(referringConnectorClaim, rightValue, policyContext);
     } else if (operator == Operator.IN) {
-      return containsBusinessPartnerNumber(referringConnectorClaim, rightValue);
+      return containsBusinessPartnerNumber(referringConnectorClaim, rightValue, policyContext);
     } else {
-      monitor.warning(String.format(FAIL_EVALUATION_BECAUSE_UNSUPPORTED_OPERATOR_S, operator));
+      final String message =
+          String.format(FAIL_EVALUATION_BECAUSE_UNSUPPORTED_OPERATOR_S, operator);
+      monitor.warning(message);
+      policyContext.reportProblem(message);
       return false;
     }
   }
@@ -103,29 +110,39 @@ public abstract class AbstractBusinessPartnerValidation {
    *     against the claim
    */
   private boolean containsBusinessPartnerNumber(
-      String referingConnectorClaim, Object businessPartnerNumbers) {
+      String referingConnectorClaim, Object businessPartnerNumbers, PolicyContext policyContext) {
     if (businessPartnerNumbers == null) {
-      monitor.warning(String.format(FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_ITERABLE_S, "null"));
+      final String message =
+          String.format(FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_ITERABLE_S, "null");
+      monitor.warning(message);
+      policyContext.reportProblem(message);
       return false;
     }
     if (!(businessPartnerNumbers instanceof Iterable)) {
-      monitor.warning(
+      final String message =
           String.format(
               FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_ITERABLE_S,
-              businessPartnerNumbers.getClass().getName()));
+              businessPartnerNumbers.getClass().getName());
+      monitor.warning(message);
+      policyContext.reportProblem(message);
       return false;
     }
 
     for (Object businessPartnerNumber : (Iterable) businessPartnerNumbers) {
       if (businessPartnerNumber == null) {
-        monitor.warning(String.format(SKIP_EVALUATION_BECAUSE_ITERABLE_VALUE_NOT_STRING_S, "null"));
+        final String message =
+            String.format(SKIP_EVALUATION_BECAUSE_ITERABLE_VALUE_NOT_STRING_S, "null");
+        monitor.warning(message);
+        policyContext.reportProblem(message);
         continue;
       }
       if (!(businessPartnerNumber instanceof String)) {
-        monitor.warning(
+        final String message =
             String.format(
                 SKIP_EVALUATION_BECAUSE_ITERABLE_VALUE_NOT_STRING_S,
-                businessPartnerNumber.getClass().getName()));
+                businessPartnerNumber.getClass().getName());
+        monitor.warning(message);
+        policyContext.reportProblem(message);
         continue;
       }
       if (isCorrectBusinessPartner(referingConnectorClaim, (String) businessPartnerNumber)) {
@@ -142,16 +159,21 @@ public abstract class AbstractBusinessPartnerValidation {
    * @return true if object is string and successfully evaluated against the claim
    */
   private boolean isBusinessPartnerNumber(
-      String referingConnectorClaim, Object businessPartnerNumber) {
+      String referingConnectorClaim, Object businessPartnerNumber, PolicyContext policyContext) {
     if (businessPartnerNumber == null) {
-      monitor.warning(String.format(FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_STRING_S, "null"));
+      final String message =
+          String.format(FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_STRING_S, "null");
+      monitor.warning(message);
+      policyContext.reportProblem(message);
       return false;
     }
     if (!(businessPartnerNumber instanceof String)) {
-      monitor.warning(
+      final String message =
           String.format(
               FAIL_EVALUATION_BECAUSE_RIGHT_VALUE_NOT_STRING_S,
-              businessPartnerNumber.getClass().getName()));
+              businessPartnerNumber.getClass().getName());
+      monitor.warning(message);
+      policyContext.reportProblem(message);
       return false;
     }
 
