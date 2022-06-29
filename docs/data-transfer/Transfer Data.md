@@ -119,8 +119,7 @@ curl -X GET "$SOKRATES_DATAMGMT_URL/data/contractnegotiations/$NEGOTIATION_ID" -
 ## 4. Transfer Data
 
 Initiate a data transfer using the contract agreement from the negotiation (from step 3). Then wait until the state of
-the
-transfer process is `COMPLETED`.
+the transfer process is `COMPLETED`.
 
 ![Sequence 1](diagrams/transfer_sequence_4.png)
 
