@@ -87,7 +87,6 @@ spec:
                 name: {{ include "edc-controlplane.fullname" . }}-env
             {{- if .Values.envSecretName }}
             - secretRef:
-                optional: true
                 name: {{ .Values.envSecretName | quote }}
             {{- end }}
           resources:
