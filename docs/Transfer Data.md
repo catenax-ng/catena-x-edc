@@ -4,8 +4,7 @@ This document will showcase a data transfer between two connectors.
 
 ---
 
-Before running the commands setup the all-in-one deployment from the. This is documented in it's
-[README.md](../README.md#Setup).
+Before running the commands setup the all-in-one deployment from the. This is documented in it's [README.md](../edc-tests/src/main/resources/deployment/helm/all-in-one/README.md#Setup).
 
 Please install [Bash jq](https://linuxhint.com/bash_jq_command/), as it is used in the bash calls of this document.
 
