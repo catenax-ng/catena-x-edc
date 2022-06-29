@@ -54,7 +54,7 @@ export SOKRATES_DATAMGMT_URL=$(minikube service sokrates-edc-controlplane -n edc
 
 Set up a data offer in **Plato**, so that **Sokrates** has something to consume.
 
-In case you are unfamiliar with the EDC terms `Asset`, `Policy` or `ContractDefinition` please have a look  the official open
+In case you are unfamiliar with the EDC terms `Asset`, `Policy` or `ContractDefinition` please have a look at the official open
 source documentation ([link](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/blob/main/docs/architecture/domain-model.md)).
 
 ![Sequence 1](diagrams/transfer_sequence_1.png)
