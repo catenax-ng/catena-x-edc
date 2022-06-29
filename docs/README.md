@@ -2,7 +2,7 @@
 
 The Catena-X Product EDC Repository creates runnable applications out of EDC extensions from the [Eclipse DataSpace Connector](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector) repository.
 
-When running a EDC connector from the Product EDC repository there are three setups to choose from. They only vary by using different extensions for
+When running a EDC connector from the Product EDC repository there are three setups to choose from. They only vary by using different extensions for 
 - Resolving of Connector-Identities
 - Persistence of the Control-Plane-State
 - Persistence of Secrets (Vault)
@@ -11,21 +11,21 @@ When running a EDC connector from the Product EDC repository there are three set
 
 The three supported setups are.
 
-- Setup 1
+- Setup 1: In Memory & Azure Vault
   - [Control Plane](../edc-controlplane/edc-controlplane-memory/README.md)
     - [IDS DAPS Extensions](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/iam/daps)
     - In Memory Persistence done by using no extension
     - [Azure Key Vault Extension](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/azure/vault)
   - [Data Plane](../edc-dataplane/edc-dataplane-azure-vault/README.md)
     - [Azure Key Vault Extension](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/azure/vault)
-- Setup 2
+- Setup 2: PostgreSQL & Azure Vault
   - [Control Plane](../edc-controlplane/edc-controlplane-postgresql/README.md)
     - [IDS DAPS Extensions](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/iam/daps)
     - [PostgreSQL Persistence Extensions](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/sql)
     - [Azure Key Vault Extension](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/azure/vault)
   - [Data Plane](../edc-dataplane/edc-dataplane-azure-vault/README.md)
     - [Azure Key Vault Extension](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/azure/vault)
-- Setup 3
+- Setup 3: PostgreSQL & HashiCorp Vault
   - [Control Plane](../edc-controlplane/edc-controlplane-postgresql-hashicorp-vault/README.md)
     - [IDS DAPS Extensions](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/iam/daps)
     - [PostgreSQL Persistence Extensions](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/sql)
