@@ -233,8 +233,6 @@ platoedccontrolplane:
     ## POSTGRESQL ##
     ################
 
-    # the psql username in section 'plato-postgresql'
-
     # see extension https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/sql/asset-index-sql
     EDC_DATASOURCE_ASSET_NAME: asset
     EDC_DATASOURCE_ASSET_USER: *psqlUsername
@@ -442,8 +440,6 @@ sokratesedccontrolplane:
     ################
     ## POSTGRESQL ##
     ################
-
-    # the psql username is configured in section 'sokrates-postgresql'
 
     # see extension https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/extensions/sql/asset-index-sql
     EDC_DATASOURCE_ASSET_NAME: asset
