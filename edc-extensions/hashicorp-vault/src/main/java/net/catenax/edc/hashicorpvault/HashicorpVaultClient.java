@@ -9,7 +9,7 @@
  *
  *  Contributors:
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
- *
+ *       Mercedes-Benz Tech Innovation GmbH - Make secret data & metadata paths configurable
  */
 
 package net.catenax.edc.hashicorpvault;
@@ -39,17 +39,16 @@ class HashicorpVaultClient {
   private static final String VAULT_TOKEN_HEADER = "X-Vault-Token";
   private static final String VAULT_REQUEST_HEADER = "X-Vault-Request";
   private static final MediaType MEDIA_TYPE_APPLICATION_JSON = MediaType.get("application/json");
-  private static final String VAULT_API_VERSION = "v1";
-  private static final String VAULT_SECRET_PATH = "secret";
-  private static final String VAULT_SECRET_DATA_PATH = "data";
-  private static final String VAULT_SECRET_METADATA_PATH = "metadata";
   private static final String CALL_UNSUCCESSFUL_ERROR_TEMPLATE = "Call unsuccessful: %s";
+
   @NonNull private final HashicorpVaultClientConfig config;
   @NonNull private final OkHttpClient okHttpClient;
   @NonNull private final ObjectMapper objectMapper;
+  @NonNull private final String secretDataPath;
+  @NonNull private final String secretMetadataPath;
 
   Result<String> getSecretValue(@NonNull String key) {
-    String requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
+    String requestURI = getSecretUrl(key, secretDataPath);
     Headers headers = getHeaders();
     Request request = new Request.Builder().url(requestURI).headers(headers).get().build();
 
@@ -79,7 +78,7 @@ class HashicorpVaultClient {
 
   Result<HashicorpVaultCreateEntryResponsePayload> setSecret(
       @NonNull String key, @NonNull String value) {
-    String requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
+    String requestURI = getSecretUrl(key, secretDataPath);
     Headers headers = getHeaders();
     HashicorpVaultCreateEntryRequestPayload requestPayload =
         HashicorpVaultCreateEntryRequestPayload.builder()
@@ -107,7 +106,7 @@ class HashicorpVaultClient {
   }
 
   Result<Void> destroySecret(@NonNull String key) {
-    String requestURI = getSecretUrl(key, VAULT_SECRET_METADATA_PATH);
+    String requestURI = getSecretUrl(key, secretMetadataPath);
     Headers headers = getHeaders();
     Request request = new Request.Builder().url(requestURI).headers(headers).delete().build();
 
@@ -140,13 +139,13 @@ class HashicorpVaultClient {
     return baseUrl;
   }
 
-  private String getSecretUrl(String key, String entryType) {
+  private String getSecretUrl(String key, String path) {
 
     key = URLEncoder.encode(key, StandardCharsets.UTF_8);
+    if (path == null || path.isBlank())
+      return URI.create(String.format("%s/%s", getBaseUrl(), key)).toString();
     return URI.create(
-            String.format(
-                "%s/%s/%s/%s/%s",
-                getBaseUrl(), VAULT_API_VERSION, VAULT_SECRET_PATH, entryType, key))
+            String.format("%s/%s/%s", getBaseUrl(), PathUtil.trimLeadingOrEndingSlash(path), key))
         .toString();
   }
 

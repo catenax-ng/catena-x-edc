@@ -42,7 +42,12 @@ class HashicorpVaultClientTest {
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
-        new HashicorpVaultClient(hashicorpVaultClientConfig, okHttpClient, objectMapper);
+        new HashicorpVaultClient(
+            hashicorpVaultClientConfig,
+            okHttpClient,
+            objectMapper,
+            "/v1/secret/data",
+            "/v1/secret/metadata");
     Call call = Mockito.mock(Call.class);
     Response response = Mockito.mock(Response.class);
     ResponseBody body = Mockito.mock(ResponseBody.class);
@@ -80,7 +85,12 @@ class HashicorpVaultClientTest {
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
-        new HashicorpVaultClient(hashicorpVaultClientConfig, okHttpClient, objectMapper);
+        new HashicorpVaultClient(
+            hashicorpVaultClientConfig,
+            okHttpClient,
+            objectMapper,
+            "/v1/secret/data",
+            "/v1/secret/metadata");
     HashicorpVaultCreateEntryResponsePayload payload =
         new HashicorpVaultCreateEntryResponsePayload();
 
@@ -120,7 +130,12 @@ class HashicorpVaultClientTest {
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
-        new HashicorpVaultClient(hashicorpVaultClientConfig, okHttpClient, objectMapper);
+        new HashicorpVaultClient(
+            hashicorpVaultClientConfig,
+            okHttpClient,
+            objectMapper,
+            "/v1/secret/data",
+            "/v1/secret/metadata");
 
     Call call = Mockito.mock(Call.class);
     Response response = Mockito.mock(Response.class);
