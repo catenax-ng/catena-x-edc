@@ -19,6 +19,7 @@ import static net.catenax.edc.hashicorpvault.HashicorpVaultExtension.VAULT_TOKEN
 import static net.catenax.edc.hashicorpvault.HashicorpVaultExtension.VAULT_URL;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import org.eclipse.dataspaceconnector.junit.launcher.EdcExtension;
@@ -62,17 +63,20 @@ class AbstractHashicorpIT {
 
   @BeforeEach
   final void beforeEach(EdcExtension extension) {
-    extension.setConfiguration(
-        new HashMap<>() {
-          {
-            put(
-                VAULT_URL,
-                String.format(
-                    "http://%s:%s", vaultContainer.getHost(), vaultContainer.getFirstMappedPort()));
-            put(VAULT_TOKEN, TOKEN);
-          }
-        });
+    extension.setConfiguration(getConfig());
     extension.registerSystemExtension(ServiceExtension.class, testExtension);
+  }
+
+  protected Map<String, String> getConfig() {
+    return new HashMap<>() {
+      {
+        put(
+            VAULT_URL,
+            String.format(
+                "http://%s:%s", vaultContainer.getHost(), vaultContainer.getFirstMappedPort()));
+        put(VAULT_TOKEN, TOKEN);
+      }
+    };
   }
 
   @Getter

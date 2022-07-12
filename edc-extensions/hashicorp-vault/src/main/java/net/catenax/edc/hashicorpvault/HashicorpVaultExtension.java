@@ -34,16 +34,7 @@ public class HashicorpVaultExtension implements VaultExtension {
   @EdcSetting(required = true)
   public static final String VAULT_TOKEN = "edc.vault.hashicorp.token";
 
-  @EdcSetting(required = false)
-  public static final String VAULT_SECRET_DATA_PATH = "edc.vault.hashicorp.secret.data.path";
-
-  public static final String VAULT_SECRET_DATA_PATH_DEFAULT = "/v1/secret/data";
-
-  @EdcSetting(required = false)
-  public static final String VAULT_SECRET_METADATA_PATH =
-      "edc.vault.hashicorp.secret.metadata.path";
-
-  public static final String VAULT_SECRET_METADATA_PATH_DEFAULT = "/v1/secret/metadata";
+  @EdcSetting public static final String VAULT_NAMESPACE = "edc.vault.hashicorp.namespace";
 
   @EdcSetting
   private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.hashicorp.timeout.seconds";
@@ -78,17 +69,8 @@ public class HashicorpVaultExtension implements VaultExtension {
 
     OkHttpClient okHttpClient = createOkHttpClient(config);
 
-    String secretDataPath =
-        context.getSetting(VAULT_SECRET_DATA_PATH, VAULT_SECRET_DATA_PATH_DEFAULT);
-    String secretMetadataPath =
-        context.getSetting(VAULT_SECRET_METADATA_PATH, VAULT_SECRET_METADATA_PATH_DEFAULT);
     HashicorpVaultClient client =
-        new HashicorpVaultClient(
-            config,
-            okHttpClient,
-            context.getTypeManager().getMapper(),
-            secretDataPath,
-            secretMetadataPath);
+        new HashicorpVaultClient(config, okHttpClient, context.getTypeManager().getMapper());
 
     vault = new HashicorpVault(client, context.getMonitor());
     certificateResolver = new HashicorpCertificateResolver(vault, context.getMonitor());
@@ -124,9 +106,12 @@ public class HashicorpVaultExtension implements VaultExtension {
           String.format("For Vault authentication [%s] is required", VAULT_TOKEN));
     }
 
+    String namespace = context.getSetting(VAULT_NAMESPACE, null);
+
     return HashicorpVaultClientConfig.builder()
         .vaultUrl(vaultUrl)
         .vaultToken(vaultToken)
+        .vaultNamespace(namespace)
         .timeout(vaultTimeoutDuration)
         .build();
   }

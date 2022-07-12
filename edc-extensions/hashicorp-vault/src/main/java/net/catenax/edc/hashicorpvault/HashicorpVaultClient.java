@@ -17,7 +17,6 @@ package net.catenax.edc.hashicorpvault;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -25,6 +24,7 @@ import java.util.Objects;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,17 +38,20 @@ class HashicorpVaultClient {
   static final String VAULT_DATA_ENTRY_NAME = "content";
   private static final String VAULT_TOKEN_HEADER = "X-Vault-Token";
   private static final String VAULT_REQUEST_HEADER = "X-Vault-Request";
+  private static final String VAULT_NAMESPACE_HEADER = "X-Vault-Namespace";
+  private static final String VAULT_API_VERSION = "v1";
+  private static final String VAULT_SECRET_PATH = "secret";
+  private static final String VAULT_SECRET_DATA_PATH = "data";
+  private static final String VAULT_SECRET_METADATA_PATH = "metadata";
   private static final MediaType MEDIA_TYPE_APPLICATION_JSON = MediaType.get("application/json");
   private static final String CALL_UNSUCCESSFUL_ERROR_TEMPLATE = "Call unsuccessful: %s";
 
   @NonNull private final HashicorpVaultClientConfig config;
   @NonNull private final OkHttpClient okHttpClient;
   @NonNull private final ObjectMapper objectMapper;
-  @NonNull private final String secretDataPath;
-  @NonNull private final String secretMetadataPath;
 
   Result<String> getSecretValue(@NonNull String key) {
-    String requestURI = getSecretUrl(key, secretDataPath);
+    HttpUrl requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
     Headers headers = getHeaders();
     Request request = new Request.Builder().url(requestURI).headers(headers).get().build();
 
@@ -78,7 +81,7 @@ class HashicorpVaultClient {
 
   Result<HashicorpVaultCreateEntryResponsePayload> setSecret(
       @NonNull String key, @NonNull String value) {
-    String requestURI = getSecretUrl(key, secretDataPath);
+    HttpUrl requestURI = getSecretUrl(key, VAULT_SECRET_DATA_PATH);
     Headers headers = getHeaders();
     HashicorpVaultCreateEntryRequestPayload requestPayload =
         HashicorpVaultCreateEntryRequestPayload.builder()
@@ -106,7 +109,7 @@ class HashicorpVaultClient {
   }
 
   Result<Void> destroySecret(@NonNull String key) {
-    String requestURI = getSecretUrl(key, secretMetadataPath);
+    HttpUrl requestURI = getSecretUrl(key, VAULT_SECRET_METADATA_PATH);
     Headers headers = getHeaders();
     Request request = new Request.Builder().url(requestURI).headers(headers).delete().build();
 
@@ -126,27 +129,22 @@ class HashicorpVaultClient {
     if (config.getVaultToken() != null) {
       headersBuilder = headersBuilder.add(VAULT_TOKEN_HEADER, config.getVaultToken());
     }
+    if (config.getVaultNamespace() != null) {
+      headersBuilder = headersBuilder.add(VAULT_NAMESPACE_HEADER, config.getVaultNamespace());
+    }
     return headersBuilder.build();
   }
 
-  private String getBaseUrl() {
-    String baseUrl = config.getVaultUrl();
-
-    if (baseUrl.endsWith("/")) {
-      baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
-    }
-
-    return baseUrl;
-  }
-
-  private String getSecretUrl(String key, String path) {
-
+  private HttpUrl getSecretUrl(String key, String entryType) {
     key = URLEncoder.encode(key, StandardCharsets.UTF_8);
-    if (path == null || path.isBlank())
-      return URI.create(String.format("%s/%s", getBaseUrl(), key)).toString();
-    return URI.create(
-            String.format("%s/%s/%s", getBaseUrl(), PathUtil.trimLeadingOrEndingSlash(path), key))
-        .toString();
+
+    return Objects.requireNonNull(HttpUrl.parse(config.getVaultUrl()))
+        .newBuilder()
+        .addPathSegment(VAULT_API_VERSION)
+        .addPathSegment(VAULT_SECRET_PATH)
+        .addPathSegment(entryType)
+        .addPathSegment(key)
+        .build();
   }
 
   private RequestBody createRequestBody(Object requestPayload) {

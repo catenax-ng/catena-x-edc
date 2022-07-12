@@ -25,5 +25,6 @@ import lombok.RequiredArgsConstructor;
 class HashicorpVaultClientConfig {
   private final String vaultUrl;
   private final String vaultToken;
+  private final String vaultNamespace;
   private final Duration timeout;
 }
