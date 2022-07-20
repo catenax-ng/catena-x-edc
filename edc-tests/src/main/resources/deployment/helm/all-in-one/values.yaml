@@ -11,7 +11,7 @@ idsdaps:
       name: sokrates
       attributes:
         issuerConnector: http://sokrates-edc-controlplane/BPNSOKRATES
-      # Must be the same certificate that is stores in section 'alice-vault'
+      # Must be the same certificate that is stores in section 'sokrates-vault'
       certificate: |-
         -----BEGIN CERTIFICATE-----
         MIIEAzCCAuugAwIBAgIUXFgjbN7jxGRUDkoUvEwcN3zcew8wDQYJKoZIhvcNAQEL
@@ -41,7 +41,7 @@ idsdaps:
       name: plato
       attributes:
         issuerConnector: http://plato-edc-controlplane/BPNPLATO
-      # Must be the same certificate that is stores in section 'bob-vault'
+      # Must be the same certificate that is stores in section 'plato-vault'
       certificate: |-
         -----BEGIN CERTIFICATE-----
         MIID7TCCAtWgAwIBAgIUJ0bwxUc7n3YK89mOyGXrLx2KO0YwDQYJKoZIhvcNAQEL
