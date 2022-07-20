@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - BusinessPartnerNumber constraint supports List structure
 - Confidential EDC settings can be set using K8 secrets
+- DAPS of All-In-One-Deployment supports BusinessPartnerNumbers
 
 ## [0.0.4] - 2022-06-27
 
