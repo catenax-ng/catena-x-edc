@@ -43,7 +43,7 @@ class HashicorpVaultClientTest {
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
         HashicorpVaultClientConfig.builder()
             .vaultUrl(vaultUrl)
-            .vaultApiPath(customApiPath)
+            .vaultApiSecretPath(customApiPath)
             .vaultToken(vaultToken)
             .timeout(timeout)
             .build();
@@ -86,7 +86,7 @@ class HashicorpVaultClientTest {
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
         HashicorpVaultClientConfig.builder()
             .vaultUrl(vaultUrl)
-            .vaultApiPath(customApiPath)
+            .vaultApiSecretPath(customApiPath)
             .vaultToken(vaultToken)
             .timeout(timeout)
             .build();
@@ -131,7 +131,7 @@ class HashicorpVaultClientTest {
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
         HashicorpVaultClientConfig.builder()
             .vaultUrl(vaultUrl)
-            .vaultApiPath(customApiPath)
+            .vaultApiSecretPath(customApiPath)
             .vaultToken(vaultToken)
             .timeout(timeout)
             .build();
