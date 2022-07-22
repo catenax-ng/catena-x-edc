@@ -12,11 +12,11 @@
  *
  */
 
-package features;
+package net.catenax.edc.tests.features;
 
 import org.junit.platform.suite.api.SelectClasspathResource;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectClasspathResource("features")
+@SelectClasspathResource("net/catenax/edc/tests/features")
 public class RunCucumberTest {}

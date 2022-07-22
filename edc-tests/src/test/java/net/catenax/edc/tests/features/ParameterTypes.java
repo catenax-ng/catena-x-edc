@@ -1,4 +1,4 @@
-package features;
+package net.catenax.edc.tests.features;
 
 import io.cucumber.java.ParameterType;
 import net.catenax.edc.tests.Connector;

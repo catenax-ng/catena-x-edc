@@ -1,3 +1,17 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
+
 package net.catenax.edc.tests;
 
 import com.google.gson.Gson;
@@ -11,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import net.catenax.edc.tests.data.Asset;
 import net.catenax.edc.tests.data.ContractDefinition;
 import net.catenax.edc.tests.data.ContractOffer;
@@ -26,6 +41,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+@Slf4j
 public class DataManagementAPI {
 
   private final String ASSET_PATH = "/assets";
@@ -43,8 +59,7 @@ public class DataManagementAPI {
     this.dataMgmtUrl = dataManagementUrl;
   }
 
-  public Stream<ContractOffer> requestCatalogFrom(String receivingConnectorUrl)
-      throws ClientProtocolException, IOException {
+  public Stream<ContractOffer> requestCatalogFrom(String receivingConnectorUrl) throws IOException {
     final String encodedUrl =
         URLEncoder.encode(receivingConnectorUrl, StandardCharsets.UTF_8.toString());
     final DataManagementApiContractOfferCatalog catalog =
@@ -53,17 +68,18 @@ public class DataManagementAPI {
             "providerUrl=" + encodedUrl,
             new TypeToken<DataManagementApiContractOfferCatalog>() {});
 
-    System.out.println("Received " + catalog.contractOffers.size() + " offers");
+    log.debug("Received " + catalog.contractOffers.size() + " offers");
+
     return catalog.contractOffers.stream().map(this::mapOffer);
   }
 
-  public Asset getAsset(String id) throws IOException, ClientProtocolException {
+  public Asset getAsset(String id) throws IOException {
     final DataManagementApiAsset asset =
         get(ASSET_PATH + "/" + id, new TypeToken<DataManagementApiAsset>() {});
     return mapAsset(asset);
   }
 
-  public Policy getPolicy(String id) throws IOException, ClientProtocolException {
+  public Policy getPolicy(String id) throws IOException {
     final DataManagementApiPolicy policy =
         get(POLICY_PATH + "/" + id, new TypeToken<DataManagementApiPolicy>() {});
     return mapPolicy(policy);
@@ -78,7 +94,7 @@ public class DataManagementAPI {
     return mapContractDefinition(contractDefinition);
   }
 
-  public void createAsset(Asset asset) throws ClientProtocolException, IOException {
+  public void createAsset(Asset asset) throws IOException {
     final DataManagementApiDataAddress dataAddress = new DataManagementApiDataAddress();
     dataAddress.properties =
         Map.of(
@@ -98,8 +114,7 @@ public class DataManagementAPI {
     post(POLICY_PATH, mapPolicy(policy));
   }
 
-  public void createContractDefinition(ContractDefinition contractDefinition)
-      throws ClientProtocolException, IOException {
+  public void createContractDefinition(ContractDefinition contractDefinition) throws IOException {
     post(CONTRACT_DEFINITIONS_PATH, mapContractDefinition(contractDefinition));
   }
 
@@ -109,14 +124,13 @@ public class DataManagementAPI {
     return assets.stream().map(this::mapAsset);
   }
 
-  public Stream<Policy> getAllPolicies() throws IOException, ClientProtocolException {
+  public Stream<Policy> getAllPolicies() throws IOException {
     final List<DataManagementApiPolicy> policies =
         get(POLICY_PATH, PARAM_NO_LIMIT, new TypeToken<ArrayList<DataManagementApiPolicy>>() {});
     return policies.stream().map(this::mapPolicy);
   }
 
-  public Stream<ContractDefinition> getAllContractDefinitions()
-      throws IOException, ClientProtocolException {
+  public Stream<ContractDefinition> getAllContractDefinitions() throws IOException {
     final List<DataManagementApiContractDefinition> contractDefinitions =
         get(
             CONTRACT_DEFINITIONS_PATH,
@@ -125,25 +139,23 @@ public class DataManagementAPI {
     return contractDefinitions.stream().map(this::mapContractDefinition);
   }
 
-  public void deleteAsset(String id) throws IOException, ClientProtocolException {
+  public void deleteAsset(String id) throws IOException {
     delete(ASSET_PATH + "/" + id);
   }
 
-  public void deletePolicy(String id) throws IOException, ClientProtocolException {
+  public void deletePolicy(String id) throws IOException {
     delete(POLICY_PATH + "/" + id);
   }
 
-  public void deleteContractDefinition(String id) throws IOException, ClientProtocolException {
+  public void deleteContractDefinition(String id) throws IOException {
     delete(CONTRACT_DEFINITIONS_PATH + "/" + id);
   }
 
-  private <T> T get(String path, String params, TypeToken<?> typeToken)
-      throws IOException, ClientProtocolException {
+  private <T> T get(String path, String params, TypeToken<?> typeToken) throws IOException {
     return get(path + "?" + params, typeToken);
   }
 
-  private <T> T get(String path, TypeToken<?> typeToken)
-      throws IOException, ClientProtocolException {
+  private <T> T get(String path, TypeToken<?> typeToken) throws IOException {
 
     final HttpGet get = new HttpGet(dataMgmtUrl + path);
 
@@ -153,29 +165,29 @@ public class DataManagementAPI {
     return new Gson().fromJson(new String(json), typeToken.getType());
   }
 
-  private void delete(String path) throws IOException, ClientProtocolException {
+  private void delete(String path) throws IOException {
     final HttpDelete delete = new HttpDelete(dataMgmtUrl + path);
 
     sendRequest(delete);
   }
 
-  private void post(String path, Object object) throws ClientProtocolException, IOException {
+  private void post(String path, Object object) throws IOException {
     final String url = String.format("%s%s", dataMgmtUrl, path);
     final HttpPost post = new HttpPost(url);
     post.addHeader("Content-Type", "application/json");
 
     var json = new Gson().toJson(object);
-    System.out.println("POST Payload: " + json);
+
+    log.debug("POST Payload: " + json);
 
     post.setEntity(new StringEntity(json));
     sendRequest(post);
   }
 
-  private HttpResponse sendRequest(HttpRequestBase request)
-      throws IOException, ClientProtocolException {
+  private HttpResponse sendRequest(HttpRequestBase request) throws IOException {
     request.addHeader("X-Api-Key", "password");
 
-    System.out.println(String.format("Send %-6s %s", request.getMethod(), request.getURI()));
+    log.debug(String.format("Send %-6s %s", request.getMethod(), request.getURI()));
 
     final HttpResponse response = httpClient.execute(request);
     if (200 > response.getStatusLine().getStatusCode()
