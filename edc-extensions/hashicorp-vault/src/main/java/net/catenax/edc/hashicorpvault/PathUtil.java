@@ -16,10 +16,6 @@ package net.catenax.edc.hashicorpvault;
 
 final class PathUtil {
 
-  private PathUtil() {
-    throw new IllegalStateException("Private constructor invocation disallowed");
-  }
-
   static String trimLeadingOrEndingSlash(String path) {
     var fixedPath = path;
 

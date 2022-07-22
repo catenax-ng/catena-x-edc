@@ -41,7 +41,7 @@ class HashicorpVaultHealthCheckTest {
   }
 
   @ParameterizedTest
-  @ValueSource(ints = {200, 409, 472, 473, 501, 503})
+  @ValueSource(ints = {200, 409, 472, 473, 501, 503, 999})
   void testResponseFromCode(int code) throws IOException {
 
     Mockito.when(client.getHealth())

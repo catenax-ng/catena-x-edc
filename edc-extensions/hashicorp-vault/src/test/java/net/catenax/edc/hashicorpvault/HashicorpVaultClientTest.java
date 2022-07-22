@@ -157,7 +157,20 @@ class HashicorpVaultClientTest {
     Mockito.when(call.execute()).thenReturn(response);
     Mockito.when(response.code()).thenReturn(200);
     Mockito.when(response.body()).thenReturn(body);
-    Mockito.when(body.string()).thenReturn("{ \"initialized\": true }");
+    Mockito.when(body.string())
+        .thenReturn(
+            "{ "
+                + "\"initialized\": true, "
+                + "\"sealed\": false,"
+                + "\"standby\": false,"
+                + "\"performance_standby\": false,"
+                + "\"replication_performance_mode\": \"mode\","
+                + "\"replication_dr_mode\": \"mode\","
+                + "\"server_time_utc\": 100,"
+                + "\"version\": \"1.0.0\","
+                + "\"cluster_name\": \"name\","
+                + "\"cluster_id\": \"id\" "
+                + " }");
 
     // invoke
     HashicorpVaultHealthResponse result = vaultClient.getHealth();
@@ -177,7 +190,20 @@ class HashicorpVaultClientTest {
         HashicorpVaultHealthResponse.HashiCorpVaultHealthResponseCode
             .INITIALIZED_UNSEALED_AND_ACTIVE,
         result.getCodeAsEnum());
-    Assertions.assertNotNull(result.getPayload());
+
+    HashicorpVaultHealthResponsePayload resultPayload = result.getPayload();
+
+    Assertions.assertNotNull(resultPayload);
+    Assertions.assertTrue(resultPayload.isInitialized());
+    Assertions.assertFalse(resultPayload.isSealed());
+    Assertions.assertFalse(resultPayload.isStandby());
+    Assertions.assertFalse(resultPayload.isPerformanceStandby());
+    Assertions.assertEquals("mode", resultPayload.getReplicationPerformanceMode());
+    Assertions.assertEquals("mode", resultPayload.getReplicationDrMode());
+    Assertions.assertEquals(100, resultPayload.getServerTimeUtc());
+    Assertions.assertEquals("1.0.0", resultPayload.getVersion());
+    Assertions.assertEquals("id", resultPayload.getClusterId());
+    Assertions.assertEquals("name", resultPayload.getClusterName());
   }
 
   @Test
