@@ -10,6 +10,7 @@
  *  Contributors:
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *       Mercedes-Benz Tech Innovation GmbH - Make secret data & metadata paths configurable
+ *       Mercedes-Benz Tech Innovation GmbH - Add vault health check
  */
 
 package net.catenax.edc.hashicorpvault;

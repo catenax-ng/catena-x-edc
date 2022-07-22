@@ -1,9 +1,24 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial Test
+ *
+ */
+
 package net.catenax.edc.hashicorpvault;
 
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.spi.system.health.HealthCheckService;
 import org.eclipse.dataspaceconnector.spi.types.TypeManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -78,5 +93,21 @@ class HashicorpVaultExtensionTest {
     Mockito.verify(healthCheckService, Mockito.times(0)).addReadinessProvider(Mockito.any());
     Mockito.verify(healthCheckService, Mockito.times(0)).addLivenessProvider(Mockito.any());
     Mockito.verify(healthCheckService, Mockito.times(0)).addStartupStatusProvider(Mockito.any());
+  }
+
+  @Test
+  void throwsHashicorpVaultExceptionOnVaultUrlUndefined() {
+    Mockito.when(context.getSetting(HashicorpVaultExtension.VAULT_URL, null)).thenReturn(null);
+
+    Assertions.assertThrows(
+        HashicorpVaultException.class, () -> extension.initializeVault(context));
+  }
+
+  @Test
+  void throwsHashicorpVaultExceptionOnVaultTokenUndefined() {
+    Mockito.when(context.getSetting(HashicorpVaultExtension.VAULT_TOKEN, null)).thenReturn(null);
+
+    Assertions.assertThrows(
+        HashicorpVaultException.class, () -> extension.initializeVault(context));
   }
 }

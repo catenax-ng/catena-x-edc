@@ -10,6 +10,7 @@
  *  Contributors:
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *       Mercedes-Benz Tech Innovation GmbH - Make secret data & metadata paths configurable
+ *       Mercedes-Benz Tech Innovation GmbH - Add vault health check
  *
  */
 
@@ -17,7 +18,6 @@ package net.catenax.edc.hashicorpvault;
 
 import java.time.Duration;
 import okhttp3.OkHttpClient;
-import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.security.CertificateResolver;
 import org.eclipse.dataspaceconnector.spi.security.PrivateKeyResolver;
@@ -124,7 +124,7 @@ public class HashicorpVaultExtension implements VaultExtension {
     final String vaultToken = context.getSetting(VAULT_TOKEN, null);
 
     if (vaultToken == null) {
-      throw new EdcException(
+      throw new HashicorpVaultException(
           String.format("For Vault authentication [%s] is required", VAULT_TOKEN));
     }
 
