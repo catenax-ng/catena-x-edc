@@ -20,11 +20,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class PathUtilTest {
+class PathUtilTest {
 
   @ParameterizedTest
   @MethodSource("provideStringsForTrimsPathsCorrect")
-  public void trimsPathsCorrect(String path, String expected) {
+  void trimsPathsCorrect(String path, String expected) {
     final String result = PathUtil.trimLeadingOrEndingSlash(path);
 
     Assertions.assertEquals(expected, result);
