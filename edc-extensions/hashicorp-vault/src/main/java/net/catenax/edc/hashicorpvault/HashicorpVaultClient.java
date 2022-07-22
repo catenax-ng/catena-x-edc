@@ -38,9 +38,6 @@ class HashicorpVaultClient {
   static final String VAULT_DATA_ENTRY_NAME = "content";
   private static final String VAULT_TOKEN_HEADER = "X-Vault-Token";
   private static final String VAULT_REQUEST_HEADER = "X-Vault-Request";
-  private static final String VAULT_NAMESPACE_HEADER = "X-Vault-Namespace";
-  private static final String VAULT_API_VERSION = "v1";
-  private static final String VAULT_SECRET_PATH = "secret";
   private static final String VAULT_SECRET_DATA_PATH = "data";
   private static final String VAULT_SECRET_METADATA_PATH = "metadata";
   private static final MediaType MEDIA_TYPE_APPLICATION_JSON = MediaType.get("application/json");
@@ -129,19 +126,17 @@ class HashicorpVaultClient {
     if (config.getVaultToken() != null) {
       headersBuilder = headersBuilder.add(VAULT_TOKEN_HEADER, config.getVaultToken());
     }
-    if (config.getVaultNamespace() != null) {
-      headersBuilder = headersBuilder.add(VAULT_NAMESPACE_HEADER, config.getVaultNamespace());
-    }
     return headersBuilder.build();
   }
 
   private HttpUrl getSecretUrl(String key, String entryType) {
     key = URLEncoder.encode(key, StandardCharsets.UTF_8);
 
+    final String vaultApiPath = config.getVaultApiPath();
+
     return Objects.requireNonNull(HttpUrl.parse(config.getVaultUrl()))
         .newBuilder()
-        .addPathSegment(VAULT_API_VERSION)
-        .addPathSegment(VAULT_SECRET_PATH)
+        .addPathSegments(PathUtil.trimLeadingOrEndingSlash(vaultApiPath))
         .addPathSegment(entryType)
         .addPathSegment(key)
         .build();

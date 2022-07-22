@@ -34,7 +34,10 @@ public class HashicorpVaultExtension implements VaultExtension {
   @EdcSetting(required = true)
   public static final String VAULT_TOKEN = "edc.vault.hashicorp.token";
 
-  @EdcSetting public static final String VAULT_NAMESPACE = "edc.vault.hashicorp.namespace";
+  @EdcSetting
+  public static final String VAULT_API_SECRET_PATH = "edc.vault.hashicorp.api.secret.path";
+
+  public static final String VAULT_API_SECRET_PATH_DEFAULT = "/v1/secret";
 
   @EdcSetting
   private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.hashicorp.timeout.seconds";
@@ -65,11 +68,11 @@ public class HashicorpVaultExtension implements VaultExtension {
 
   @Override
   public void initializeVault(ServiceExtensionContext context) {
-    HashicorpVaultClientConfig config = loadHashicorpVaultClientConfig(context);
+    final HashicorpVaultClientConfig config = loadHashicorpVaultClientConfig(context);
 
-    OkHttpClient okHttpClient = createOkHttpClient(config);
+    final OkHttpClient okHttpClient = createOkHttpClient(config);
 
-    HashicorpVaultClient client =
+    final HashicorpVaultClient client =
         new HashicorpVaultClient(config, okHttpClient, context.getTypeManager().getMapper());
 
     vault = new HashicorpVault(client, context.getMonitor());
@@ -91,27 +94,28 @@ public class HashicorpVaultExtension implements VaultExtension {
   private HashicorpVaultClientConfig loadHashicorpVaultClientConfig(
       ServiceExtensionContext context) {
 
-    String vaultUrl = context.getSetting(VAULT_URL, null);
+    final String vaultUrl = context.getSetting(VAULT_URL, null);
     if (vaultUrl == null) {
       throw new HashicorpVaultException(String.format("Vault URL (%s) must be defined", VAULT_URL));
     }
 
-    int vaultTimeoutSeconds = Math.max(0, context.getSetting(VAULT_TIMEOUT_SECONDS, 30));
-    Duration vaultTimeoutDuration = Duration.ofSeconds(vaultTimeoutSeconds);
+    final int vaultTimeoutSeconds = Math.max(0, context.getSetting(VAULT_TIMEOUT_SECONDS, 30));
+    final Duration vaultTimeoutDuration = Duration.ofSeconds(vaultTimeoutSeconds);
 
-    String vaultToken = context.getSetting(VAULT_TOKEN, null);
+    final String vaultToken = context.getSetting(VAULT_TOKEN, null);
 
     if (vaultToken == null) {
       throw new EdcException(
           String.format("For Vault authentication [%s] is required", VAULT_TOKEN));
     }
 
-    String namespace = context.getSetting(VAULT_NAMESPACE, null);
+    final String apiSecretPath =
+        context.getSetting(VAULT_API_SECRET_PATH, VAULT_API_SECRET_PATH_DEFAULT);
 
     return HashicorpVaultClientConfig.builder()
         .vaultUrl(vaultUrl)
         .vaultToken(vaultToken)
-        .vaultNamespace(namespace)
+        .vaultApiPath(apiSecretPath)
         .timeout(vaultTimeoutDuration)
         .build();
   }

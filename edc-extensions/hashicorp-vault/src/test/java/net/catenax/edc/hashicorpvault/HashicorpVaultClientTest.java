@@ -15,6 +15,7 @@
 package net.catenax.edc.hashicorpvault;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import okhttp3.Call;
@@ -29,6 +30,8 @@ import org.mockito.Mockito;
 
 class HashicorpVaultClientTest {
   private static final String key = "key";
+  private static final String customApiPath = "v1/test/secret";
+  private static final Duration timeout = Duration.ofSeconds(30);
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
@@ -38,7 +41,12 @@ class HashicorpVaultClientTest {
     String vaultUrl = "https://mock.url";
     String vaultToken = UUID.randomUUID().toString();
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
-        HashicorpVaultClientConfig.builder().vaultUrl(vaultUrl).vaultToken(vaultToken).build();
+        HashicorpVaultClientConfig.builder()
+            .vaultUrl(vaultUrl)
+            .vaultApiPath(customApiPath)
+            .vaultToken(vaultToken)
+            .timeout(timeout)
+            .build();
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
@@ -64,7 +72,7 @@ class HashicorpVaultClientTest {
             Mockito.argThat(
                 request ->
                     request.method().equalsIgnoreCase("GET")
-                        && request.url().encodedPath().contains("/v1/secret/data")
+                        && request.url().encodedPath().contains(customApiPath + "/data")
                         && request.url().encodedPathSegments().contains(key)));
   }
 
@@ -76,7 +84,12 @@ class HashicorpVaultClientTest {
     String vaultToken = UUID.randomUUID().toString();
     String secretValue = UUID.randomUUID().toString();
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
-        HashicorpVaultClientConfig.builder().vaultUrl(vaultUrl).vaultToken(vaultToken).build();
+        HashicorpVaultClientConfig.builder()
+            .vaultUrl(vaultUrl)
+            .vaultApiPath(customApiPath)
+            .vaultToken(vaultToken)
+            .timeout(timeout)
+            .build();
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
@@ -105,7 +118,7 @@ class HashicorpVaultClientTest {
             Mockito.argThat(
                 request ->
                     request.method().equalsIgnoreCase("POST")
-                        && request.url().encodedPath().contains("/v1/secret/data")
+                        && request.url().encodedPath().contains(customApiPath + "/data")
                         && request.url().encodedPathSegments().contains(key)));
   }
 
@@ -116,7 +129,12 @@ class HashicorpVaultClientTest {
     String vaultUrl = "https://mock.url";
     String vaultToken = UUID.randomUUID().toString();
     HashicorpVaultClientConfig hashicorpVaultClientConfig =
-        HashicorpVaultClientConfig.builder().vaultUrl(vaultUrl).vaultToken(vaultToken).build();
+        HashicorpVaultClientConfig.builder()
+            .vaultUrl(vaultUrl)
+            .vaultApiPath(customApiPath)
+            .vaultToken(vaultToken)
+            .timeout(timeout)
+            .build();
 
     OkHttpClient okHttpClient = Mockito.mock(OkHttpClient.class);
     HashicorpVaultClient vaultClient =
@@ -140,7 +158,7 @@ class HashicorpVaultClientTest {
             Mockito.argThat(
                 request ->
                     request.method().equalsIgnoreCase("DELETE")
-                        && request.url().encodedPath().contains("/v1/secret/metadata")
+                        && request.url().encodedPath().contains(customApiPath + "/metadata")
                         && request.url().encodedPathSegments().contains(key)));
   }
 }
