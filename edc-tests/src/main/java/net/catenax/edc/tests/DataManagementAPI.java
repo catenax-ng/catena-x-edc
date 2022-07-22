@@ -35,14 +35,12 @@ public class DataManagementAPI {
 
   private final String PARAM_NO_LIMIT = "limit=" + Integer.MAX_VALUE;
 
-  private final String apiKey;
   private final String dataMgmtUrl;
   private final HttpClient httpClient;
 
-  public DataManagementAPI(String dataManagementUrl, String apiKey) {
+  public DataManagementAPI(String dataManagementUrl) {
     this.httpClient = HttpClientBuilder.create().build();
     this.dataMgmtUrl = dataManagementUrl;
-    this.apiKey = apiKey;
   }
 
   public Stream<ContractOffer> requestCatalogFrom(String receivingConnectorUrl)
@@ -175,7 +173,7 @@ public class DataManagementAPI {
 
   private HttpResponse sendRequest(HttpRequestBase request)
       throws IOException, ClientProtocolException {
-    request.addHeader("X-Api-Key", apiKey);
+    request.addHeader("X-Api-Key", "password");
 
     System.out.println(String.format("Send %-6s %s", request.getMethod(), request.getURI()));
 

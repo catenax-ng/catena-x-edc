@@ -75,11 +75,6 @@ jobs:
       -
         name: Define test environment variables
         run: |-
-          # Create random Sokrates Data-Management-Api password
-          echo SOKRATES_DATA_MANAGEMENT_API_AUTH_KEY="sokrates" | tee -a ${GITHUB_ENV}
-          # Create random Plato Data-Management-Api password
-          echo PLATO_DATA_MANAGEMENT_API_AUTH_KEY="plato" | tee -a ${GITHUB_ENV}
-
           # Define endpoints
           echo "SOKRATES_DATA_MANAGEMENT_URL=http://sokrates-edc-controlplane:8181/data" | tee -a ${GITHUB_ENV}
           echo "SOKRATES_IDS_URL=http://sokrates-edc-controlplane:8282/api/v1/ids" | tee -a ${GITHUB_ENV}
@@ -95,31 +90,23 @@ jobs:
 
           # Install the all-in-one environment
           helm install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
-            --set sokrates-edc-controlplane.service.type=ClusterIP \
-            --set sokrates-edc-controlplane.env.EDC_API_AUTH_KEY=${SOKRATES_DATA_MANAGEMENT_API_AUTH_KEY} \
-            --set sokrates-edc-dataplane.service.type=ClusterIP \
             --set sokrates-backend-application.persistence.enabled=false \
-            --set plato-edc-controlplane.service.type=ClusterIP \
-            --set plato-edc-controlplane.env.EDC_API_AUTH_KEY=${PLATO_DATA_MANAGEMENT_API_AUTH_KEY} \
-            --set plato-edc-dataplane.service.type=ClusterIP \
             --set plato-backend-application.persistence.enabled=false \
             --wait-for-jobs --timeout=120s
-
-          helm list
       -
         name: Wait for Sokrates and Plato to become ready
         run: |-
           # Wait for Control-/DataPlanes to become ready
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokrates-backend-application --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokrates-backend-application && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=plato-backend-application --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=plato-backend-application && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokrates-edc-dataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokrates-edc-dataplane && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=plato-edc-dataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=plato-edc-dataplane && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokrates-vault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokrates-vault && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=plato-vault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=plato-vault && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokrates-postgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokrates-postgresql && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=plato-postgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=plato-postgresql && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokrates-edc-controlplane --timeout=600s || ( kubectl logs -l app.kubernetes.io/name=sokrates-edc-controlplane && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=plato-edc-controlplane --timeout=600s || ( kubectl logs -l app.kubernetes.io/name=plato-edc-controlplane && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesbackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesbackendapplication && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platobackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platobackendapplication && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesvault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesvault && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platovault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platovault && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratespostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratespostgresql && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platopostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platopostgresql && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesedcdataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesedcdataplane && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platoedcdataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platoedcdataplane && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesedccontrolplane --timeout=600s || ( kubectl logs -l app.kubernetes.io/name=sokratesedccontrolplane && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platoedccontrolplane --timeout=600s || ( kubectl logs -l app.kubernetes.io/name=platoedccontrolplane && exit 1 )
 
       ##############################################
       ### Run Business Tests inside kind cluster ###

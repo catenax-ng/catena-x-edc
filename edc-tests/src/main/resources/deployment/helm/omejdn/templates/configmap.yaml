@@ -5,6 +5,35 @@ metadata:
   labels:
     {{- include "omejdn.labels" . | nindent 4 }}
 data:
+  omejdn.key:  |-
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpAIBAAKCAQEAtLohyo1POig+pMuj9WLrMGV2KY4SmXFDefMqob9muUoSq9WX
+      kljipUQP7BAPgEitOX4otPLGSMMls//Xlh2LkbkPNb3BTQSeZlWwDz7qgm9n0sdD
+      CeNuR0K6BukxhQ+LEpEfY6GVyBDKXk71W/0Ba0wfQQt3Cl3VEnN8ebBsiSBxjdEO
+      bCSH5++PezbRSEEPYZx1IzlECKgq39ywOKL/I7vxYa8C5Q3L89Jiktj6FXwYwEW+
+      UIdF9yP9BOl8FQ/gjLfRICv+zru/TO1EgKfkOQLYQn3DV4+xgXRkDdVsVkLahaQ7
+      v76KQpPr3IAsqruHhh9xanJba2AVqiJspNBlSwIDAQABAoIBADQ0Eb+y6sA3UMUE
+      Z6Nhg+MSY7vkJH47J80JjvZy1abO/S6yf1pQH4OycdDz4K5jD9psFTETcXAiInlo
+      fOsJNMAOjxSsb7IiE+kmdjkpKM8tg/VwBm7MSZX+8cI+SMYRM9BUqBb83UmRhAsS
+      zq/YGLlYHy0INUYCzaHLRxjVe7xt6xQkc5TQkg3BwAcdqnpH7sSwQP3kyQIWGg6d
+      a44EIPyXX3xbFR284gp4lpFZxb0qd2pS4kywlGPqbc+cmkdeq7VEc6SPy05jY0A0
+      XxQ9cvH9MToP50/p/Ntbqel5XLP89aMiz+xvtOx/WJLK4HOpkX5UfzcQkkhTh1z2
+      YZle+kECgYEAtR0qxJ7HtJpVJ3fzxN3SAtht2NWP+wqQUmuWZgYMf2cwY2EEVDxY
+      hGhr0oelBtYKxSNICnbMmPtsCY+zMYcx/5/x8eHQkUrrARKPQcpT75nKStrugtQM
+      5vPv4wq1jqwa3tcpgOPJ4PCb6ekn9LuviAxsIF4GFrwpXH3uMjXsbEECgYEA/3QE
+      NBuCxeyf4RuL/3RcadSX94x/5hszQwOBXQlFrYXdvZggBeR8uoiqzoWD5djjGIUZ
+      LFPG+w8q070fYm3+SuSks3Lck17Y5UnSkc5RUOefOxC9O3/Eh8VTza4KNMasn43G
+      PFHZSSJPPpff64VLqa+XIIGfyyc7+Xmx88BCHosCgYEApR/FiWQWQaPf9U8Y0ilH
+      Os7mP6ZeUgxMjsiGY9gp9tI2vLSMRNyL+5RUkaqYHAZz5U6IdPnhCa1Yz9LTFlnj
+      jOLfrJ8sD/uVDPJF6D62jiHR3LOEd4UrijlnQcHWzBA/o2HZ9ig4O7xC+l1Xz3p6
+      y/g/cLcop/u/XhN2YxLkzcECgYBjEFO8/Vo2dS//NRaSh0Z7SBVyy4qh6rRzbX2S
+      XdEmnL5EEyWAA36XO/65Pi/LR9Oxo5QCi66jl9ss56+vFSbDVm3EpWuCvwpvyLQf
+      FRqVvG0Uk8Y+t6q4WD7KiY6trsosyecxZzBTWznN9UnB5RxVfqGl2n7kYp+wfJAV
+      Dd7WRwKBgQCHxuggBEFWyitod8+epzKnYrPPrc4u4EEm8fV6yIcJ2jMfgwEFrvyg
+      ACWWl43G0b9dCfsBTIZI7qpx2YsRpcBMNu23xt1hgtIF7yA+HG2TucYb5fWBnaYZ
+      Ag2OY6jXsbPiowMBj2LgXTYRCxP0LP179B/MkSBQL4xEu9zNcV9zcw==
+      -----END RSA PRIVATE KEY-----
+
   omejdn.yml:  |-
     ---
     host: http://ids-daps:4567/

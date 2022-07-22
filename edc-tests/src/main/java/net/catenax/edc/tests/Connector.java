@@ -29,7 +29,6 @@ public class Connector {
   private final DataManagementAPI dataManagementAPI = loadDataManagementAPI();
 
   private DataManagementAPI loadDataManagementAPI() {
-    return new DataManagementAPI(
-        environment.getDataManagementUrl(), environment.getDataManagementApiAuthKey());
+    return new DataManagementAPI(environment.getDataManagementUrl());
   }
 }
