@@ -14,6 +14,9 @@
 
 package net.catenax.edc.tests;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class Constants {
   public static final String DATA_MANAGEMENT_URL = "DATA_MANAGEMENT_URL";
   /** refers to edc.api.auth.key resp. EDC_API_AUTH_KEY */

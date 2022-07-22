@@ -44,12 +44,12 @@ import org.apache.http.impl.client.HttpClientBuilder;
 @Slf4j
 public class DataManagementAPI {
 
-  private final String ASSET_PATH = "/assets";
-  private final String POLICY_PATH = "/policies";
-  private final String CONTRACT_DEFINITIONS_PATH = "/contractdefinitions";
-  private final String CATALOG_PATH = "/catalog";
+  private static final String ASSET_PATH = "/assets";
+  private static final String POLICY_PATH = "/policies";
+  private static final String CONTRACT_DEFINITIONS_PATH = "/contractdefinitions";
+  private static final String CATALOG_PATH = "/catalog";
 
-  private final String PARAM_NO_LIMIT = "limit=" + Integer.MAX_VALUE;
+  private static final String PARAM_NO_LIMIT = "limit=" + Integer.MAX_VALUE;
 
   private final String dataMgmtUrl;
   private final HttpClient httpClient;
