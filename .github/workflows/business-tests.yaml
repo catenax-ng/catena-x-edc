@@ -16,10 +16,6 @@ on:
 
 jobs:
   business-test:
-    if: |-
-      contains(github.event.pull_request.labels.*.name, 'edc') ||
-      contains(github.event.pull_request.labels.*.name, 'enhancement') ||
-      contains(github.event.pull_request.labels.*.name, 'business-tests')
     runs-on: ubuntu-latest
     steps:
       ##############
@@ -28,6 +24,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
       -
         name: Set-Up JDK 11
         uses: actions/setup-java@v3.4.0
@@ -92,21 +90,54 @@ jobs:
           # Update helm dependencies
           helm dependency update edc-tests/src/main/resources/deployment/helm/all-in-one
 
-          # Install the all-in-one environment
+          # Install the all-in-one supporting infrastructure environment
           helm install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
+            --set idsdaps.enabled=true \
+            --set platovault.enabled=true \
+            --set platopostgresql.enabled=true \
+            --set sokratesvault.enabled=true \
+            --set sokratespostgresql.enabled=true \
+            --set platoedccontrolplane.enabled=false \
+            --set platoedcdataplane.enabled=false \
+            --set platobackendapplication.enabled=false \
+            --set sokratesedccontrolplane.enabled=false \
+            --set sokratesedcdataplane.enabled=false \
+            --set sokratesbackendapplication.enabled=false \
             --set sokrates-backend-application.persistence.enabled=false \
             --set plato-backend-application.persistence.enabled=false \
             --wait-for-jobs --timeout=120s
-      -
-        name: Wait for Sokrates and Plato to become ready
-        run: |-
-          # Wait for Control-/DataPlanes to become ready
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesbackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesbackendapplication && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platobackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platobackendapplication && exit 1 )
+
+          sleep 5s
+
+          # Wait for supporting infrastructure to become ready
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=idsdaps --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=idsdaps && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesvault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesvault && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platovault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platovault && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratespostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratespostgresql && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platopostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platopostgresql && exit 1 )
+
+          # Install the all-in-one Control-/DataPlanes environment
+          helm upgrade --install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
+            --set idsdaps.enabled=true \
+            --set platovault.enabled=true \
+            --set platopostgresql.enabled=true \
+            --set sokratesvault.enabled=true \
+            --set sokratespostgresql.enabled=true \
+            --set platoedccontrolplane.enabled=true \
+            --set platoedcdataplane.enabled=true \
+            --set platobackendapplication.enabled=true \
+            --set sokratesedccontrolplane.enabled=true \
+            --set sokratesedcdataplane.enabled=true \
+            --set sokratesbackendapplication.enabled=true \
+            --set sokrates-backend-application.persistence.enabled=true \
+            --set plato-backend-application.persistence.enabled=true \
+            --wait-for-jobs --timeout=120s
+
+          sleep 5s
+          
+          # Wait for Control-/DataPlanes to become ready
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesbackendapplication --timeout=120s || ( kubectl logs -since=0 -l app.kubernetes.io/name=sokratesbackendapplication && exit 1 )
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platobackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platobackendapplication && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesedcdataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesedcdataplane && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platoedcdataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platoedcdataplane && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesedccontrolplane --timeout=600s || ( kubectl logs -l app.kubernetes.io/name=sokratesedccontrolplane && exit 1 )
