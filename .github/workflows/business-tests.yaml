@@ -16,6 +16,10 @@ on:
 
 jobs:
   business-test:
+    if: |-
+      contains(github.event.pull_request.labels.*.name, 'edc') ||
+      contains(github.event.pull_request.labels.*.name, 'enhancement') ||
+      contains(github.event.pull_request.labels.*.name, 'business-tests')
     runs-on: ubuntu-latest
     steps:
       ##############
