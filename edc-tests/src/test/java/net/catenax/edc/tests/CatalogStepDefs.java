@@ -1,3 +1,17 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
+
 package net.catenax.edc.tests;
 
 import io.cucumber.datatable.DataTable;
@@ -8,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import net.catenax.edc.tests.data.ContractOffer;
-import org.apache.http.client.ClientProtocolException;
 import org.junit.jupiter.api.Assertions;
 
 public class CatalogStepDefs {
@@ -16,8 +29,7 @@ public class CatalogStepDefs {
   private List<ContractOffer> lastRequestedOffers;
 
   @When("'{connector}' requests the catalog from '{connector}'")
-  public void requestCatalog(Connector sender, Connector receiver)
-      throws ClientProtocolException, IOException {
+  public void requestCatalog(Connector sender, Connector receiver) throws IOException {
 
     final DataManagementAPI dataManagementAPI = sender.getDataManagementAPI();
     final String receiverIdsUrl = receiver.getEnvironment().getIdsUrl() + "/data";

@@ -123,7 +123,7 @@ jobs:
                 {
                   "args": [
                     "-c",
-                    "cd /product-edc && ./mvnw -s settings.xml -B -Pbusiness-tests -pl edc-tests test -Dtest=RunCucumberTest"
+                    "cd /product-edc && ./mvnw -s settings.xml -B -Pbusiness-tests -pl edc-tests test -Dtest=net.catenax.edc.tests.features.RunCucumberTest"
                   ],
                   "command": [
                     "/bin/sh"
