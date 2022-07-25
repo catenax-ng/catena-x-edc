@@ -16,6 +16,8 @@ package net.catenax.edc.hashicorpvault;
 
 final class PathUtil {
 
+  private PathUtil() {}
+
   static String trimLeadingOrEndingSlash(String path) {
     var fixedPath = path;
 
