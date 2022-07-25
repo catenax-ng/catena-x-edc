@@ -43,11 +43,13 @@ public class HashicorpVaultExtension implements VaultExtension {
   public static final String VAULT_API_SECRET_PATH_DEFAULT = "/v1/secret";
 
   @EdcSetting
-  public static final String VAULT_API_HEALTH_PATH = "edc.vault.hashicorp.api.health.path";
+  public static final String VAULT_API_HEALTH_PATH = "edc.vault.hashicorp.api.health.check.path";
 
   public static final String VAULT_API_HEALTH_PATH_DEFAULT = "/sys/health";
 
-  @EdcSetting public static final String VAULT_HEALTH_CHECK = "edc.vault.hashicorp.health.check";
+  @EdcSetting
+  public static final String VAULT_HEALTH_CHECK = "edc.vault.hashicorp.health.check.enabled";
+
   public static final boolean VAULT_HEALTH_CHECK_DEFAULT = true;
 
   @EdcSetting
