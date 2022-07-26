@@ -2,16 +2,13 @@
 name: "Business Tests"
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
   pull_request:
+    paths-ignore:
+      - docs/**
     branches:
+      - develop/**
+      - release/**
       - main
-      - develop
   workflow_dispatch:
 
 jobs:
@@ -71,6 +68,32 @@ jobs:
         with:
           config: kind.config.yaml
 
+      ##############################################
+      ### Build and load recent images into KinD ###
+      ##############################################
+      -
+        name: Build edc with Gradle to get latest snapshots
+        run: ./gradlew publishToMavenLocal
+        working-directory: edc
+      -
+        name: Build edc-controlplane-postgresql-hashicorp-vault
+        run: |-
+          ./mvnw -s settings.xml -B -pl .,edc-controlplane/edc-controlplane-postgresql-hashicorp-vault -am package -Dmaven.test.skip=true -Pwith-docker-image
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build edc-dataplane-hashicorp-vault
+        run: |-
+          ./mvnw -s settings.xml -B -pl .,edc-dataplane/edc-dataplane-hashicorp-vault -am package -Dmaven.test.skip=true -Pwith-docker-image
+        env:
+          GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
+          GITHUB_PACKAGE_PASSWORD: ${{ secrets.CXNG_GHCR_PAT }}
+      -
+        name: Load images into KinD
+        run: |-
+          kind load docker-image edc-controlplane-postgresql-hashicorp-vault:latest edc-dataplane-hashicorp-vault:latest
+
       ############################################
       ### Prepare And Install Test Environment ###
       ############################################
@@ -90,8 +113,12 @@ jobs:
           # Update helm dependencies
           helm dependency update edc-tests/src/main/resources/deployment/helm/all-in-one
 
-          # Install the all-in-one supporting infrastructure environment
+          # Install the all-in-one supporting infrastructure environment (daps, vault, pgsql)
           helm install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
+            --set platoedccontrolplane.image.tag=latest \
+            --set sokratesedccontrolplane.image.tag=latest \
+            --set platoedcdataplane.image.tag=latest \
+            --set sokratesedcdataplane.image.tag=latest \
             --set idsdaps.enabled=true \
             --set platovault.enabled=true \
             --set platopostgresql.enabled=true \
@@ -107,17 +134,22 @@ jobs:
             --set plato-backend-application.persistence.enabled=false \
             --wait-for-jobs --timeout=120s
 
+          # GH pipelines constrained by cpu, so give helm some time to register all resources \w k8s
           sleep 5s
 
-          # Wait for supporting infrastructure to become ready
+          # Wait for supporting infrastructure to become ready (control-/data-plane, backend service)
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=idsdaps --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=idsdaps && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesvault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesvault && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platovault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platovault && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratespostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratespostgresql && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platopostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platopostgresql && exit 1 )
 
-          # Install the all-in-one Control-/DataPlanes environment
+          # Install the all-in-one Control-/DataPlanes and backend-services
           helm upgrade --install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
+            --set platoedccontrolplane.image.tag=latest \
+            --set sokratesedccontrolplane.image.tag=latest \
+            --set platoedcdataplane.image.tag=latest \
+            --set sokratesedcdataplane.image.tag=latest \
             --set idsdaps.enabled=true \
             --set platovault.enabled=true \
             --set platopostgresql.enabled=true \
@@ -133,9 +165,10 @@ jobs:
             --set plato-backend-application.persistence.enabled=true \
             --wait-for-jobs --timeout=120s
 
+          # GH pipelines constrained by cpu, so give helm some time to register all resources \w k8s
           sleep 5s
-          
-          # Wait for Control-/DataPlanes to become ready
+
+          # Wait for Control-/DataPlane and backend-service to become ready
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesbackendapplication --timeout=120s || ( kubectl logs -since=0 -l app.kubernetes.io/name=sokratesbackendapplication && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platobackendapplication --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platobackendapplication && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesedcdataplane --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesedcdataplane && exit 1 )
@@ -223,4 +256,4 @@ jobs:
         name: Destroy the kind cluster
         if: always()
         run: >-
-          kind delete clusters $(kind get clusters)
+          $(kind get clusters) | xargs -n1 kind delete cluster --name
