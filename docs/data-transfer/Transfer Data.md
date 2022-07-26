@@ -74,7 +74,7 @@ curl -X POST "$PLATO_DATAMGMT_URL/data/policies" --header "X-Api-Key: password" 
 ```
 
 ```bash
-curl -X POST "$PLATO_DATAMGMT_URL/data/contractdefinitions" --header "X-Api-Key: password" --header "Content-Type: application/json" --data "{ \"id\": \"1\", \"criteria\": [ { \"left\": \"asset:prop:id\", \"op\": \"kl\", \"right\": \"1\" } ], \"accessPolicyId\": \"1\", \"contractPolicyId\": \"1\" }" -s -o /dev/null -w 'Response Code: %{http_code}\n'
+curl -X POST "$PLATO_DATAMGMT_URL/data/contractdefinitions" --header "X-Api-Key: password" --header "Content-Type: application/json" --data "{ \"id\": \"1\", \"criteria\": [ { \"left\": \"asset:prop:id\", \"op\": \"=\", \"right\": \"1\" } ], \"accessPolicyId\": \"1\", \"contractPolicyId\": \"1\" }" -s -o /dev/null -w 'Response Code: %{http_code}\n'
 ```
 
 ## 2. Request Contract Offer Catalog
