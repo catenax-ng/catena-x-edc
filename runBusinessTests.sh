@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1" -eq 1 ]; then
+if [ "$1" = "1" ]; then
 
     # TODO manually update image name in values.yaml
 
@@ -42,4 +42,4 @@ export SOKRATES_IDS_URL="${SOKRATES_IDS_URL}/api/v1/ids"
 export SOKRATES_DATA_PLANE_URL=foo
 export SOKRATES_DATA_MANAGEMENT_API_AUTH_KEY=password
 
-./mvnw -s settings.xml -B -Pbusiness-tests -pl edc-tests test -Dtest=RunCucumberTest
+./mvnw -pl edc-tests -Pbusiness-tests -pl edc-tests test -Dtest=net.catenax.edc.tests.features.RunCucumberTest
