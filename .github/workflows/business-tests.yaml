@@ -92,7 +92,7 @@ jobs:
       -
         name: Load images into KinD
         run: |-
-          kind load docker-image edc-controlplane-postgresql-hashicorp-vault:latest edc-dataplane-hashicorp-vault:latest
+          kind get clusters | xargs -n1 kind load docker-image edc-controlplane-postgresql-hashicorp-vault:latest edc-dataplane-hashicorp-vault:latest --name
 
       ############################################
       ### Prepare And Install Test Environment ###
@@ -256,4 +256,4 @@ jobs:
         name: Destroy the kind cluster
         if: always()
         run: >-
-          $(kind get clusters) | xargs -n1 kind delete cluster --name
+          kind get clusters | xargs -n1 kind delete cluster --name
