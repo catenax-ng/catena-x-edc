@@ -1,7 +1,7 @@
 
-#Audit Logging
+# Audit Logging
 
-##User Story
+## User Story
 
 As a security auditor I can find all audit relevant actions in a dedicated audit log. The audit log is represented by chronological records documenting every administrative activitiy as well as potential malicious end user activities. The records are created as part of an EDC end-user or system interaction which ensured reliable and tamper-proof writing of each record. 
 Main purpose of the log is to enable the identification of malicious activities.
@@ -10,7 +10,7 @@ As a security officer I can use the auditlog as forensic evidence for legal proc
 
 ##
 
-##Requirements
+## Requirements
 
 Req1: Audit relevant actions should be logged. Audit relevant actions are defined as:
  - Any modifying activity performed by the data management API has to be considered as configuration change and hence should be audit logged.
@@ -46,10 +46,10 @@ Req8: The audit log should be executed (where applicable) just before the user's
 - Audit log retention period should be handled within the respective extension providing the persistence.
 - End user access to the audit log should be handled in the extension providing the persistence.
 
-##Implementation Options
+## Implementation Options
 
 
-###Enhance Monitor
+### Enhance Monitor
 Existing monitor Service could be enhanced by additional method
 ````java
 
@@ -66,7 +66,7 @@ The corresponding implementation could take care of specific handling of audit()
 
 Current monitor service is already used in most of the extensions and hence adopting auditlog would cause minimal effort.
 
-###Add Auditlog Service
+### Add Auditlog Service
 Template for the new service would be the monitor. But to express the difference of audit and application log the reuse of the monitor service avoided.
 ````java
 public interface AuditLogger {
@@ -82,7 +82,7 @@ public interface AuditLogger {
 ````
 Prototype can be found under: https://github.com/sap-contributions/DataSpaceConnector/tree/auditLogAsService
 
-###Use event framework
+### Use event framework
 
 Background for event framework: https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/b71a14c44f3718ce4a2c9b40769bc70d863716ad/docs/developer/decision-records/2022-06-03-event-framework
 
