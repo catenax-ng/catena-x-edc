@@ -14,6 +14,7 @@
 
 package net.catenax.edc.tests;
 
+import static net.catenax.edc.tests.Constants.BACKEND_SERVICE_BACKEND_API_URL;
 import static net.catenax.edc.tests.Constants.DATA_MANAGEMENT_URL;
 import static net.catenax.edc.tests.Constants.DATA_PLANE_URL;
 import static net.catenax.edc.tests.Constants.IDS_URL;
@@ -32,6 +33,7 @@ class Environment {
   @NonNull private final String dataManagementUrl;
   @NonNull private final String idsUrl;
   @NonNull private final String dataPlaneUrl;
+  @NonNull private final String backendServiceBackendApiUrl;
 
   public static Environment plato() {
     return byName(PLATO);
@@ -48,6 +50,8 @@ class Environment {
         .dataManagementUrl(System.getenv(String.join("_", name, DATA_MANAGEMENT_URL)))
         .idsUrl(System.getenv(String.join("_", name, IDS_URL)))
         .dataPlaneUrl(System.getenv(String.join("_", name, DATA_PLANE_URL)))
+        .backendServiceBackendApiUrl(
+            System.getenv(String.join("_", name, BACKEND_SERVICE_BACKEND_API_URL)))
         .build();
   }
 }

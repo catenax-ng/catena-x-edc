@@ -28,7 +28,14 @@ public class Connector {
   @Getter(lazy = true)
   private final DataManagementAPI dataManagementAPI = loadDataManagementAPI();
 
+  @Getter(lazy = true)
+  private final BackendServiceBackendAPI backendServiceBackendAPI = loadBackendServiceBackendAPI();
+
   private DataManagementAPI loadDataManagementAPI() {
     return new DataManagementAPI(environment.getDataManagementUrl());
+  }
+
+  private BackendServiceBackendAPI loadBackendServiceBackendAPI() {
+    return new BackendServiceBackendAPI(environment.getBackendServiceBackendApiUrl());
   }
 }

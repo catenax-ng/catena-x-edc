@@ -218,9 +218,11 @@ jobs:
                     {"name": "SOKRATES_DATA_MANAGEMENT_URL", "value": "${SOKRATES_DATA_MANAGEMENT_URL}"},
                     {"name": "SOKRATES_IDS_URL", "value": "${SOKRATES_IDS_URL}"},
                     {"name": "SOKRATES_DATA_PLANE_URL", "value": "${SOKRATES_DATA_PLANE_URL}"},
+                    {"name": "SOKRATES_BACKEND_SERVICE_BACKEND_API_URL", "value": "http://sokrates-backend-application:8081" },
                     {"name": "PLATO_DATA_MANAGEMENT_URL", "value": "${PLATO_DATA_MANAGEMENT_URL}"},
                     {"name": "PLATO_IDS_URL", "value": "${PLATO_IDS_URL}"},
-                    {"name": "PLATO_DATA_PLANE_URL", "value": "${PLATO_DATA_PLANE_URL}"}
+                    {"name": "PLATO_DATA_PLANE_URL", "value": "${PLATO_DATA_PLANE_URL}"},
+                    {"name": "PLATO_BACKEND_SERVICE_BACKEND_API_URL", "value": "http://plato-backend-application:8081"}
                   ],
           EOF
 
