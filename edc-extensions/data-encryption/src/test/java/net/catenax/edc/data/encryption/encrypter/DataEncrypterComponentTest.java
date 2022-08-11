@@ -1,4 +1,17 @@
-package net.catenax.edc.data.encryption;
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
+package net.catenax.edc.data.encryption.encrypter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -10,6 +23,7 @@ import net.catenax.edc.data.encryption.provider.KeyProvider;
 import net.catenax.edc.data.encryption.provider.SymmetricKeyProvider;
 import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
 import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
+import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -19,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class DataEncrypterComponentTest {
+class DataEncrypterComponentTest {
 
   private final String Key1 = "8y/B?E(H+MbQeThVmYq3t6w9z$C&F)J@";
   private final String Key2 = "dRgUkXp2s5v8y/A?D(G+KbPeShVmYq3t";
@@ -36,7 +50,7 @@ public class DataEncrypterComponentTest {
   private Vault vault;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     monitor = Mockito.mock(Monitor.class);
     vault = Mockito.mock(Vault.class);
 
@@ -48,7 +62,7 @@ public class DataEncrypterComponentTest {
   }
 
   @Test
-  public void testKeyRotation()
+  void testKeyRotation()
       throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException,
           NoSuchAlgorithmException, InvalidKeyException {
     Mockito.when(vault.resolveSecret(Mockito.anyString()))
@@ -65,7 +79,7 @@ public class DataEncrypterComponentTest {
   }
 
   @Test
-  public void testSuccess() {
+  void testEncryption() {
     Mockito.when(vault.resolveSecret(Mockito.anyString())).thenReturn(Key1);
 
     final String expectedResult = "hello world!";
@@ -76,5 +90,15 @@ public class DataEncrypterComponentTest {
     Assertions.assertEquals(expectedResult, result);
   }
 
-  public void testWarningOnInvalidKey() {}
+  @Test
+  void testWarningOnInvalidKey() {
+    Mockito.when(vault.resolveSecret(Mockito.anyString())).thenReturn(Key1, "invalid-key," + Key1);
+
+    final String expectedResult = "hello world!";
+
+    var encryptedResult = dataEncrypter.encrypt(expectedResult);
+    dataEncrypter.decrypt(encryptedResult);
+
+    Mockito.verify(monitor, Mockito.times(1)).warning(Mockito.anyString());
+  }
 }

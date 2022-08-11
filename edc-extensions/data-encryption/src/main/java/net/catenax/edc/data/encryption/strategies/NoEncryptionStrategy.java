@@ -19,12 +19,21 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public interface EncryptionStrategy {
-  byte[] encrypt(byte[] value, byte[] key)
-      throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-          NoSuchPaddingException, NoSuchAlgorithmException;
+public class NoEncryptionStrategy implements EncryptionStrategy {
 
-  byte[] decrypt(byte[] value, byte[] key)
+  public static final String NAME = "NONE";
+
+  @Override
+  public byte[] encrypt(byte[] value, byte[] key)
       throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-          NoSuchPaddingException, NoSuchAlgorithmException;
+          NoSuchPaddingException, NoSuchAlgorithmException {
+    return value;
+  }
+
+  @Override
+  public byte[] decrypt(byte[] value, byte[] key)
+      throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
+          NoSuchPaddingException, NoSuchAlgorithmException {
+    return value;
+  }
 }

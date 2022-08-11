@@ -1,11 +1,22 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
 package net.catenax.edc.data.encryption;
 
 import java.time.Duration;
-import net.catenax.edc.data.encryption.provider.CachingKeyProvider;
-import net.catenax.edc.data.encryption.provider.KeyProvider;
-import net.catenax.edc.data.encryption.provider.SymmetricKeyProvider;
+import net.catenax.edc.data.encryption.encrypter.DataEncrypterConfiguration;
+import net.catenax.edc.data.encryption.encrypter.DataEncrypterFactory;
 import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
-import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
@@ -25,7 +36,7 @@ public class DataEncryptionExtension implements ServiceExtension {
   @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys";
 
   @EdcSetting public static final String ENCRYPTION_STRATEGY = "edc.data.encryption.strategy";
-  public static final String ENCRYPTION_STRATEGY_DEFAULT = AesEncryptionStrategy.AES;
+  public static final String ENCRYPTION_STRATEGY_DEFAULT = AesEncryptionStrategy.NAME;
 
   @EdcSetting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
   public static final boolean CACHING_ENABLED_DEFAULT = false;
@@ -38,22 +49,21 @@ public class DataEncryptionExtension implements ServiceExtension {
     return NAME;
   }
 
+  // TODO Test Vault key exists on Start
+
   @Override
   public void initialize(ServiceExtensionContext context) {
     Monitor monitor = context.getMonitor();
 
     final Vault vault = context.getService(Vault.class);
-    final DataEncryptionConfiguration configuration = getConfiguration(context);
-    final KeyProvider keyProvider = getKeyProvider(vault, configuration);
-    final EncryptionStrategy strategy = getStrategy(configuration);
-    final DataEnveloper enveloper = new DataEnveloper();
-    final DataEncrypter dataEncrypter =
-        new DataEncrypterImpl(monitor, strategy, enveloper, keyProvider);
+    final DataEncrypterConfiguration configuration = getConfiguration(context);
+    final DataEncrypterFactory factory = new DataEncrypterFactory(vault, monitor);
+    final DataEncrypter dataEncrypter = factory.create(configuration);
 
     context.registerService(DataEncrypter.class, dataEncrypter);
   }
 
-  private DataEncryptionConfiguration getConfiguration(ServiceExtensionContext context) {
+  private DataEncrypterConfiguration getConfiguration(ServiceExtensionContext context) {
     final String keySetAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
     if (keySetAlias == null) {
       throw new EdcException("TODO");
@@ -64,28 +74,7 @@ public class DataEncryptionExtension implements ServiceExtension {
     final boolean cachingEnabled = context.getSetting(CACHING_ENABLED, CACHING_ENABLED_DEFAULT);
     final int cachingSeconds = context.getSetting(CACHING_SECONDS, CACHING_SECONDS_DEFAULT);
 
-    return new DataEncryptionConfiguration(
+    return new DataEncrypterConfiguration(
         encryptionStrategy, keySetAlias, cachingEnabled, Duration.ofSeconds(cachingSeconds));
-  }
-
-  private KeyProvider getKeyProvider(Vault vault, DataEncryptionConfiguration configuration) {
-
-    final KeyProvider keyProvider = new SymmetricKeyProvider(vault, configuration.getKeySetAlias());
-
-    return configuration.isCachingEnabled()
-        ? new CachingKeyProvider(keyProvider, configuration.getCachingDuration())
-        : keyProvider;
-  }
-
-  private EncryptionStrategy getStrategy(DataEncryptionConfiguration configuration) {
-    if (AesEncryptionStrategy.AES.equalsIgnoreCase(configuration.getEncryptionStrategy())) {
-      return new AesEncryptionStrategy();
-    }
-
-    final String msg =
-        String.format(
-            NAME + ": Unsupported encryption strategy. Supported strategies are '%s'.",
-            AesEncryptionStrategy.AES);
-    throw new EdcException(msg);
   }
 }

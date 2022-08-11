@@ -1,3 +1,16 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
 package net.catenax.edc.data.encryption.strategies;
 
 import java.nio.charset.StandardCharsets;
@@ -14,13 +27,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-public class EncryptionStrategyTest {
+class EncryptionStrategyTest {
 
   private final byte[] key = "This is a super safe key".getBytes(StandardCharsets.UTF_8);
 
   @ParameterizedTest
   @ArgumentsSource(StrategyArgumentsProvider.class)
-  public void testSuccess(EncryptionStrategy strategy)
+  void testSuccess(EncryptionStrategy strategy)
       throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException,
           NoSuchAlgorithmException, InvalidKeyException {
 

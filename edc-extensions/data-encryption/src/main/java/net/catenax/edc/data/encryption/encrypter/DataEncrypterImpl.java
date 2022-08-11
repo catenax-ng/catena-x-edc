@@ -1,4 +1,18 @@
-package net.catenax.edc.data.encryption;
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
+
+package net.catenax.edc.data.encryption.encrypter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -8,8 +22,10 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import lombok.NonNull;
+import net.catenax.edc.data.encryption.DataEncryptionExtension;
 import net.catenax.edc.data.encryption.provider.KeyProvider;
 import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
+import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;

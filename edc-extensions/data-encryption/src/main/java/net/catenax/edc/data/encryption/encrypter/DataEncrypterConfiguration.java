@@ -11,12 +11,17 @@
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *
  */
-package net.catenax.edc.data.encryption.provider;
 
-import java.util.stream.Stream;
+package net.catenax.edc.data.encryption.encrypter;
 
-public interface KeyProvider {
-  byte[] getEncryptionKey();
+import java.time.Duration;
+import lombok.NonNull;
+import lombok.Value;
 
-  Stream<byte[]> getDecryptionKeySet();
+@Value
+public class DataEncrypterConfiguration {
+  @NonNull String encryptionStrategy;
+  @NonNull String keySetAlias;
+  boolean cachingEnabled;
+  Duration cachingDuration;
 }

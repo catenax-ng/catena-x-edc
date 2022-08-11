@@ -14,21 +14,31 @@
 
 package net.catenax.edc.data.encryption;
 
+import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
+import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-public class DataEncryptionExtensionTest {
+class DataEncryptionExtensionTest {
 
   private DataEncryptionExtension extension;
 
+  // mocks
+  private Monitor monitor;
+  private ServiceExtensionContext context;
+
   @BeforeEach
-  public void setup() {
+  void setup() {
+    monitor = Mockito.mock(Monitor.class);
+    context = Mockito.mock(ServiceExtensionContext.class);
+
     extension = new DataEncryptionExtension();
   }
 
   @Test
-  public void testName() {
+  void testName() {
     Assertions.assertEquals(DataEncryptionExtension.NAME, extension.name());
   }
 }
