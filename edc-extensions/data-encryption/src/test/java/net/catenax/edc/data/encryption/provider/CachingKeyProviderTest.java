@@ -1,79 +1,74 @@
 package net.catenax.edc.data.encryption.provider;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class CachingKeyProviderTest {
 
-    private CachingKeyProvider cachingKeyProvider;
+  private CachingKeyProvider cachingKeyProvider;
 
-    // mocks
-    private KeyProvider decoratedProvider;
-    private Duration cacheExpiration;
-    private Clock clock;
+  // mocks
+  private KeyProvider decoratedProvider;
+  private Duration cacheExpiration;
+  private Clock clock;
 
-    @BeforeEach
-    public void setup() {
-        decoratedProvider = Mockito.mock(KeyProvider.class);
-        cacheExpiration = Duration.ofSeconds(2);
-        clock = Mockito.mock(Clock.class);
+  @BeforeEach
+  void setup() {
+    decoratedProvider = Mockito.mock(KeyProvider.class);
+    cacheExpiration = Duration.ofSeconds(2);
+    clock = Mockito.mock(Clock.class);
 
-        cachingKeyProvider = new CachingKeyProvider(decoratedProvider, cacheExpiration, clock);
+    cachingKeyProvider = new CachingKeyProvider(decoratedProvider, cacheExpiration, clock);
 
-        Mockito.when(decoratedProvider.getEncryptionKey()).thenReturn(new byte[] { 1, 2, 3 });
-        Mockito.when(decoratedProvider.getDecryptionKeySet()).thenAnswer((i) -> Stream.of(new byte[] { 4, 5, 6 }));
-    }
+    Mockito.when(decoratedProvider.getEncryptionKey()).thenReturn(new byte[] {1, 2, 3});
+    Mockito.when(decoratedProvider.getDecryptionKeySet())
+        .thenAnswer((i) -> Stream.of(new byte[] {4, 5, 6}));
+  }
 
-    @Test
-    public void testCaching() {
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
+  @Test
+  void testCaching() {
 
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
+    Mockito.when(clock.instant()).thenAnswer((i) -> Instant.now());
 
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-        Mockito.verify(decoratedProvider, Mockito.times(1)).getDecryptionKeySet();
-        Mockito.verify(decoratedProvider, Mockito.times(1)).getEncryptionKey();
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-    }
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-    @Test
-    public void testCacheUpdate() {
+    Mockito.verify(decoratedProvider, Mockito.times(1)).getDecryptionKeySet();
+    Mockito.verify(decoratedProvider, Mockito.times(1)).getEncryptionKey();
+  }
 
-        Mockito.when(clock.instant()).thenAnswer((i) -> Instant.now());
+  @Test
+  void testCacheUpdate() {
 
-        var test1 = clock.instant();
+    Mockito.when(clock.instant()).thenAnswer((i) -> Instant.now());
 
-        Mockito.when(clock.instant()).thenAnswer((i) -> Instant.now().plus(cacheExpiration.plusSeconds(1)));
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-        var test2 = clock.instant();
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-        // TODO find problem
+    Mockito.when(clock.instant())
+        .thenAnswer((i) -> Instant.now().plus(cacheExpiration.plusSeconds(1)));
 
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
+    cachingKeyProvider.getDecryptionKeySet();
+    cachingKeyProvider.getEncryptionKey();
 
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
-
-        Mockito.when(clock.instant()).thenAnswer((i) -> Instant.now().plus(cacheExpiration.plusSeconds(1)));
-
-        cachingKeyProvider.getDecryptionKeySet();
-        cachingKeyProvider.getEncryptionKey();
-
-        Mockito.verify(decoratedProvider, Mockito.times(2)).getDecryptionKeySet();
-        Mockito.verify(decoratedProvider, Mockito.times(2)).getEncryptionKey();
-    }
+    Mockito.verify(decoratedProvider, Mockito.times(2)).getDecryptionKeySet();
+    Mockito.verify(decoratedProvider, Mockito.times(2)).getEncryptionKey();
+  }
 }
