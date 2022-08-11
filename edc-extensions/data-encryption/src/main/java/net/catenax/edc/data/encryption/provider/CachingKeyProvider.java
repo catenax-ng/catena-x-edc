@@ -21,19 +21,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-@RequiredArgsConstructor
 public class CachingKeyProvider implements KeyProvider {
 
-  private final KeyProvider decoratedProvider;
-  private final Duration cacheExpiration;
-  private final Clock clock;
+  @NonNull private final KeyProvider decoratedProvider;
+  @NonNull private final Clock clock;
+  @NonNull private final Duration cacheExpiration;
+
   private CachedKeys cachedKeys;
 
-  public CachingKeyProvider(KeyProvider dKeyProvider, Duration cacheExpiration) {
-    this(dKeyProvider, cacheExpiration, Clock.systemUTC());
+  public CachingKeyProvider(KeyProvider keyProvider, Duration cacheExpiration) {
+    this(keyProvider, cacheExpiration, Clock.systemUTC());
+  }
+
+  public CachingKeyProvider(KeyProvider keyProvider, Duration cacheExpiration, Clock clock) {
+
+    this.decoratedProvider = keyProvider;
+    this.cacheExpiration = cacheExpiration;
+    this.clock = clock;
   }
 
   @Override

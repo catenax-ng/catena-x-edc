@@ -33,7 +33,7 @@ public class DataEncryptionExtension implements ServiceExtension {
 
   public static final String NAME = "Data Encryption Extension";
 
-  @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys";
+  @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
   @EdcSetting public static final String ENCRYPTION_STRATEGY = "edc.data.encryption.strategy";
   public static final String ENCRYPTION_STRATEGY_DEFAULT = AesEncryptionStrategy.NAME;
@@ -44,29 +44,40 @@ public class DataEncryptionExtension implements ServiceExtension {
   @EdcSetting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
+  private Vault vault;
+  private String keySetAlias;
+
   @Override
   public String name() {
     return NAME;
   }
 
-  // TODO Test Vault key exists on Start
+  @Override
+  public void start() {
+    final String keySecret = vault.resolveSecret(keySetAlias);
+    if (keySecret == null || keySecret.isEmpty()) {
+      throw new EdcException("No key secret found for alias " + keySetAlias);
+    }
+  }
 
   @Override
   public void initialize(ServiceExtensionContext context) {
     Monitor monitor = context.getMonitor();
 
-    final Vault vault = context.getService(Vault.class);
+    vault = context.getService(Vault.class);
+
     final DataEncrypterConfiguration configuration = getConfiguration(context);
     final DataEncrypterFactory factory = new DataEncrypterFactory(vault, monitor);
     final DataEncrypter dataEncrypter = factory.create(configuration);
 
+    keySetAlias = configuration.getKeySetAlias();
     context.registerService(DataEncrypter.class, dataEncrypter);
   }
 
   private DataEncrypterConfiguration getConfiguration(ServiceExtensionContext context) {
     final String keySetAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
     if (keySetAlias == null) {
-      throw new EdcException("TODO");
+      throw new EdcException(NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
     }
 
     final String encryptionStrategy =

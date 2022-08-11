@@ -14,7 +14,9 @@
 
 package net.catenax.edc.data.encryption;
 
+import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
+import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,17 +30,54 @@ class DataEncryptionExtensionTest {
   // mocks
   private Monitor monitor;
   private ServiceExtensionContext context;
+  private Vault vault;
 
   @BeforeEach
   void setup() {
     monitor = Mockito.mock(Monitor.class);
     context = Mockito.mock(ServiceExtensionContext.class);
+    vault = Mockito.mock(Vault.class);
 
     extension = new DataEncryptionExtension();
+
+    Mockito.when(context.getMonitor()).thenReturn(monitor);
+    Mockito.when(context.getService(Vault.class)).thenReturn(vault);
+
+    Mockito.when(
+            context.getSetting(
+                Mockito.eq(DataEncryptionExtension.CACHING_ENABLED), Mockito.anyBoolean()))
+        .thenAnswer((i) -> i.getArguments()[1]);
+    Mockito.when(
+            context.getSetting(
+                Mockito.eq(DataEncryptionExtension.ENCRYPTION_STRATEGY), Mockito.anyString()))
+        .thenAnswer((i) -> i.getArguments()[1]);
+    Mockito.when(
+            context.getSetting(
+                Mockito.eq(DataEncryptionExtension.CACHING_SECONDS), Mockito.anyInt()))
+        .thenAnswer((i) -> i.getArguments()[1]);
   }
 
   @Test
   void testName() {
     Assertions.assertEquals(DataEncryptionExtension.NAME, extension.name());
+  }
+
+  @Test
+  void testExceptionOnMissingKeySetAlias() {
+    Mockito.when(context.getSetting(DataEncryptionExtension.ENCRYPTION_KEY_SET, null))
+        .thenReturn(null);
+    Assertions.assertThrows(EdcException.class, () -> extension.initialize(context));
+  }
+
+  @Test
+  void testExceptionOnMissingKeySetInVault() {
+    final String keySetAlias = "foo";
+    Mockito.when(context.getSetting(DataEncryptionExtension.ENCRYPTION_KEY_SET, null))
+        .thenReturn(keySetAlias);
+    Mockito.when(vault.resolveSecret(keySetAlias)).thenReturn("");
+
+    extension.initialize(context);
+
+    Assertions.assertThrows(EdcException.class, () -> extension.start());
   }
 }

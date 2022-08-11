@@ -30,15 +30,16 @@ import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncryp
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 @SuppressWarnings("FieldCanBeLocal")
 class DataEncrypterComponentTest {
 
-  private final String Key1 = "8y/B?E(H+MbQeThVmYq3t6w9z$C&F)J@";
-  private final String Key2 = "dRgUkXp2s5v8y/A?D(G+KbPeShVmYq3t";
-  private final String Key3 = "@NcRfUjXn2r5u8x/A%D*G-KaPdSgVkYp";
-  private final String Key4 = "6v9y$B&E(H+MbQeThWmZq4t7w!z%C*F-";
+  private static final String KEY_128_BIT = "8y/B?E(H+KbPeShV";
+  private static final String KEY_192_BIT = "fUjXn2r5u7x!A%D*G-KaPdSg";
+  private static final String KEY_256_BIT = "gVkXp2s5v8y/B?E(H+MbQeThWmZq3t6w";
 
   private DataEncrypter dataEncrypter;
   private EncryptionStrategy encryptionStrategy;
@@ -66,11 +67,12 @@ class DataEncrypterComponentTest {
       throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException,
           NoSuchAlgorithmException, InvalidKeyException {
     Mockito.when(vault.resolveSecret(Mockito.anyString()))
-        .thenReturn(String.format("%s, %s, %s, %s", Key1, Key2, Key3, Key4));
+        .thenReturn(
+            String.format("%s, %s, %s, %s", KEY_128_BIT, KEY_128_BIT, KEY_128_BIT, KEY_256_BIT));
 
     final String expectedResult = "hello";
     final byte[] envelopedResult = dataEnveloper.pack(expectedResult);
-    final byte[] encryptionKey = Key4.getBytes(StandardCharsets.UTF_8);
+    final byte[] encryptionKey = KEY_256_BIT.getBytes(StandardCharsets.UTF_8);
     final byte[] encryptedResult = encryptionStrategy.encrypt(envelopedResult, encryptionKey);
 
     var result = dataEncrypter.decrypt(new String(encryptedResult, StandardCharsets.UTF_8));
@@ -78,9 +80,10 @@ class DataEncrypterComponentTest {
     Assertions.assertEquals(expectedResult, result);
   }
 
-  @Test
-  void testEncryption() {
-    Mockito.when(vault.resolveSecret(Mockito.anyString())).thenReturn(Key1);
+  @ParameterizedTest
+  @ValueSource(strings = {KEY_128_BIT, KEY_192_BIT, KEY_256_BIT})
+  void testEncryption(String key) {
+    Mockito.when(vault.resolveSecret(Mockito.anyString())).thenReturn(key);
 
     final String expectedResult = "hello world!";
 
@@ -92,7 +95,10 @@ class DataEncrypterComponentTest {
 
   @Test
   void testWarningOnInvalidKey() {
-    Mockito.when(vault.resolveSecret(Mockito.anyString())).thenReturn(Key1, "invalid-key," + Key1);
+    // first return only one key for encryption, then for decryption return an
+    // invalid key before returning the correct one
+    Mockito.when(vault.resolveSecret(Mockito.anyString()))
+        .thenReturn(KEY_128_BIT, "invalid-key," + KEY_128_BIT);
 
     final String expectedResult = "hello world!";
 

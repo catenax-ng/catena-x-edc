@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 
 class EncryptionStrategyTest {
 
-  private final byte[] key = "This is a super safe key".getBytes(StandardCharsets.UTF_8);
+  private final byte[] key = "8y/B?E(H+KbPeShV".getBytes(StandardCharsets.UTF_8);
 
   @ParameterizedTest
   @ArgumentsSource(StrategyArgumentsProvider.class)
