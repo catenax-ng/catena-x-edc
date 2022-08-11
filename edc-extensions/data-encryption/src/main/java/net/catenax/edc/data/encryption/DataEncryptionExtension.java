@@ -1,9 +1,10 @@
 package net.catenax.edc.data.encryption;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import net.catenax.edc.data.encryption.provider.CachingKeyProvider;
+import net.catenax.edc.data.encryption.provider.KeyProvider;
+import net.catenax.edc.data.encryption.provider.SymmetricKeyProvider;
+import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
+import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
@@ -14,22 +15,32 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
 
 @Provides({DataEncrypter.class})
 @Requires({Vault.class})
 public class DataEncryptionExtension implements ServiceExtension {
+
+    public static final String NAME = "Data Encryption Extension";
 
     @EdcSetting
     public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys";
 
     @EdcSetting
     public static final String ENCRYPTION_STRATEGY = "edc.data.encryption.strategy";
+    public static final String ENCRYPTION_STRATEGY_DEFAULT = AesEncryptionStrategy.AES;
+
+    @EdcSetting
+    public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
+    public static final boolean CACHING_ENABLED_DEFAULT = false;
+
+    @EdcSetting
+    public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
+    public static final int CACHING_SECONDS_DEFAULT = 3600;
 
     @Override
     public String name() {
-        return "Data Encryption Extension";
+        return NAME;
     }
 
     @Override
@@ -37,44 +48,46 @@ public class DataEncryptionExtension implements ServiceExtension {
         Monitor monitor = context.getMonitor();
 
         final Vault vault = context.getService(Vault.class);
-        final String keySetAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
-        if (keySetAlias == null) {
-            throw new EdcException("TODO");
-        }
-        final List<String> keys = getKeys(vault, keySetAlias);
-
-        final String strategyName = context.getSetting(ENCRYPTION_STRATEGY, AesEncryptionStrategy.AES);
-        final EncryptionStrategy strategy = getStrategy(strategyName);
+        final DataEncryptionConfiguration configuration = getConfiguration(context);
+        final KeyProvider keyProvider = getKeyProvider(vault, configuration);
+        final EncryptionStrategy strategy = getStrategy(configuration);
         final DataEnveloper enveloper = new DataEnveloper();
-        final DataEncrypter dataEncrypter = new DataEncrypterImpl(monitor, strategy, enveloper, keys);
+        final DataEncrypter dataEncrypter = new DataEncrypterImpl(monitor, strategy, enveloper, keyProvider);
 
         context.registerService(DataEncrypter.class, dataEncrypter);
     }
 
-    // TODO GET VAULT KEYS EVERY 5 MINUTES
-    // TODO MAKE CACHING CONFIGURABLE
-    private List<String> getKeys(Vault vault, String keySetAlias) {
-        final String serializedKeys = vault.resolveSecret(keySetAlias);
-        if (serializedKeys == null) {
+    private DataEncryptionConfiguration getConfiguration(ServiceExtensionContext context) {
+        final String keySetAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
+        if (keySetAlias == null) {
             throw new EdcException("TODO");
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(serializedKeys, new TypeReference<ArrayList<String>>() {
-            });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        final String encryptionStrategy = context.getSetting(ENCRYPTION_STRATEGY, ENCRYPTION_STRATEGY_DEFAULT);
+        final boolean cachingEnabled = context.getSetting(CACHING_ENABLED, CACHING_ENABLED_DEFAULT);
+        final int cachingSeconds = context.getSetting(CACHING_SECONDS, CACHING_SECONDS_DEFAULT);
+
+        return new DataEncryptionConfiguration(encryptionStrategy, keySetAlias, cachingEnabled, Duration.ofSeconds(cachingSeconds));
     }
 
-    private EncryptionStrategy getStrategy(String strategyName) {
-        if (AesEncryptionStrategy.AES.equals(strategyName)) {
+    private KeyProvider getKeyProvider(Vault vault, DataEncryptionConfiguration configuration) {
+
+        final KeyProvider keyProvider = new SymmetricKeyProvider(vault, configuration.getKeySetAlias());
+
+        return configuration.isCachingEnabled() ?
+                new CachingKeyProvider(keyProvider, configuration.getCachingDuration()) :
+                keyProvider;
+    }
+
+    private EncryptionStrategy getStrategy(DataEncryptionConfiguration configuration) {
+        if (AesEncryptionStrategy.AES
+                .equalsIgnoreCase(configuration.getEncryptionStrategy())) {
             return new AesEncryptionStrategy();
         }
 
-        final String msg = String.format("Unsupported encryption strategy. Supported strategies are '%s'.",
+        final String msg = String.format(NAME + ": Unsupported encryption strategy. Supported strategies are '%s'.",
                 AesEncryptionStrategy.AES);
         throw new EdcException(msg);
     }
+
 }

@@ -1,4 +1,4 @@
-package net.catenax.edc.data.encryption;
+package net.catenax.edc.data.encryption.strategies;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

@@ -1,5 +1,6 @@
-package net.catenax.edc.data.encryption;
+package net.catenax.edc.data.encryption.strategies;
 
+import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 

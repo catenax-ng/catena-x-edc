@@ -12,9 +12,6 @@
     <artifactId>data-encrypter</artifactId>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <originalSourceDirectory>${project.basedir}/src/main/java</originalSourceDirectory>
         <sourceDirectory>${originalSourceDirectory}</sourceDirectory>
         <delombokSourceDirectory>${project.build.directory}/delombok</delombokSourceDirectory>

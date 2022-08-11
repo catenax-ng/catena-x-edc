@@ -1,5 +1,7 @@
-package net.catenax.edc.data.encryption;
+package net.catenax.edc.data.encryption.strategies;
 
+import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
+import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;

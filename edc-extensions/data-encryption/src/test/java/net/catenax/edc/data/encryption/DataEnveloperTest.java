@@ -11,7 +11,6 @@ public class DataEnveloperTest {
 
     @Test
     public void testSuccess() {
-
         final String expected = "I will be enveloped";
         final byte[] packed = dataEnveloper.pack(expected);
         final Optional<String> unpacked = dataEnveloper.tryUnpack(packed);

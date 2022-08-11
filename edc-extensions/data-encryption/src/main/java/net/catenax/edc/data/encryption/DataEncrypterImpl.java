@@ -1,6 +1,8 @@
 package net.catenax.edc.data.encryption;
 
 import lombok.NonNull;
+import net.catenax.edc.data.encryption.provider.KeyProvider;
+import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -8,7 +10,6 @@ import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncryp
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Optional;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -16,18 +17,14 @@ import javax.crypto.NoSuchPaddingException;
 
 public class DataEncrypterImpl implements DataEncrypter {
 
-    private final List<String> keys;
+    private final KeyProvider keyProvider;
     private final EncryptionStrategy encryptionStrategy;
     private final DataEnveloper dataEnveloper;
     private final Monitor monitor;
 
-    public DataEncrypterImpl(@NonNull Monitor monitor, @NonNull EncryptionStrategy encryptionStrategy, @NonNull DataEnveloper dataEnveloper, @NonNull List<String> keys) {
-        if (keys.isEmpty()) {
-            throw new IllegalArgumentException("RotatingDataEncrypter requires at least one key");
-        }
-
+    public DataEncrypterImpl(@NonNull Monitor monitor, @NonNull EncryptionStrategy encryptionStrategy, @NonNull DataEnveloper dataEnveloper, @NonNull KeyProvider keyProvider) {
         this.monitor = monitor;
-        this.keys = keys;
+        this.keyProvider = keyProvider;
         this.encryptionStrategy = encryptionStrategy;
         this.dataEnveloper = dataEnveloper;
     }
@@ -35,9 +32,9 @@ public class DataEncrypterImpl implements DataEncrypter {
     @Override
     public String encrypt(String value) {
         try {
-            byte[] valueData = dataEnveloper.pack(value);
-            byte[] keyData = keys.get(0).getBytes(StandardCharsets.UTF_8);
-            return new String(encryptionStrategy.encrypt(valueData, keyData));
+            byte[] packedData = dataEnveloper.pack(value);
+            byte[] key = keyProvider.getEncryptionKey();
+            return new String(encryptionStrategy.encrypt(packedData, key));
         } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchPaddingException |
                  NoSuchAlgorithmException e) {
             throw new EdcException(e);
@@ -46,7 +43,7 @@ public class DataEncrypterImpl implements DataEncrypter {
 
     @Override
     public String decrypt(String value) {
-        return keys.stream()
+        return keyProvider.getDecryptionKeySet()
                 .map(key -> decrypt(value, key))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -54,17 +51,16 @@ public class DataEncrypterImpl implements DataEncrypter {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst()
-                .orElseThrow(() -> new EdcException("Failed to decrypt data. This can happen if the decryption key is not configured in the key set anymore, or because the data was originally not encrypted by this extension."));
+                .orElseThrow(() -> new EdcException(DataEncryptionExtension.NAME + ": Failed to decrypt data. This can happen if the key set is empty, contains invalid keys, the decryption key rotated out of the key set or because the data was originally not encrypted by this extension."));
     }
 
-    private Optional<byte[]> decrypt(String value, String key) {
+    private Optional<byte[]> decrypt(String value, byte[] key) {
         try {
             byte[] valueData = value.getBytes(StandardCharsets.UTF_8);
-            byte[] keyData = key.getBytes(StandardCharsets.UTF_8);
-            return Optional.ofNullable(encryptionStrategy.decrypt(valueData, keyData));
+            return Optional.ofNullable(encryptionStrategy.decrypt(valueData, key));
         } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException | NoSuchPaddingException |
                  NoSuchAlgorithmException e) {
-            monitor.warning(String.format("Unusable key in rotating key set. %s", e.getMessage()));
+            monitor.warning(String.format(DataEncryptionExtension.NAME + ": Unusable key in rotating key set. %s", e.getMessage()));
             return Optional.empty();
         }
     }
