@@ -15,8 +15,10 @@ package net.catenax.edc.data.encryption.provider;
 
 import java.util.stream.Stream;
 
-public interface KeyProvider {
-  byte[] getEncryptionKey();
+import net.catenax.edc.data.encryption.key.CryptoKey;
 
-  Stream<byte[]> getDecryptionKeySet();
+public interface KeyProvider<TKey extends CryptoKey> {
+  TKey getEncryptionKey();
+
+  Stream<TKey> getDecryptionKeySet();
 }

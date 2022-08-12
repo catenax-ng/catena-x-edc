@@ -14,15 +14,21 @@
 
 package net.catenax.edc.data.encryption.encrypter;
 
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import net.catenax.edc.data.encryption.DataEncryptionExtension;
+import net.catenax.edc.data.encryption.algorithms.CryptoAlgorithm;
+import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
+import net.catenax.edc.data.encryption.data.CryptoDataFactory;
+import net.catenax.edc.data.encryption.data.CryptoDataFactoryImpl;
+import net.catenax.edc.data.encryption.encrypter.delegates.AesDecryptionDelegate;
+import net.catenax.edc.data.encryption.encrypter.delegates.AesEncryptionDelegate;
+import net.catenax.edc.data.encryption.encrypter.delegates.DecryptionDelegate;
+import net.catenax.edc.data.encryption.encrypter.delegates.EncryptionDelegate;
+import net.catenax.edc.data.encryption.key.AesKey;
+import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
 import net.catenax.edc.data.encryption.provider.CachingKeyProvider;
 import net.catenax.edc.data.encryption.provider.KeyProvider;
-import net.catenax.edc.data.encryption.provider.SymmetricKeyProvider;
-import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
-import net.catenax.edc.data.encryption.strategies.EncryptionStrategy;
-import net.catenax.edc.data.encryption.strategies.NoEncryptionStrategy;
+import net.catenax.edc.data.encryption.provider.AesKeyProvider;
 import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -31,42 +37,59 @@ import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncryp
 @RequiredArgsConstructor
 public class DataEncrypterFactory {
 
+  public static final String AES_ALGORITHM = "AES";
+  public static final String NONE = "NONE";
+
   private final Vault vault;
   private final Monitor monitor;
+  private final CryptoKeyFactory keyFactory;
 
   public DataEncrypter create(DataEncrypterConfiguration configuration) {
-    final KeyProvider keyProvider = getKeyProvider(vault, configuration);
-    final EncryptionStrategy strategy = getStrategy(configuration);
+    if (configuration.getAlgorithm().equalsIgnoreCase(AES_ALGORITHM)) {
+      return createAesEncrypter(configuration);
+    } else if (configuration.getAlgorithm().equalsIgnoreCase(NONE)) {
+      return createNoneEncrypter(configuration);
+    } else {
+      final String msg = String.format(DataEncryptionExtension.NAME
+          + ": Unsupported encryption algorithm '%s'. Supported algorithms are '%s',  %s.",
+          configuration.getAlgorithm(), AES_ALGORITHM, NONE);
+      throw new IllegalArgumentException(msg);
+    }
+
+  }
+
+  public DataEncrypter createAesEncrypter(DataEncrypterConfiguration configuration) {
+
+    KeyProvider<AesKey> keyProvider = new AesKeyProvider(vault, configuration.getKeySetAlias(), keyFactory);
+
+    if (configuration.isCachingEnabled()) {
+      keyProvider = new CachingKeyProvider<AesKey>(keyProvider, configuration.getCachingDuration());
+    }
+
     final DataEnveloper enveloper = new DataEnveloper();
-    final DataEncrypter dataEncrypter =
-        new DataEncrypterImpl(monitor, strategy, enveloper, keyProvider);
+    final CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
+    final CryptoAlgorithm<AesKey> algorithm = new AesAlgorithm(cryptoDataFactory);
 
-    return dataEncrypter;
+    final EncryptionDelegate encryptionDelegate = new AesEncryptionDelegate(keyProvider, algorithm, enveloper,
+        cryptoDataFactory);
+    final DecryptionDelegate decryptionDelegate = new AesDecryptionDelegate(keyProvider, algorithm, enveloper,
+        cryptoDataFactory, monitor);
+
+    return new DataEncrypterImpl(encryptionDelegate, decryptionDelegate);
   }
 
-  private KeyProvider getKeyProvider(Vault vault, DataEncrypterConfiguration configuration) {
+  public DataEncrypter createNoneEncrypter(DataEncrypterConfiguration configuration) {
+    return new DataEncrypter() {
+      @Override
+      public String encrypt(String data) {
+        return data;
+      }
 
-    final KeyProvider keyProvider = new SymmetricKeyProvider(vault, configuration.getKeySetAlias());
-
-    return configuration.isCachingEnabled()
-        ? new CachingKeyProvider(keyProvider, configuration.getCachingDuration())
-        : keyProvider;
+      @Override
+      public String decrypt(String data) {
+        return data;
+      }
+    };
   }
 
-  private EncryptionStrategy getStrategy(DataEncrypterConfiguration configuration) {
-    if (AesEncryptionStrategy.NAME.equalsIgnoreCase(configuration.getEncryptionStrategy())) {
-      return new AesEncryptionStrategy();
-    }
-    if (NoEncryptionStrategy.NAME.equalsIgnoreCase(configuration.getEncryptionStrategy())) {
-      return new AesEncryptionStrategy();
-    }
-
-    final String msg =
-        String.format(
-            DataEncryptionExtension.NAME
-                + ": Unsupported encryption strategy. Supported strategies are '%s', %s.",
-            AesEncryptionStrategy.NAME,
-            NoEncryptionStrategy.NAME);
-    throw new NoSuchElementException(msg);
-  }
 }

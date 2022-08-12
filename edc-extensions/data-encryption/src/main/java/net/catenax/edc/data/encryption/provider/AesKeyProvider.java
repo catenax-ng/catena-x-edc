@@ -18,36 +18,41 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import net.catenax.edc.data.encryption.DataEncryptionExtension;
+import net.catenax.edc.data.encryption.key.AesKey;
+import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
+
+import org.bouncycastle.util.encoders.Base64;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 
 @RequiredArgsConstructor
-public class SymmetricKeyProvider implements KeyProvider {
+public class AesKeyProvider implements KeyProvider<AesKey> {
 
   private static final String KEY_SEPARATOR = ",";
 
   private final Vault vault;
   private final String vaultKeyAlias;
+  private final CryptoKeyFactory cryptoKeyFactory;
 
   @Override
-  public Stream<byte[]> getDecryptionKeySet() {
+  public Stream<AesKey> getDecryptionKeySet() {
     return getKeysStream();
   }
 
   @Override
-  public byte[] getEncryptionKey() {
+  public AesKey getEncryptionKey() {
     return getKeysStream()
         .findFirst()
         .orElseThrow(
-            () ->
-                new RuntimeException(
-                    DataEncryptionExtension.NAME + ": Vault must contain at least one key."));
+            () -> new RuntimeException(
+                DataEncryptionExtension.NAME + ": Vault must contain at least one key."));
   }
 
-  private Stream<byte[]> getKeysStream() {
+  private Stream<AesKey> getKeysStream() {
     return Arrays.stream(getKeys().split(KEY_SEPARATOR))
         .map(String::trim)
         .filter(Predicate.not(String::isEmpty))
-        .map(String::getBytes);
+        .map(Base64::decode)
+        .map(cryptoKeyFactory::fromBytes);
   }
 
   private String getKeys() {

@@ -23,11 +23,11 @@ class DataEnveloperTest {
 
   @Test
   void testSuccess() {
-    final String expected = "I will be enveloped";
+    final byte[] expected = "I will be enveloped".getBytes();
     final byte[] packed = dataEnveloper.pack(expected);
-    final Optional<String> unpacked = dataEnveloper.tryUnpack(packed);
+    final Optional<byte[]> unpacked = dataEnveloper.tryUnpack(packed);
 
     Assertions.assertTrue(unpacked.isPresent());
-    Assertions.assertEquals(expected, unpacked.get());
+    Assertions.assertEquals(new String(expected), new String(unpacked.get()));
   }
 }

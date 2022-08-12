@@ -22,20 +22,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.Value;
+import net.catenax.edc.data.encryption.key.CryptoKey;
 
-public class CachingKeyProvider implements KeyProvider {
+public class CachingKeyProvider<TKey extends CryptoKey> implements KeyProvider<TKey> {
 
-  @NonNull private final KeyProvider decoratedProvider;
-  @NonNull private final Clock clock;
-  @NonNull private final Duration cacheExpiration;
+  @NonNull
+  private final KeyProvider<TKey> decoratedProvider;
+  @NonNull
+  private final Clock clock;
+  @NonNull
+  private final Duration cacheExpiration;
 
-  private CachedKeys cachedKeys;
+  private CachedKeys<TKey> cachedKeys;
 
-  public CachingKeyProvider(KeyProvider keyProvider, Duration cacheExpiration) {
+  public CachingKeyProvider(KeyProvider<TKey> keyProvider, Duration cacheExpiration) {
     this(keyProvider, cacheExpiration, Clock.systemUTC());
   }
 
-  public CachingKeyProvider(KeyProvider keyProvider, Duration cacheExpiration, Clock clock) {
+  public CachingKeyProvider(KeyProvider<TKey> keyProvider, Duration cacheExpiration, Clock clock) {
 
     this.decoratedProvider = keyProvider;
     this.cacheExpiration = cacheExpiration;
@@ -43,31 +47,30 @@ public class CachingKeyProvider implements KeyProvider {
   }
 
   @Override
-  public byte[] getEncryptionKey() {
+  public TKey getEncryptionKey() {
     checkCache();
     return cachedKeys.getEncryptionKey();
   }
 
   @Override
-  public Stream<byte[]> getDecryptionKeySet() {
+  public Stream<TKey> getDecryptionKeySet() {
     checkCache();
     return cachedKeys.getDecryptionKeys().stream();
   }
 
   private void checkCache() {
     if (cachedKeys == null || cachedKeys.expiration.isBefore(clock.instant())) {
-      byte[] encryptionKey = decoratedProvider.getEncryptionKey();
-      List<byte[]> decryptionKeys =
-          decoratedProvider.getDecryptionKeySet().collect(Collectors.toList());
-      cachedKeys =
-          new CachedKeys(encryptionKey, decryptionKeys, clock.instant().plus(cacheExpiration));
+      TKey encryptionKey = decoratedProvider.getEncryptionKey();
+      List<TKey> decryptionKeys = decoratedProvider.getDecryptionKeySet().collect(Collectors.toList());
+      cachedKeys = new CachedKeys<TKey>(encryptionKey, decryptionKeys, clock.instant().plus(cacheExpiration));
     }
   }
 
   @Value
-  private static class CachedKeys {
-    byte[] encryptionKey;
-    List<byte[]> decryptionKeys;
-    @NonNull Instant expiration;
+  private static class CachedKeys<TKey> {
+    TKey encryptionKey;
+    List<TKey> decryptionKeys;
+    @NonNull
+    Instant expiration;
   }
 }

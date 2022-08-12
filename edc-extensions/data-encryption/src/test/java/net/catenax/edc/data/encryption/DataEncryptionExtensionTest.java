@@ -44,16 +44,16 @@ class DataEncryptionExtensionTest {
     Mockito.when(context.getService(Vault.class)).thenReturn(vault);
 
     Mockito.when(
-            context.getSetting(
-                Mockito.eq(DataEncryptionExtension.CACHING_ENABLED), Mockito.anyBoolean()))
+        context.getSetting(
+            Mockito.eq(DataEncryptionExtension.CACHING_ENABLED), Mockito.anyBoolean()))
         .thenAnswer((i) -> i.getArguments()[1]);
     Mockito.when(
-            context.getSetting(
-                Mockito.eq(DataEncryptionExtension.ENCRYPTION_STRATEGY), Mockito.anyString()))
+        context.getSetting(
+            Mockito.eq(DataEncryptionExtension.ENCRYPTION_ALGORITHM), Mockito.anyString()))
         .thenAnswer((i) -> i.getArguments()[1]);
     Mockito.when(
-            context.getSetting(
-                Mockito.eq(DataEncryptionExtension.CACHING_SECONDS), Mockito.anyInt()))
+        context.getSetting(
+            Mockito.eq(DataEncryptionExtension.CACHING_SECONDS), Mockito.anyInt()))
         .thenAnswer((i) -> i.getArguments()[1]);
   }
 

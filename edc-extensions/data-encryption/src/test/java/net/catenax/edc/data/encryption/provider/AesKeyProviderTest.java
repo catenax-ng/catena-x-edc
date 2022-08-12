@@ -16,17 +16,25 @@ package net.catenax.edc.data.encryption.provider;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class SymmetricKeyProviderTest {
+import net.catenax.edc.data.encryption.key.AesKey;
+import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
+
+public class AesKeyProviderTest {
+
+  private static final String KEY_1 = "dVUjmYJzbwVcntkFZU+lNQ==";
+  private static final String KEY_2 = "7h6sh6t6tchCmNnHjK2kFA==";
+  private static final String KEY_3 = "uyNfJzhsnvfEe9OtQyR9Og==";
 
   private static final String KEY_ALIAS = "foo";
 
-  private SymmetricKeyProvider keyProvider;
+  private AesKeyProvider keyProvider;
 
   // mocks
   private Vault vault;
@@ -34,16 +42,17 @@ public class SymmetricKeyProviderTest {
   @BeforeEach
   void setup() {
     vault = Mockito.mock(Vault.class);
-    keyProvider = new SymmetricKeyProvider(vault, KEY_ALIAS);
+    keyProvider = new AesKeyProvider(vault, KEY_ALIAS, new CryptoKeyFactoryImpl());
   }
 
   @Test
   void testEncryptionKeyAlwaysFirstKey() {
-    Mockito.when(vault.resolveSecret(KEY_ALIAS)).thenReturn("1,2,3");
+    Mockito.when(vault.resolveSecret(KEY_ALIAS)).thenReturn(
+        String.format("%s,%s,%s", KEY_1, KEY_2, KEY_3));
 
-    byte[] key = keyProvider.getEncryptionKey();
+    AesKey key = keyProvider.getEncryptionKey();
 
-    Assertions.assertEquals("1", new String(key));
+    Assertions.assertEquals(KEY_1, key.getBase64());
   }
 
   @Test
@@ -55,11 +64,12 @@ public class SymmetricKeyProviderTest {
 
   @Test
   void testGetKeys() {
-    Mockito.when(vault.resolveSecret(KEY_ALIAS)).thenReturn("1,2,  ,,3,4");
+    Mockito.when(vault.resolveSecret(KEY_ALIAS))
+        .thenReturn(
+            String.format("%s,  ,,%s,%s", KEY_1, KEY_2, KEY_3));
 
-    List<String> keys =
-        keyProvider.getDecryptionKeySet().map(String::new).collect(Collectors.toList());
-    List<String> expected = List.of("1", "2", "3", "4");
+    List<String> keys = keyProvider.getDecryptionKeySet().map(AesKey::getBase64).collect(Collectors.toList());
+    List<String> expected = List.of(KEY_1, KEY_2, KEY_3);
 
     Assertions.assertEquals(expected, keys);
   }

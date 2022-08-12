@@ -15,8 +15,7 @@ package net.catenax.edc.data.encryption.encrypter;
 
 import java.time.Duration;
 import java.util.NoSuchElementException;
-import net.catenax.edc.data.encryption.strategies.AesEncryptionStrategy;
-import net.catenax.edc.data.encryption.strategies.NoEncryptionStrategy;
+
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -26,6 +25,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+
+import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
+import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 
 class DataEncrypterFactoryTest {
 
@@ -42,7 +44,7 @@ class DataEncrypterFactoryTest {
     vault = Mockito.mock(Vault.class);
     monitor = Mockito.mock(Monitor.class);
 
-    factory = new DataEncrypterFactory(vault, monitor);
+    factory = new DataEncrypterFactory(vault, monitor, new CryptoKeyFactoryImpl());
   }
 
   @Test
@@ -52,7 +54,7 @@ class DataEncrypterFactoryTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {NoEncryptionStrategy.NAME, AesEncryptionStrategy.NAME})
+  @ValueSource(strings = { DataEncrypterFactory.AES_ALGORITHM, DataEncrypterFactory.NONE })
   void testValidStrategies(String strategy) {
     final DataEncrypterConfiguration configuration = newConfiguration(strategy);
     Assertions.assertDoesNotThrow(() -> factory.create(configuration));
@@ -60,7 +62,7 @@ class DataEncrypterFactoryTest {
 
   @Test
   public void testEncrypterWithCaching() {
-    Mockito.when(vault.resolveSecret(KEY_SET_ALIAS)).thenReturn("z%C*F-JaNcRfUjXn");
+    Mockito.when(vault.resolveSecret(KEY_SET_ALIAS)).thenReturn("7h6sh6t6tchCmNnHjK2kFA==");
 
     final DataEncrypterConfiguration configuration = newConfiguration(true);
     final DataEncrypter dataEncrypter = factory.create(configuration);
@@ -82,6 +84,6 @@ class DataEncrypterFactoryTest {
 
   private DataEncrypterConfiguration newConfiguration(boolean isCachingEnabled) {
     return new DataEncrypterConfiguration(
-        AesEncryptionStrategy.NAME, KEY_SET_ALIAS, isCachingEnabled, Duration.ofMinutes(1));
+        DataEncrypterFactory.AES_ALGORITHM, KEY_SET_ALIAS, isCachingEnabled, Duration.ofMinutes(1));
   }
 }

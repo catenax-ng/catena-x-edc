@@ -28,12 +28,12 @@ public class DataEnveloper {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @SneakyThrows
-  public byte[] pack(String data) {
+  public byte[] pack(byte[] data) {
     final Envelop envelop = new Envelop(data);
     return objectMapper.writeValueAsBytes(envelop);
   }
 
-  public Optional<String> tryUnpack(byte[] envelopedData) {
+  public Optional<byte[]> tryUnpack(byte[] envelopedData) {
     final Envelop envelop;
     try {
       envelop = objectMapper.readValue(envelopedData, Envelop.class);
@@ -47,6 +47,7 @@ public class DataEnveloper {
   @AllArgsConstructor
   @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
   private static class Envelop {
-    @NonNull String data;
+    @NonNull
+    byte[] data;
   }
 }

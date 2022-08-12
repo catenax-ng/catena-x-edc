@@ -21,12 +21,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import net.catenax.edc.data.encryption.key.CryptoKey;
+
 public class CachingKeyProviderTest {
 
-  private CachingKeyProvider cachingKeyProvider;
+  private CachingKeyProvider<CryptoKey> cachingKeyProvider;
+
+  private CryptoKey encryptionKey;
+  private CryptoKey decryptionKey;
 
   // mocks
-  private KeyProvider decoratedProvider;
+  private KeyProvider<CryptoKey> decoratedProvider;
   private Duration cacheExpiration;
   private Clock clock;
 
@@ -35,12 +40,14 @@ public class CachingKeyProviderTest {
     decoratedProvider = Mockito.mock(KeyProvider.class);
     cacheExpiration = Duration.ofSeconds(2);
     clock = Mockito.mock(Clock.class);
+    encryptionKey = Mockito.mock(CryptoKey.class);
+    decryptionKey = Mockito.mock(CryptoKey.class);
 
-    cachingKeyProvider = new CachingKeyProvider(decoratedProvider, cacheExpiration, clock);
+    cachingKeyProvider = new CachingKeyProvider<CryptoKey>(decoratedProvider, cacheExpiration, clock);
 
-    Mockito.when(decoratedProvider.getEncryptionKey()).thenReturn(new byte[] {1, 2, 3});
+    Mockito.when(decoratedProvider.getEncryptionKey()).thenReturn(encryptionKey);
     Mockito.when(decoratedProvider.getDecryptionKeySet())
-        .thenAnswer((i) -> Stream.of(new byte[] {4, 5, 6}));
+        .thenAnswer((i) -> Stream.of(decryptionKey));
   }
 
   @Test
