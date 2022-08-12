@@ -47,7 +47,6 @@ public class DataEnveloper {
   @AllArgsConstructor
   @NoArgsConstructor(force = true, access = AccessLevel.PRIVATE)
   private static class Envelop {
-    @NonNull
-    byte[] data;
+    @NonNull byte[] data;
   }
 }

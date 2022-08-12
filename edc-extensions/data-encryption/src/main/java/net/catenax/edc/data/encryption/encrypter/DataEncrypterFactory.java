@@ -26,9 +26,9 @@ import net.catenax.edc.data.encryption.encrypter.delegates.DecryptionDelegate;
 import net.catenax.edc.data.encryption.encrypter.delegates.EncryptionDelegate;
 import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
+import net.catenax.edc.data.encryption.provider.AesKeyProvider;
 import net.catenax.edc.data.encryption.provider.CachingKeyProvider;
 import net.catenax.edc.data.encryption.provider.KeyProvider;
-import net.catenax.edc.data.encryption.provider.AesKeyProvider;
 import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -50,17 +50,21 @@ public class DataEncrypterFactory {
     } else if (configuration.getAlgorithm().equalsIgnoreCase(NONE)) {
       return createNoneEncrypter(configuration);
     } else {
-      final String msg = String.format(DataEncryptionExtension.NAME
-          + ": Unsupported encryption algorithm '%s'. Supported algorithms are '%s',  %s.",
-          configuration.getAlgorithm(), AES_ALGORITHM, NONE);
+      final String msg =
+          String.format(
+              DataEncryptionExtension.NAME
+                  + ": Unsupported encryption algorithm '%s'. Supported algorithms are '%s',  %s.",
+              configuration.getAlgorithm(),
+              AES_ALGORITHM,
+              NONE);
       throw new IllegalArgumentException(msg);
     }
-
   }
 
   public DataEncrypter createAesEncrypter(DataEncrypterConfiguration configuration) {
 
-    KeyProvider<AesKey> keyProvider = new AesKeyProvider(vault, configuration.getKeySetAlias(), keyFactory);
+    KeyProvider<AesKey> keyProvider =
+        new AesKeyProvider(vault, configuration.getKeySetAlias(), keyFactory);
 
     if (configuration.isCachingEnabled()) {
       keyProvider = new CachingKeyProvider<AesKey>(keyProvider, configuration.getCachingDuration());
@@ -70,10 +74,10 @@ public class DataEncrypterFactory {
     final CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
     final CryptoAlgorithm<AesKey> algorithm = new AesAlgorithm(cryptoDataFactory);
 
-    final EncryptionDelegate encryptionDelegate = new AesEncryptionDelegate(keyProvider, algorithm, enveloper,
-        cryptoDataFactory);
-    final DecryptionDelegate decryptionDelegate = new AesDecryptionDelegate(keyProvider, algorithm, enveloper,
-        cryptoDataFactory, monitor);
+    final EncryptionDelegate encryptionDelegate =
+        new AesEncryptionDelegate(keyProvider, algorithm, enveloper, cryptoDataFactory);
+    final DecryptionDelegate decryptionDelegate =
+        new AesDecryptionDelegate(keyProvider, algorithm, enveloper, cryptoDataFactory, monitor);
 
     return new DataEncrypterImpl(encryptionDelegate, decryptionDelegate);
   }
@@ -91,5 +95,4 @@ public class DataEncrypterFactory {
       }
     };
   }
-
 }

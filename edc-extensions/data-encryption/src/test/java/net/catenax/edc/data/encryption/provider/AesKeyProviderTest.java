@@ -16,15 +16,13 @@ package net.catenax.edc.data.encryption.provider;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import net.catenax.edc.data.encryption.key.AesKey;
+import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import net.catenax.edc.data.encryption.key.AesKey;
-import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 
 public class AesKeyProviderTest {
 
@@ -47,8 +45,8 @@ public class AesKeyProviderTest {
 
   @Test
   void testEncryptionKeyAlwaysFirstKey() {
-    Mockito.when(vault.resolveSecret(KEY_ALIAS)).thenReturn(
-        String.format("%s,%s,%s", KEY_1, KEY_2, KEY_3));
+    Mockito.when(vault.resolveSecret(KEY_ALIAS))
+        .thenReturn(String.format("%s,%s,%s", KEY_1, KEY_2, KEY_3));
 
     AesKey key = keyProvider.getEncryptionKey();
 
@@ -65,10 +63,10 @@ public class AesKeyProviderTest {
   @Test
   void testGetKeys() {
     Mockito.when(vault.resolveSecret(KEY_ALIAS))
-        .thenReturn(
-            String.format("%s,  ,,%s,%s", KEY_1, KEY_2, KEY_3));
+        .thenReturn(String.format("%s,  ,,%s,%s", KEY_1, KEY_2, KEY_3));
 
-    List<String> keys = keyProvider.getDecryptionKeySet().map(AesKey::getBase64).collect(Collectors.toList());
+    List<String> keys =
+        keyProvider.getDecryptionKeySet().map(AesKey::getBase64).collect(Collectors.toList());
     List<String> expected = List.of(KEY_1, KEY_2, KEY_3);
 
     Assertions.assertEquals(expected, keys);

@@ -15,7 +15,7 @@ package net.catenax.edc.data.encryption.encrypter;
 
 import java.time.Duration;
 import java.util.NoSuchElementException;
-
+import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -25,9 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
-
-import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
-import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 
 class DataEncrypterFactoryTest {
 
@@ -54,7 +51,7 @@ class DataEncrypterFactoryTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { DataEncrypterFactory.AES_ALGORITHM, DataEncrypterFactory.NONE })
+  @ValueSource(strings = {DataEncrypterFactory.AES_ALGORITHM, DataEncrypterFactory.NONE})
   void testValidStrategies(String strategy) {
     final DataEncrypterConfiguration configuration = newConfiguration(strategy);
     Assertions.assertDoesNotThrow(() -> factory.create(configuration));

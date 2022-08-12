@@ -18,16 +18,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.catenax.edc.data.encryption.encrypter.delegates.DecryptionDelegate;
 import net.catenax.edc.data.encryption.encrypter.delegates.EncryptionDelegate;
-
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
 
 @RequiredArgsConstructor
 public class DataEncrypterImpl implements DataEncrypter {
 
-  @NonNull
-  private final EncryptionDelegate encryptionDelegate;
-  @NonNull
-  private final DecryptionDelegate decryptionDelegate;
+  @NonNull private final EncryptionDelegate encryptionDelegate;
+  @NonNull private final DecryptionDelegate decryptionDelegate;
 
   @Override
   public String encrypt(String value) {

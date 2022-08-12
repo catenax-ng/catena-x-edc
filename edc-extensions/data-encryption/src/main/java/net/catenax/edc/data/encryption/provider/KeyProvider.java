@@ -14,7 +14,6 @@
 package net.catenax.edc.data.encryption.provider;
 
 import java.util.stream.Stream;
-
 import net.catenax.edc.data.encryption.key.CryptoKey;
 
 public interface KeyProvider<TKey extends CryptoKey> {

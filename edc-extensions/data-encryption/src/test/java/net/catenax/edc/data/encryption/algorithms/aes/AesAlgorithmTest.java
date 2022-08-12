@@ -13,23 +13,22 @@
  */
 package net.catenax.edc.data.encryption.algorithms.aes;
 
-import org.bouncycastle.util.encoders.Base64;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import lombok.SneakyThrows;
-import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
 import net.catenax.edc.data.encryption.data.CryptoDataFactory;
 import net.catenax.edc.data.encryption.data.CryptoDataFactoryImpl;
 import net.catenax.edc.data.encryption.data.DecryptedData;
 import net.catenax.edc.data.encryption.data.EncryptedData;
 import net.catenax.edc.data.encryption.key.AesKey;
+import org.bouncycastle.util.encoders.Base64;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class AesAlgorithmTest {
 
   private static final byte[] KEY_128_BIT = Base64.decode("dVUjmYJzbwVcntkFZU+lNQ==");
   private static final byte[] KEY_196_BIT = Base64.decode("NcgHzzRTUC+z396tWG9hqIbeihujz0m8");
-  private static final byte[] KEY_256_BIT = Base64.decode("OSD+3NcZAmS/6UXbq6NL8UL+aQIAJDLL7BE2rBX5MtA=");
+  private static final byte[] KEY_256_BIT =
+      Base64.decode("OSD+3NcZAmS/6UXbq6NL8UL+aQIAJDLL7BE2rBX5MtA=");
 
   private AesAlgorithm strategy = new AesAlgorithm(new CryptoDataFactoryImpl());
   private CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
@@ -75,5 +74,4 @@ class AesAlgorithmTest {
       }
     };
   }
-
 }

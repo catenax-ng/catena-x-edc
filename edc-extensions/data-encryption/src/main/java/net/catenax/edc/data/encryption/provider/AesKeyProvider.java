@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import net.catenax.edc.data.encryption.DataEncryptionExtension;
 import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
-
 import org.bouncycastle.util.encoders.Base64;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 
@@ -43,8 +42,9 @@ public class AesKeyProvider implements KeyProvider<AesKey> {
     return getKeysStream()
         .findFirst()
         .orElseThrow(
-            () -> new RuntimeException(
-                DataEncryptionExtension.NAME + ": Vault must contain at least one key."));
+            () ->
+                new RuntimeException(
+                    DataEncryptionExtension.NAME + ": Vault must contain at least one key."));
   }
 
   private Stream<AesKey> getKeysStream() {

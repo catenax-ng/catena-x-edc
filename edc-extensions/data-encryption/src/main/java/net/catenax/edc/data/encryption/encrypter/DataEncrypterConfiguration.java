@@ -20,10 +20,8 @@ import lombok.Value;
 
 @Value
 public class DataEncrypterConfiguration {
-  @NonNull
-  String algorithm;
-  @NonNull
-  String keySetAlias;
+  @NonNull String algorithm;
+  @NonNull String keySetAlias;
   boolean cachingEnabled;
   Duration cachingDuration;
 }

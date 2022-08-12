@@ -13,22 +13,23 @@
  */
 package net.catenax.edc.data.encryption.algorithms;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
 import net.catenax.edc.data.encryption.data.DecryptedData;
 import net.catenax.edc.data.encryption.data.EncryptedData;
 import net.catenax.edc.data.encryption.key.CryptoKey;
 
 public interface CryptoAlgorithm<TKey extends CryptoKey> {
-        EncryptedData encrypt(DecryptedData data, TKey key)
-                        throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-                        NoSuchPaddingException, NoSuchAlgorithmException;
+  EncryptedData encrypt(DecryptedData data, TKey key)
+      throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
+          NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+          InvalidAlgorithmParameterException;
 
-        DecryptedData decrypt(EncryptedData data, TKey key)
-                        throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-                        NoSuchPaddingException, NoSuchAlgorithmException;
+  DecryptedData decrypt(EncryptedData data, TKey key)
+      throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
+          NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException;
 }

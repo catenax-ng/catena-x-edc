@@ -13,12 +13,7 @@
  */
 package net.catenax.edc.data.encryption.encrypter;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import net.catenax.edc.data.encryption.provider.KeyProvider;
+import lombok.SneakyThrows;
 import net.catenax.edc.data.encryption.algorithms.CryptoAlgorithm;
 import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
 import net.catenax.edc.data.encryption.data.CryptoDataFactory;
@@ -33,8 +28,8 @@ import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
 import net.catenax.edc.data.encryption.provider.AesKeyProvider;
+import net.catenax.edc.data.encryption.provider.KeyProvider;
 import net.catenax.edc.data.encryption.util.DataEnveloper;
-
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -42,8 +37,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import lombok.SneakyThrows;
 
 @SuppressWarnings("FieldCanBeLocal")
 class DataEncrypterAesComponentTest {
@@ -73,10 +66,11 @@ class DataEncrypterAesComponentTest {
     algorithm = new AesAlgorithm(cryptoDataFactory);
     keyProvider = new AesKeyProvider(vault, "foo", cryptoKeyFactory);
 
-    EncryptionDelegate encryptionDelegate = new AesEncryptionDelegate(keyProvider, algorithm, dataEnveloper,
-        cryptoDataFactory);
-    DecryptionDelegate decryptionDelegate = new AesDecryptionDelegate(keyProvider, algorithm, dataEnveloper,
-        cryptoDataFactory, monitor);
+    EncryptionDelegate encryptionDelegate =
+        new AesEncryptionDelegate(keyProvider, algorithm, dataEnveloper, cryptoDataFactory);
+    DecryptionDelegate decryptionDelegate =
+        new AesDecryptionDelegate(
+            keyProvider, algorithm, dataEnveloper, cryptoDataFactory, monitor);
 
     dataEncrypter = new DataEncrypterImpl(encryptionDelegate, decryptionDelegate);
   }
@@ -86,7 +80,11 @@ class DataEncrypterAesComponentTest {
   void testKeyRotation() {
     Mockito.when(vault.resolveSecret(Mockito.anyString()))
         .thenReturn(
-            String.format("%s, %s, %s, %s", KEY_128_BIT_BASE_64, KEY_128_BIT_BASE_64, KEY_128_BIT_BASE_64,
+            String.format(
+                "%s, %s, %s, %s",
+                KEY_128_BIT_BASE_64,
+                KEY_128_BIT_BASE_64,
+                KEY_128_BIT_BASE_64,
                 KEY_256_BIT_BASE_64));
 
     final AesKey key256Bit = cryptoKeyFactory.fromBase64(KEY_256_BIT_BASE_64);
