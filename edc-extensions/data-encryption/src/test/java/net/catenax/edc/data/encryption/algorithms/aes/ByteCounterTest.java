@@ -23,11 +23,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-public class ByteCounterTest {
+class ByteCounterTest {
 
   @ParameterizedTest
   @ArgumentsSource(IncrementArgumentsProvider.class)
-  public void testIncrements(byte[] counterValue, long numberOfIncrements, byte[] expected) {
+  void testIncrements(byte[] counterValue, long numberOfIncrements, byte[] expected) {
 
     ByteCounter initializationVector = new ByteCounter(counterValue);
 
@@ -40,7 +40,7 @@ public class ByteCounterTest {
   }
 
   @Test
-  public void testIsMaxed() {
+  void testIsMaxed() {
 
     byte[] counterValue = new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
     ByteCounter initializationVector = new ByteCounter(counterValue);
@@ -49,7 +49,7 @@ public class ByteCounterTest {
   }
 
   @Test
-  public void testOverflow() {
+  void testOverflow() {
 
     byte[] counterValue = new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
     ByteCounter initializationVector = new ByteCounter(counterValue);

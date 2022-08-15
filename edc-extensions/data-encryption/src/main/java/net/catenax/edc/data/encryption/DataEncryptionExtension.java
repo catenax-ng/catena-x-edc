@@ -82,8 +82,8 @@ public class DataEncryptionExtension implements ServiceExtension {
   }
 
   private DataEncrypterConfiguration getConfiguration(ServiceExtensionContext context) {
-    final String keySetAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
-    if (keySetAlias == null) {
+    final String keyAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
+    if (keyAlias == null) {
       throw new EdcException(NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
     }
 
@@ -93,6 +93,6 @@ public class DataEncryptionExtension implements ServiceExtension {
     final int cachingSeconds = context.getSetting(CACHING_SECONDS, CACHING_SECONDS_DEFAULT);
 
     return new DataEncrypterConfiguration(
-        encryptionStrategy, keySetAlias, cachingEnabled, Duration.ofSeconds(cachingSeconds));
+        encryptionStrategy, keyAlias, cachingEnabled, Duration.ofSeconds(cachingSeconds));
   }
 }

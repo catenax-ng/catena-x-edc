@@ -23,13 +23,12 @@ import net.catenax.edc.data.encryption.data.DecryptedData;
 import net.catenax.edc.data.encryption.data.EncryptedData;
 import net.catenax.edc.data.encryption.key.CryptoKey;
 
-public interface CryptoAlgorithm<TKey extends CryptoKey> {
-  EncryptedData encrypt(DecryptedData data, TKey key)
+public interface CryptoAlgorithm<T extends CryptoKey> {
+  EncryptedData encrypt(DecryptedData data, T key)
       throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-          NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-          InvalidAlgorithmParameterException;
+          NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException;
 
-  DecryptedData decrypt(EncryptedData data, TKey key)
+  DecryptedData decrypt(EncryptedData data, T key)
       throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
           NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException;
 }

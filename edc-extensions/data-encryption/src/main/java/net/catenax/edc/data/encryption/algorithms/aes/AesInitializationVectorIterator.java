@@ -16,6 +16,7 @@ package net.catenax.edc.data.encryption.algorithms.aes;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import net.catenax.edc.data.encryption.util.ArrayUtil;
 
 public class AesInitializationVectorIterator implements Iterator<byte[]> {
@@ -46,7 +47,7 @@ public class AesInitializationVectorIterator implements Iterator<byte[]> {
       throw new IllegalStateException(getClass().getSimpleName() + " has not been initialized");
     }
     if (counter.isMaxed()) {
-      throw new IllegalStateException(getClass().getSimpleName() + " has no more elements");
+      throw new NoSuchElementException(getClass().getSimpleName() + " has no more elements");
     }
 
     counter.increment();

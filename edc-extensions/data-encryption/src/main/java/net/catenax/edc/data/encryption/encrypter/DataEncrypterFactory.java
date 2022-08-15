@@ -44,7 +44,7 @@ public class DataEncrypterFactory {
     if (configuration.getAlgorithm().equalsIgnoreCase(AES_ALGORITHM)) {
       return createAesEncrypter(configuration);
     } else if (configuration.getAlgorithm().equalsIgnoreCase(NONE)) {
-      return createNoneEncrypter(configuration);
+      return createNoneEncrypter();
     } else {
       final String msg =
           String.format(
@@ -63,7 +63,7 @@ public class DataEncrypterFactory {
         new AesKeyProvider(vault, configuration.getKeySetAlias(), keyFactory);
 
     if (configuration.isCachingEnabled()) {
-      keyProvider = new CachingKeyProvider<AesKey>(keyProvider, configuration.getCachingDuration());
+      keyProvider = new CachingKeyProvider<>(keyProvider, configuration.getCachingDuration());
     }
 
     final CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
@@ -72,7 +72,7 @@ public class DataEncrypterFactory {
     return new AesDataEncrypterImpl(algorithm, monitor, keyProvider, algorithm, cryptoDataFactory);
   }
 
-  public DataEncrypter createNoneEncrypter(DataEncrypterConfiguration configuration) {
+  public DataEncrypter createNoneEncrypter() {
     return new DataEncrypter() {
       @Override
       public String encrypt(String data) {

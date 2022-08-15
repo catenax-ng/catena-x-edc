@@ -58,7 +58,7 @@ class DataEncrypterFactoryTest {
   }
 
   @Test
-  public void testEncrypterWithCaching() {
+  void testEncrypterWithCaching() {
     Mockito.when(vault.resolveSecret(KEY_SET_ALIAS)).thenReturn("7h6sh6t6tchCmNnHjK2kFA==");
 
     final DataEncrypterConfiguration configuration = newConfiguration(true);

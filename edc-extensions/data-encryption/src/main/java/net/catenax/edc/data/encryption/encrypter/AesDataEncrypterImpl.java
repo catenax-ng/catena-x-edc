@@ -91,10 +91,10 @@ public class AesDataEncrypterImpl implements DataEncrypter {
         | NoSuchPaddingException
         | NoSuchAlgorithmException
         | InvalidAlgorithmParameterException e) {
-      // TODO Better message
       monitor.warning(
           String.format(
-              DataEncryptionExtension.NAME + ": Unusable key in rotating key set. %s",
+              DataEncryptionExtension.NAME
+                  + ": Exception decrypting data using key from rotating key set. %s",
               e.getMessage()));
       throw new EdcException(e);
     }

@@ -15,17 +15,18 @@ package net.catenax.edc.data.encryption.algorithms.aes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.SneakyThrows;
 import net.catenax.edc.data.encryption.util.ArrayUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class AesInitializationVectorIteratorTest {
+class AesInitializationVectorIteratorTest {
 
   @Test
   @SneakyThrows
-  public void testDistinctVectors() {
+  void testDistinctVectors() {
     final int vectorCount = 100;
     AesInitializationVectorIterator iterator = new AesInitializationVectorIterator();
     iterator.initialize();
@@ -41,9 +42,10 @@ public class AesInitializationVectorIteratorTest {
 
   @Test
   @SneakyThrows
-  public void testHasNextTrueOnCounterContinuing() {
+  void testHasNextTrueOnCounterContinuing() {
     ByteCounter counter = Mockito.mock(ByteCounter.class);
     AesInitializationVectorIterator iterator = new AesInitializationVectorIterator(counter);
+    iterator.initialize();
 
     Mockito.when(counter.isMaxed()).thenReturn(false);
     Assertions.assertTrue(iterator.hasNext());
@@ -51,11 +53,30 @@ public class AesInitializationVectorIteratorTest {
 
   @Test
   @SneakyThrows
-  public void testHasNextFalseOnCounterEnd() {
+  void testHasNextFalseOnCounterEnd() {
     ByteCounter counter = Mockito.mock(ByteCounter.class);
     AesInitializationVectorIterator iterator = new AesInitializationVectorIterator(counter);
+    iterator.initialize();
 
     Mockito.when(counter.isMaxed()).thenReturn(true);
     Assertions.assertFalse(iterator.hasNext());
+  }
+
+  @Test
+  @SneakyThrows
+  void testNoSuchElementExceptionOnCounterEnd() {
+    ByteCounter counter = Mockito.mock(ByteCounter.class);
+    AesInitializationVectorIterator iterator = new AesInitializationVectorIterator(counter);
+    iterator.initialize();
+
+    Mockito.when(counter.isMaxed()).thenReturn(true);
+    Assertions.assertThrows(NoSuchElementException.class, () -> iterator.next());
+  }
+
+  @Test
+  @SneakyThrows
+  void testIllegalStateExceptionOnUninitialized() {
+    AesInitializationVectorIterator iterator = new AesInitializationVectorIterator();
+    Assertions.assertThrows(IllegalStateException.class, () -> iterator.next());
   }
 }
