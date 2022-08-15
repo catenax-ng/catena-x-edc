@@ -11,12 +11,14 @@
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *
  */
-package net.catenax.edc.data.encryption.encrypter.delegates;
+
+package net.catenax.edc.data.encryption.encrypter;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import javax.crypto.AEADBadTagException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -28,30 +30,47 @@ import net.catenax.edc.data.encryption.data.DecryptedData;
 import net.catenax.edc.data.encryption.data.EncryptedData;
 import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.provider.KeyProvider;
-import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
+import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
 
 @RequiredArgsConstructor
-public class AesDecryptionDelegate implements DecryptionDelegate {
+public class AesDataEncrypterImpl implements DataEncrypter {
 
-  private final KeyProvider<AesKey> keyProvider;
   private final CryptoAlgorithm<AesKey> encryptionStrategy;
-  private final DataEnveloper dataEnveloper;
-  private final CryptoDataFactory cryptoDataFactory;
   private final Monitor monitor;
+  private final KeyProvider<AesKey> keyProvider;
+  private final CryptoAlgorithm<AesKey> algorithm;
+  private final CryptoDataFactory cryptoDataFactory;
 
   @Override
-  public String decrypt(String text) {
-    EncryptedData encryptedData = cryptoDataFactory.encryptedFromText(text);
+  public String encrypt(String value) {
+    DecryptedData decryptedData = cryptoDataFactory.decryptedFromText(value);
+    AesKey key = keyProvider.getEncryptionKey();
+
+    try {
+      EncryptedData encryptedData = algorithm.encrypt(decryptedData, key);
+      return encryptedData.getBase64();
+    } catch (IllegalBlockSizeException
+        | BadPaddingException
+        | InvalidKeyException
+        | InvalidAlgorithmParameterException
+        | NoSuchPaddingException
+        | NoSuchAlgorithmException e) {
+      throw new EdcException(e);
+    }
+  }
+
+  @Override
+  public String decrypt(String value) {
+    EncryptedData encryptedData = cryptoDataFactory.encryptedFromBase64(value);
 
     return keyProvider
         .getDecryptionKeySet()
         .map(key -> decrypt(encryptedData, key))
-        .map(DecryptedData::getBytes)
-        .map(dataEnveloper::tryUnpack)
         .filter(Optional::isPresent)
         .map(Optional::get)
+        .map(DecryptedData::getBytes)
         .map(String::new)
         .findFirst()
         .orElseThrow(
@@ -61,9 +80,11 @@ public class AesDecryptionDelegate implements DecryptionDelegate {
                         + ": Failed to decrypt data. This can happen if the key set is empty, contains invalid keys, the decryption key rotated out of the key set or because the data was originally not encrypted by this extension."));
   }
 
-  private DecryptedData decrypt(EncryptedData data, AesKey key) {
+  private Optional<DecryptedData> decrypt(EncryptedData data, AesKey key) {
     try {
-      return encryptionStrategy.decrypt(data, key);
+      return Optional.of(encryptionStrategy.decrypt(data, key));
+    } catch (AEADBadTagException e) { // thrown when wrong key is used for decryption
+      return Optional.empty();
     } catch (IllegalBlockSizeException
         | BadPaddingException
         | InvalidKeyException

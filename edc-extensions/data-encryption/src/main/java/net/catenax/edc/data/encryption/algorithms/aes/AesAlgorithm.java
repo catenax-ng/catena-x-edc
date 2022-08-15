@@ -35,6 +35,7 @@ public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
 
   private static final String AES_GCM = "AES/GCM/NoPadding";
   private static final String AES = "AES";
+  private static final Object MONITOR = new Object();
 
   @NonNull private final CryptoDataFactory cryptoDataFactory;
   private AesInitializationVectorIterator initializationVectorIterator;
@@ -45,17 +46,21 @@ public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
   }
 
   @Override
-  public EncryptedData encrypt(DecryptedData data, AesKey key)
+  public synchronized EncryptedData encrypt(DecryptedData data, AesKey key)
       throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
           NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-    if (!initializationVectorIterator.hasNext()) {
-      initializationVectorIterator = new AesInitializationVectorIterator();
-    }
-    if (!initializationVectorIterator.isInitialized()) {
-      initializationVectorIterator.initialize();
-    }
 
-    byte[] initializationVector = initializationVectorIterator.next();
+    final byte[] initializationVector;
+    synchronized (MONITOR) {
+      if (!initializationVectorIterator.hasNext()) {
+        initializationVectorIterator = new AesInitializationVectorIterator();
+      }
+      if (!initializationVectorIterator.isInitialized()) {
+        initializationVectorIterator.initialize();
+      }
+
+      initializationVector = initializationVectorIterator.next();
+    }
 
     Cipher cipher = Cipher.getInstance(AES_GCM, new BouncyCastleProvider());
     final SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), AES);

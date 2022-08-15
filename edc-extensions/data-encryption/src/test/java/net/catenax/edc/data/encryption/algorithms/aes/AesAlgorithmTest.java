@@ -55,7 +55,7 @@ class AesAlgorithmTest {
     final EncryptedData encryptedResult = strategy.encrypt(expected, aesKey);
     final DecryptedData result = strategy.decrypt(encryptedResult, aesKey);
 
-    Assertions.assertEquals(expected.getText(), result.getText());
+    Assertions.assertEquals(expected.getBase64(), result.getBase64());
   }
 
   // TODO Add Test each cipher code different

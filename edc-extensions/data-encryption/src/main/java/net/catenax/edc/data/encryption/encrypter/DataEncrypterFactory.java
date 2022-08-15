@@ -14,22 +14,18 @@
 
 package net.catenax.edc.data.encryption.encrypter;
 
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import net.catenax.edc.data.encryption.DataEncryptionExtension;
 import net.catenax.edc.data.encryption.algorithms.CryptoAlgorithm;
 import net.catenax.edc.data.encryption.algorithms.aes.AesAlgorithm;
 import net.catenax.edc.data.encryption.data.CryptoDataFactory;
 import net.catenax.edc.data.encryption.data.CryptoDataFactoryImpl;
-import net.catenax.edc.data.encryption.encrypter.delegates.AesDecryptionDelegate;
-import net.catenax.edc.data.encryption.encrypter.delegates.AesEncryptionDelegate;
-import net.catenax.edc.data.encryption.encrypter.delegates.DecryptionDelegate;
-import net.catenax.edc.data.encryption.encrypter.delegates.EncryptionDelegate;
 import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
 import net.catenax.edc.data.encryption.provider.AesKeyProvider;
 import net.catenax.edc.data.encryption.provider.CachingKeyProvider;
 import net.catenax.edc.data.encryption.provider.KeyProvider;
-import net.catenax.edc.data.encryption.util.DataEnveloper;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
@@ -57,7 +53,7 @@ public class DataEncrypterFactory {
               configuration.getAlgorithm(),
               AES_ALGORITHM,
               NONE);
-      throw new IllegalArgumentException(msg);
+      throw new NoSuchElementException(msg);
     }
   }
 
@@ -70,16 +66,10 @@ public class DataEncrypterFactory {
       keyProvider = new CachingKeyProvider<AesKey>(keyProvider, configuration.getCachingDuration());
     }
 
-    final DataEnveloper enveloper = new DataEnveloper();
     final CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
     final CryptoAlgorithm<AesKey> algorithm = new AesAlgorithm(cryptoDataFactory);
 
-    final EncryptionDelegate encryptionDelegate =
-        new AesEncryptionDelegate(keyProvider, algorithm, enveloper, cryptoDataFactory);
-    final DecryptionDelegate decryptionDelegate =
-        new AesDecryptionDelegate(keyProvider, algorithm, enveloper, cryptoDataFactory, monitor);
-
-    return new DataEncrypterImpl(encryptionDelegate, decryptionDelegate);
+    return new AesDataEncrypterImpl(algorithm, monitor, keyProvider, algorithm, cryptoDataFactory);
   }
 
   public DataEncrypter createNoneEncrypter(DataEncrypterConfiguration configuration) {

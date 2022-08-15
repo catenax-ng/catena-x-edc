@@ -17,6 +17,4 @@ public interface CryptoData {
   byte[] getBytes();
 
   String getBase64();
-
-  String getText();
 }
