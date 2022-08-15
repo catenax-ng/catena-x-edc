@@ -49,6 +49,8 @@ public class DataEncryptionExtension implements ServiceExtension {
   @EdcSetting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
+  private static final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
+
   private Monitor monitor;
   private Vault vault;
   private DataEncrypterConfiguration configuration;
@@ -71,9 +73,8 @@ public class DataEncryptionExtension implements ServiceExtension {
 
     if (configuration.getAlgorithm().equals(DataEncrypterFactory.AES_ALGORITHM)) {
       try {
-        final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
         final AesKeyProvider aesKeyProvider =
-            new AesKeyProvider(vault, configuration.getKeySetAlias(), cryptoKeyFactory);
+            createAesKeyProvider(vault, configuration.getKeySetAlias());
         final List<AesKey> keys = aesKeyProvider.getDecryptionKeySet().collect(Collectors.toList());
         monitor.debug(String.format(NAME + ": Found %s registered AES keys in vault", keys.size()));
       } catch (Exception e) {
@@ -89,7 +90,6 @@ public class DataEncryptionExtension implements ServiceExtension {
     configuration = getConfiguration(context);
     vault = context.getService(Vault.class);
 
-    final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
     final DataEncrypterFactory factory = new DataEncrypterFactory(vault, monitor, cryptoKeyFactory);
 
     final DataEncrypter dataEncrypter = factory.create(configuration);
@@ -109,5 +109,9 @@ public class DataEncryptionExtension implements ServiceExtension {
 
     return new DataEncrypterConfiguration(
         encryptionStrategy, key, cachingEnabled, Duration.ofSeconds(cachingSeconds));
+  }
+
+  private static AesKeyProvider createAesKeyProvider(Vault vault, String vaultKeySetAlias) {
+    return new AesKeyProvider(vault, vaultKeySetAlias, cryptoKeyFactory);
   }
 }

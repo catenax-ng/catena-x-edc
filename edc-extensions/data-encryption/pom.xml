@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>data-encrypter</artifactId>
+    <artifactId>data-encryption</artifactId>
 
     <properties>
         <originalSourceDirectory>${project.basedir}/src/main/java</originalSourceDirectory>

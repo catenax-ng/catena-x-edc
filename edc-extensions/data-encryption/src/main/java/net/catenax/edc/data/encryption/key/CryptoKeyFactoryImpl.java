@@ -23,7 +23,7 @@ public class CryptoKeyFactoryImpl implements CryptoKeyFactory {
   }
 
   public AesKey fromBytes(byte[] key) {
-    int bitLength = key.length * 8;
+    int bitLength = key.length * Byte.SIZE;
     if (!(bitLength == 128 || bitLength == 192 || bitLength == 256)) {
       throw new IllegalArgumentException("Invalid AES key length: " + bitLength);
     }
