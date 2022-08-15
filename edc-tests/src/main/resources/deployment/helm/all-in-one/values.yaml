@@ -104,7 +104,11 @@ platovault:
         { 
         
         sleep 1
-        
+
+        cat << EOF | /bin/vault kv put secret/data-encryption-aes-keys content=-
+        Yek9V6QuYKAinNd5w+Pyx/d1qCTnG2uWvIqXBLCHYDd9ZqQtTu0q/Tr/NnLNLl+C87EDH6i0E57oF9I/qkIDir2EE2e4Tr6lsoRXwHpxJZTCakMbd+1AGPoPZWj3wOH0Gx0SWrNvM/tGHr+AvMlx8bXueQa9Bxesm6GLX0U0JtE=
+        EOF
+
         cat << EOF | /bin/vault kv put secret/my-plato-daps-key content=-
         -----BEGIN PRIVATE KEY-----
         MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCbX9S8de5FTWl4
@@ -172,9 +176,9 @@ platoedcdataplane:
   enabled: true
   fullnameOverride: "plato-edc-dataplane"
   image:
-    repository: &edcDataPlaneImage ghcr.io/catenax-ng/product-edc/edc-dataplane-hashicorp-vault
-    tag: &edcDataPlaneImageTag develop
-    pullPolicy: &pullPolicy Always
+    repository: &edcDataPlaneImage docker.io/library/edc-dataplane-hashicorp-vault
+    tag: &edcDataPlaneImageTag latest
+    pullPolicy: &pullPolicy Never
   envSecretName: "aio-plato-data-secret"
   edc:
     endpoints:
@@ -206,9 +210,18 @@ platoedccontrolplane:
   fullnameOverride: "plato-edc-controlplane"
   service:
     type: NodePort
+  logging:
+    # -- EDC logging.properties configuring the [java.util.logging subsystem](https://docs.oracle.com/javase/7/docs/technotes/guides/logging/overview.html#a1.8)
+    properties: |-
+      .level=DEBUG
+      org.eclipse.dataspaceconnector.level=ALL
+      handlers=java.util.logging.ConsoleHandler
+      java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+      java.util.logging.ConsoleHandler.level=ALL
+      java.util.logging.SimpleFormatter.format=[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] [%4$-7s] %5$s%6$s%n
   image:
-    repository: &edcControlPlaneImage ghcr.io/catenax-ng/product-edc/edc-controlplane-postgresql-hashicorp-vault
-    tag: &edcControlPlaneImageTag develop
+    repository: &edcControlPlaneImage docker.io/library/edc-controlplane-postgresql-hashicorp-vault
+    tag: &edcControlPlaneImageTag latest
     pullPolicy: *pullPolicy
   opentelemetry:
     properties: |-
@@ -298,6 +311,14 @@ platoedccontrolplane:
     # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/hashicorp-vault
     EDC_VAULT_HASHICORP_URL: http://plato-vault:8200
 
+    #####################
+    ## DATA ENCRYPTION ##
+    #####################
+
+    # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/data-encryption
+    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-rsa-keys
+    EDC_DATA_ENCRYPTION_ALGORITHM: AES
+
 ############
 # SOKRATES #
 ############
@@ -331,6 +352,10 @@ sokratesvault:
         { 
         
         sleep 1
+
+        cat << EOF | /bin/vault kv put secret/data-encryption-aes-keys content=-
+        9Q2UjrNbFA8R90bz7LpYfdlUwmGr4WFnrHZQDtDbYlOd54li3M/qRvvJsKZ18sY/4IG+D2CMCOYjRtMh/onPTA3Z+PRh1KuM/3vh7mlHmANDL3j+8kMKiqof6q7w46Dsa9TC50G6cIp5f/+4rb8+UT+n9qipbaep2SCPOeyClXA=
+        EOF
 
         cat << EOF | /bin/vault kv put secret/my-sokrates-daps-key content=-
         -----BEGIN PRIVATE KEY-----
@@ -434,6 +459,15 @@ sokratesedccontrolplane:
   fullnameOverride: "sokrates-edc-controlplane"
   service:
     type: NodePort
+  logging:
+    # -- EDC logging.properties configuring the [java.util.logging subsystem](https://docs.oracle.com/javase/7/docs/technotes/guides/logging/overview.html#a1.8)
+    properties: |-
+      .level=DEBUG
+      org.eclipse.dataspaceconnector.level=ALL
+      handlers=java.util.logging.ConsoleHandler
+      java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+      java.util.logging.ConsoleHandler.level=ALL
+      java.util.logging.SimpleFormatter.format=[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] [%4$-7s] %5$s%6$s%n
   envSecretName: "aio-sokrates-control-secret"
   image:
     repository: *edcControlPlaneImage
@@ -522,3 +556,11 @@ sokratesedccontrolplane:
 
     # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/hashicorp-vault
     EDC_VAULT_HASHICORP_URL: http://sokrates-vault:8200
+
+    #####################
+    ## DATA ENCRYPTION ##
+    #####################
+
+    # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/data-encryption
+    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-rsa-keys
+    EDC_DATA_ENCRYPTION_ALGORITHM: AES

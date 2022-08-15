@@ -96,6 +96,11 @@
             <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
+            <id>oss-sonatype</id>
+            <name>OSS Sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
             <id>fraunhofer-iais-eis</id>
             <name>Fraunhofer IAIS</name>
             <url>https://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
