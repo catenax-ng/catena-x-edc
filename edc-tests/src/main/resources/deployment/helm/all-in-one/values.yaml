@@ -105,9 +105,7 @@ platovault:
         
         sleep 1
 
-        cat << EOF | /bin/vault kv put secret/data-encryption-aes-keys content=-
-        Yek9V6QuYKAinNd5w+Pyx/d1qCTnG2uWvIqXBLCHYDd9ZqQtTu0q/Tr/NnLNLl+C87EDH6i0E57oF9I/qkIDir2EE2e4Tr6lsoRXwHpxJZTCakMbd+1AGPoPZWj3wOH0Gx0SWrNvM/tGHr+AvMlx8bXueQa9Bxesm6GLX0U0JtE=
-        EOF
+        /bin/vault kv put secret/data-encryption-aes-keys content=H7j47H6vVQQOv/hbdAYz+w==
 
         cat << EOF | /bin/vault kv put secret/my-plato-daps-key content=-
         -----BEGIN PRIVATE KEY-----
@@ -316,7 +314,7 @@ platoedccontrolplane:
     #####################
 
     # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/data-encryption
-    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-rsa-keys
+    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-aes-keys
     EDC_DATA_ENCRYPTION_ALGORITHM: AES
 
 ############
@@ -353,9 +351,7 @@ sokratesvault:
         
         sleep 1
 
-        cat << EOF | /bin/vault kv put secret/data-encryption-aes-keys content=-
-        9Q2UjrNbFA8R90bz7LpYfdlUwmGr4WFnrHZQDtDbYlOd54li3M/qRvvJsKZ18sY/4IG+D2CMCOYjRtMh/onPTA3Z+PRh1KuM/3vh7mlHmANDL3j+8kMKiqof6q7w46Dsa9TC50G6cIp5f/+4rb8+UT+n9qipbaep2SCPOeyClXA=
-        EOF
+        /bin/vault kv put secret/data-encryption-aes-keys content=OcvxzWCK8ETSjt1jmZw3RA==
 
         cat << EOF | /bin/vault kv put secret/my-sokrates-daps-key content=-
         -----BEGIN PRIVATE KEY-----
@@ -562,5 +558,5 @@ sokratesedccontrolplane:
     #####################
 
     # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/data-encryption
-    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-rsa-keys
+    EDC_DATA_ENCRYPTION_KEYS_ALIAS: data-encryption-aes-keys
     EDC_DATA_ENCRYPTION_ALGORITHM: AES

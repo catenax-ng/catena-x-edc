@@ -8,13 +8,13 @@ sleep 10
 #kubectl delete pv -n edc-all-in-one --all
 
 # DELETE IMAGES
-docker image rm edc-controlplane-postgresql-hashicorp-vault:latest
-docker image rm edc-dataplane-hashicorp-vault:latest
-minikube image rm edc-controlplane-postgresql-hashicorp-vault:latest
-minikube image rm edc-dataplane-hashicorp-vault:latest
+#docker image rm edc-controlplane-postgresql-hashicorp-vault:latest
+#docker image rm edc-dataplane-hashicorp-vault:latest
+#minikube image rm edc-controlplane-postgresql-hashicorp-vault:latest
+#minikube image rm edc-dataplane-hashicorp-vault:latest
 
 # CREATE NEW IMAGE
-./mvnw spotless:applykgp -n clean package -Pwith-docker-image
+./mvnw spotless:apply clean package -Pwith-docker-image
 
 # LOAD IMAGE
 minikube image load edc-controlplane-postgresql-hashicorp-vault:latest
