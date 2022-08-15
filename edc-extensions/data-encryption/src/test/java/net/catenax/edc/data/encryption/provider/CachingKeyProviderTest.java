@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class CachingKeyProviderTest {
+class CachingKeyProviderTest {
 
   private CachingKeyProvider<CryptoKey> cachingKeyProvider;
 
@@ -42,8 +42,7 @@ public class CachingKeyProviderTest {
     encryptionKey = Mockito.mock(CryptoKey.class);
     decryptionKey = Mockito.mock(CryptoKey.class);
 
-    cachingKeyProvider =
-        new CachingKeyProvider<CryptoKey>(decoratedProvider, cacheExpiration, clock);
+    cachingKeyProvider = new CachingKeyProvider<CryptoKey>(decoratedProvider, cacheExpiration, clock);
 
     Mockito.when(decoratedProvider.getEncryptionKey()).thenReturn(encryptionKey);
     Mockito.when(decoratedProvider.getDecryptionKeySet())

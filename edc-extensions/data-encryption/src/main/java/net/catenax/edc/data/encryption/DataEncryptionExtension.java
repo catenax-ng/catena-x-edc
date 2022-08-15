@@ -14,10 +14,16 @@
 package net.catenax.edc.data.encryption;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.catenax.edc.data.encryption.encrypter.DataEncrypterConfiguration;
 import net.catenax.edc.data.encryption.encrypter.DataEncrypterFactory;
+import net.catenax.edc.data.encryption.key.AesKey;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactory;
 import net.catenax.edc.data.encryption.key.CryptoKeyFactoryImpl;
+import net.catenax.edc.data.encryption.provider.AesKeyProvider;
+
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
@@ -28,25 +34,30 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
 
-@Provides({DataEncrypter.class})
-@Requires({Vault.class})
+@Provides({ DataEncrypter.class })
+@Requires({ Vault.class })
 public class DataEncryptionExtension implements ServiceExtension {
 
   public static final String NAME = "Data Encryption Extension";
 
-  @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
+  @EdcSetting
+  public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
-  @EdcSetting public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
+  @EdcSetting
+  public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
   public static final String ENCRYPTION_ALGORITHM_DEFAULT = DataEncrypterFactory.AES_ALGORITHM;
 
-  @EdcSetting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
+  @EdcSetting
+  public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
   public static final boolean CACHING_ENABLED_DEFAULT = false;
 
-  @EdcSetting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
+  @EdcSetting
+  public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
+  private Monitor monitor;
   private Vault vault;
-  private String keySetAlias;
+  private DataEncrypterConfiguration configuration;
 
   @Override
   public String name() {
@@ -56,23 +67,33 @@ public class DataEncryptionExtension implements ServiceExtension {
   @Override
   public void start() {
 
-    // TODO Verify all Keys Base64 encoded
-    // Check Length of keys for algorithm
+    // TODO Add Unit Test here
 
-    final String keySecret = vault.resolveSecret(keySetAlias);
+    final String keyAlias = configuration.getKeySetAlias();
+    final String keySecret = vault.resolveSecret(keyAlias);
     if (keySecret == null || keySecret.isEmpty()) {
-      throw new EdcException("No key secret found for alias " + keySetAlias);
+      throw new EdcException("No key secret found for alias " + keyAlias);
     }
+
+    if (configuration.getAlgorithm().equals(DataEncrypterFactory.AES_ALGORITHM)) {
+      try {
+        final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
+        final AesKeyProvider aesKeyProvider = new AesKeyProvider(vault, configuration.getKeySetAlias(),
+            cryptoKeyFactory);
+        final List<AesKey> keys = aesKeyProvider.getDecryptionKeySet().collect(Collectors.toList());
+        monitor.debug(String.format("Found %s registered AES keys in vault", keys.size()));
+      } catch (Exception e) {
+        throw new EdcException("AES keys from vault must be comma separated and Base64 encoded.", e);
+      }
+    }
+
   }
 
   @Override
   public void initialize(ServiceExtensionContext context) {
-    Monitor monitor = context.getMonitor();
-
+    monitor = context.getMonitor();
+    configuration = getConfiguration(context);
     vault = context.getService(Vault.class);
-
-    final DataEncrypterConfiguration configuration = getConfiguration(context);
-    keySetAlias = configuration.getKeySetAlias();
 
     final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
     final DataEncrypterFactory factory = new DataEncrypterFactory(vault, monitor, cryptoKeyFactory);
@@ -81,18 +102,17 @@ public class DataEncryptionExtension implements ServiceExtension {
     context.registerService(DataEncrypter.class, dataEncrypter);
   }
 
-  private DataEncrypterConfiguration getConfiguration(ServiceExtensionContext context) {
-    final String keyAlias = context.getSetting(ENCRYPTION_KEY_SET, null);
-    if (keyAlias == null) {
+  private static DataEncrypterConfiguration getConfiguration(ServiceExtensionContext context) {
+    final String key = context.getSetting(ENCRYPTION_KEY_SET, null);
+    if (key == null) {
       throw new EdcException(NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
     }
 
-    final String encryptionStrategy =
-        context.getSetting(ENCRYPTION_ALGORITHM, ENCRYPTION_ALGORITHM_DEFAULT);
+    final String encryptionStrategy = context.getSetting(ENCRYPTION_ALGORITHM, ENCRYPTION_ALGORITHM_DEFAULT);
     final boolean cachingEnabled = context.getSetting(CACHING_ENABLED, CACHING_ENABLED_DEFAULT);
     final int cachingSeconds = context.getSetting(CACHING_SECONDS, CACHING_SECONDS_DEFAULT);
 
     return new DataEncrypterConfiguration(
-        encryptionStrategy, keyAlias, cachingEnabled, Duration.ofSeconds(cachingSeconds));
+        encryptionStrategy, key, cachingEnabled, Duration.ofSeconds(cachingSeconds));
   }
 }
