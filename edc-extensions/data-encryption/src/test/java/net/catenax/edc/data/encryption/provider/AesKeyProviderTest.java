@@ -65,7 +65,8 @@ class AesKeyProviderTest {
     Mockito.when(vault.resolveSecret(KEY_ALIAS))
         .thenReturn(String.format("%s,  ,,%s,%s", KEY_1, KEY_2, KEY_3));
 
-    List<String> keys = keyProvider.getDecryptionKeySet().map(AesKey::getBase64).collect(Collectors.toList());
+    List<String> keys =
+        keyProvider.getDecryptionKeySet().map(AesKey::getBase64).collect(Collectors.toList());
     List<String> expected = List.of(KEY_1, KEY_2, KEY_3);
 
     Assertions.assertEquals(expected, keys);

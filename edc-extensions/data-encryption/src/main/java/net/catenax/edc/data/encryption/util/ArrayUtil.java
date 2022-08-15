@@ -13,11 +13,9 @@
  */
 package net.catenax.edc.data.encryption.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ArrayUtil {
+
+  private ArrayUtil() {}
 
   public static byte[] concat(byte[] a, byte[] b) {
     byte[] c = new byte[a.length + b.length];
@@ -28,8 +26,7 @@ public class ArrayUtil {
 
   public static String byteArrayToHex(byte[] a) {
     StringBuilder sb = new StringBuilder(a.length * 2);
-    for (byte b : a)
-      sb.append(String.format("%02x", b));
+    for (byte b : a) sb.append(String.format("%02x", b));
     return sb.toString();
   }
 
