@@ -32,25 +32,21 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.transfer.dataplane.spi.security.DataEncrypter;
 
-@Provides({ DataEncrypter.class })
-@Requires({ Vault.class })
+@Provides({DataEncrypter.class})
+@Requires({Vault.class})
 public class DataEncryptionExtension implements ServiceExtension {
 
   public static final String NAME = "Data Encryption Extension";
 
-  @EdcSetting
-  public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
+  @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
-  @EdcSetting
-  public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
+  @EdcSetting public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
   public static final String ENCRYPTION_ALGORITHM_DEFAULT = DataEncrypterFactory.AES_ALGORITHM;
 
-  @EdcSetting
-  public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
+  @EdcSetting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
   public static final boolean CACHING_ENABLED_DEFAULT = false;
 
-  @EdcSetting
-  public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
+  @EdcSetting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
   private static final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();
@@ -80,9 +76,12 @@ public class DataEncryptionExtension implements ServiceExtension {
 
     if (configuration.getAlgorithm().equals(DataEncrypterFactory.AES_ALGORITHM)) {
       try {
-        final AesKeyProvider aesKeyProvider = createAesKeyProvider(vault, configuration.getKeySetAlias());
+        final AesKeyProvider aesKeyProvider =
+            createAesKeyProvider(vault, configuration.getKeySetAlias());
         final List<AesKey> keys = aesKeyProvider.getDecryptionKeySet().collect(Collectors.toList());
-        monitor.debug(String.format("Started " + NAME + ": Found %s registered AES keys in vault", keys.size()));
+        monitor.debug(
+            String.format(
+                "Started " + NAME + ": Found %s registered AES keys in vault", keys.size()));
       } catch (Exception e) {
         throw new EdcException(
             NAME + ": AES keys from vault must be comma separated and Base64 encoded.", e);
@@ -108,7 +107,8 @@ public class DataEncryptionExtension implements ServiceExtension {
       throw new EdcException(NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
     }
 
-    final String encryptionStrategy = context.getSetting(ENCRYPTION_ALGORITHM, ENCRYPTION_ALGORITHM_DEFAULT);
+    final String encryptionStrategy =
+        context.getSetting(ENCRYPTION_ALGORITHM, ENCRYPTION_ALGORITHM_DEFAULT);
     final boolean cachingEnabled = context.getSetting(CACHING_ENABLED, CACHING_ENABLED_DEFAULT);
     final int cachingSeconds = context.getSetting(CACHING_SECONDS, CACHING_SECONDS_DEFAULT);
 

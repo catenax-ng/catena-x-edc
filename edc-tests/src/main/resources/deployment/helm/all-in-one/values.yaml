@@ -174,8 +174,8 @@ platoedcdataplane:
   enabled: true
   fullnameOverride: "plato-edc-dataplane"
   image:
-    repository: &edcDataPlaneImage docker.io/library/edc-dataplane-hashicorp-vault
-    tag: &edcDataPlaneImageTag latest
+    repository: &edcDataPlaneImage ghcr.io/catenax-ng/product-edc/edc-dataplane-hashicorp-vault
+    tag: &edcDataPlaneImageTag develop
     pullPolicy: &pullPolicy Never
   envSecretName: "aio-plato-data-secret"
   edc:
@@ -218,8 +218,8 @@ platoedccontrolplane:
       java.util.logging.ConsoleHandler.level=ALL
       java.util.logging.SimpleFormatter.format=[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] [%4$-7s] %5$s%6$s%n
   image:
-    repository: &edcControlPlaneImage docker.io/library/edc-controlplane-postgresql-hashicorp-vault
-    tag: &edcControlPlaneImageTag latest
+    repository: &edcControlPlaneImage ghcr.io/catenax-ng/product-edc/edc-controlplane-postgresql-hashicorp-vault
+    tag: &edcControlPlaneImageTag develop
     pullPolicy: *pullPolicy
   opentelemetry:
     properties: |-
