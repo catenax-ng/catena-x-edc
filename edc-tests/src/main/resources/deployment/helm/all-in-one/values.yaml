@@ -76,7 +76,8 @@ platobackendapplication:
   enabled: true
   fullnameOverride: "plato-backend-application"
   service:
-    port: 80
+    frontend:
+      port: 80
 platopostgresql:
   enabled: true
   fullnameOverride: "plato-postgresql"
@@ -103,7 +104,7 @@ platovault:
       - |
         { 
         
-        sleep 1
+        sleep 5
 
         /bin/vault kv put secret/data-encryption-aes-keys content=H7j47H6vVQQOv/hbdAYz+w==
 
@@ -324,7 +325,8 @@ sokratesbackendapplication:
   enabled: true
   fullnameOverride: "sokrates-backend-application"
   service:
-    port: 80
+    frontend:
+      port: 80
 sokratespostgresql:
   enabled: true
   fullnameOverride: "sokrates-postgresql"
@@ -349,7 +351,7 @@ sokratesvault:
       - |
         { 
         
-        sleep 1
+        sleep 5
 
         /bin/vault kv put secret/data-encryption-aes-keys content=OcvxzWCK8ETSjt1jmZw3RA==
 
