@@ -27,8 +27,7 @@ class AesAlgorithmTest {
 
   private static final byte[] KEY_128_BIT = Base64.decode("dVUjmYJzbwVcntkFZU+lNQ==");
   private static final byte[] KEY_196_BIT = Base64.decode("NcgHzzRTUC+z396tWG9hqIbeihujz0m8");
-  private static final byte[] KEY_256_BIT =
-      Base64.decode("OSD+3NcZAmS/6UXbq6NL8UL+aQIAJDLL7BE2rBX5MtA=");
+  private static final byte[] KEY_256_BIT = Base64.decode("OSD+3NcZAmS/6UXbq6NL8UL+aQIAJDLL7BE2rBX5MtA=");
 
   private AesAlgorithm strategy = new AesAlgorithm(new CryptoDataFactoryImpl());
   private CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
@@ -48,6 +47,8 @@ class AesAlgorithmTest {
     testKey(KEY_256_BIT);
   }
 
+  // TODO Test same data encrypted differently
+
   @SneakyThrows
   void testKey(byte[] key) {
     final AesKey aesKey = createKey(key);
@@ -57,8 +58,6 @@ class AesAlgorithmTest {
 
     Assertions.assertEquals(expected.getBase64(), result.getBase64());
   }
-
-  // TODO Add Test each cipher code different
 
   AesKey createKey(byte[] key) {
     return new AesKey() {

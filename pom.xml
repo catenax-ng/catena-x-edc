@@ -64,7 +64,7 @@
         <org.awaitility.awaitility.version>4.2.0</org.awaitility.awaitility.version>
 
         <!-- dependency version -->
-        <org.eclipse.dataspaceconnector.version>0.0.1-milestone-5</org.eclipse.dataspaceconnector.version>
+        <org.eclipse.dataspaceconnector.version>0.0.1-20220815-SNAPSHOT</org.eclipse.dataspaceconnector.version>
         <com.azure.sdk.bom.version>1.2.2</com.azure.sdk.bom.version>
         <org.postgresql.version>42.4.1</org.postgresql.version>
         <org.flywaydb.version>9.1.3</org.flywaydb.version>

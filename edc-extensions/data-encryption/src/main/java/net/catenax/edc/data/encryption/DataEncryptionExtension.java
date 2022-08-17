@@ -67,6 +67,7 @@ public class DataEncryptionExtension implements ServiceExtension {
     // TODO Unit Test for Key Package
     // TODO Update EDC Version
     // TODO Test Keys separated by newlines
+    // TODO Update List of breaking changes
 
     final String keyAlias = configuration.getKeySetAlias();
     final String keySecret = vault.resolveSecret(keyAlias);
