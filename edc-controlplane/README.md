@@ -45,10 +45,12 @@ EDC commit the Product-EDC uses.
 - Contract negotiation not working when `web.http.ids.path` is configured/changed ([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1249))
   - **Workaround:** Don't configure `web.http.ids.path`, so that the default path is used.
 
+- HttpProxy Transfer: Provider Control Plane spams Consumer Control Plane + HttpProxy Backend Application with requests([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1840))
+  - **Possible Workaround:** Reconfigure data plane URL from `http://dataplane:8185/api/public` to `http://dataplane:8185/api/public/`
+
 **Data Management API**
 - Contract negotiation not working when initiated with policy id ([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1251))
   - **Workaround:** The DataManagement API can also initiate a contract negotiation using the actual policy object.
-
 
 **Other**
 - Non-IDS-Transformable-ContractDefinition causes connector to be unable to send out self-descriptions/catalogs([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1265))
