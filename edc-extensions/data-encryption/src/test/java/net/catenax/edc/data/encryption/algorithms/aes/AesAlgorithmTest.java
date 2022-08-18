@@ -48,7 +48,16 @@ class AesAlgorithmTest {
     testKey(KEY_256_BIT);
   }
 
-  // TODO Test same data encrypted differently
+  @Test
+  @SneakyThrows
+  void testSameDataEncryptedDifferently() {
+    final AesKey aesKey = createKey(KEY_128_BIT);
+    final DecryptedData expected = cryptoDataFactory.decryptedFromText("same data");
+    final EncryptedData result1 = strategy.encrypt(expected, aesKey);
+    final EncryptedData result2 = strategy.encrypt(expected, aesKey);
+
+    Assertions.assertNotEquals(result1.getBase64(), result2.getBase64());
+  }
 
   @SneakyThrows
   void testKey(byte[] key) {

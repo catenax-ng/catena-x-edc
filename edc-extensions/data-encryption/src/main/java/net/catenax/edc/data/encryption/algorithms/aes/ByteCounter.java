@@ -66,8 +66,8 @@ public class ByteCounter {
     }
 
     if (counter[index] == (byte) 0xff) {
-      counter[index] = (byte) 0x00;
       incrementByte(index - 1);
+      counter[index] = (byte) 0x00;
     } else {
       counter[index]++;
     }

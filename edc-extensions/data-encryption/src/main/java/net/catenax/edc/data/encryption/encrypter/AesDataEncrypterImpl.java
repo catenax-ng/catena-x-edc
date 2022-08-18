@@ -77,7 +77,7 @@ public class AesDataEncrypterImpl implements DataEncrypter {
             () ->
                 new EdcException(
                     DataEncryptionExtension.NAME
-                        + ": Failed to decrypt data. This can happen if the key set is empty, contains invalid keys, the decryption key rotated out of the key set or because the data was originally not encrypted by this extension."));
+                        + ": Failed to decrypt data. This can happen if the key set is empty, contains invalid keys, the decryption key rotated out of the key set or because the data was encrypted by a different algorithm."));
   }
 
   private Optional<DecryptedData> decrypt(EncryptedData data, AesKey key) {

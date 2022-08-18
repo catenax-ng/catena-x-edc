@@ -12,7 +12,6 @@ idsdaps:
       name: sokrates
       attributes:
         referringConnector: http://sokrates-edc-controlplane/BPNSOKRATES
-        businesspartnernumber: BPNSOKRATES
       # Must be the same certificate that is stores in section 'sokrates-vault'
       certificate: |-
         -----BEGIN CERTIFICATE-----
@@ -179,7 +178,7 @@ platoedcdataplane:
   image:
     repository: &edcDataPlaneImage ghcr.io/catenax-ng/product-edc/edc-dataplane-hashicorp-vault
     tag: &edcDataPlaneImageTag develop
-    pullPolicy: &pullPolicy Never
+    pullPolicy: &pullPolicy Always
   envSecretName: "aio-plato-data-secret"
   edc:
     endpoints:

@@ -75,7 +75,7 @@ public class DataEncryptionExtension implements ServiceExtension {
         final List<AesKey> keys = aesKeyProvider.getDecryptionKeySet().collect(Collectors.toList());
         monitor.debug(
             String.format(
-                "Started " + NAME + ": Found %s registered AES keys in vault", keys.size()));
+                "Started " + NAME + ": Found %s registered AES keys in vault.", keys.size()));
       } catch (Exception e) {
         throw new EdcException(
             NAME + ": AES keys from vault must be comma separated and Base64 encoded.", e);

@@ -15,5 +15,4 @@
 ALTER TABLE edc_transfer_process ADD COLUMN updated_at BIGINT;
 
 -- rename columns
--- the EDC specifies this colum as NOT NULL, but for the migration it will stay NULLABLE
 ALTER TABLE edc_transfer_process RENAME COLUMN created_time_stamp TO created_at;

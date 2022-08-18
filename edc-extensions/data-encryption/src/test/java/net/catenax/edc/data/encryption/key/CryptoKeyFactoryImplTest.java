@@ -1,9 +1,3 @@
-package net.catenax.edc.data.encryption.key;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 /*
  *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
  *
@@ -17,6 +11,12 @@ import org.junit.jupiter.params.provider.ValueSource;
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *
  */
+package net.catenax.edc.data.encryption.key;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 class CryptoKeyFactoryImplTest {
 
   @ParameterizedTest

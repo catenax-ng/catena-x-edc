@@ -71,7 +71,7 @@ class DataEncrypterFactoryTest {
     final String foo3 = dataEncrypter.encrypt("foo3");
     dataEncrypter.decrypt(foo3);
 
-    // one invoke to get encryption- and one to get decryption key
+    // one invoke to get encryption- and one to cache decryption key
     Mockito.verify(vault, Mockito.times(2)).resolveSecret(KEY_SET_ALIAS);
   }
 
