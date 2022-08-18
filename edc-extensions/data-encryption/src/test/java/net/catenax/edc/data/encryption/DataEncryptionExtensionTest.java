@@ -14,6 +14,7 @@
 
 package net.catenax.edc.data.encryption;
 
+import net.catenax.edc.data.encryption.encrypter.DataEncrypterFactory;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -70,11 +71,25 @@ class DataEncryptionExtensionTest {
   }
 
   @Test
-  void testExceptionOnMissingKeySetInVault() {
+  void testStartExceptionOnMissingKeySetInVault() {
     final String keySetAlias = "foo";
     Mockito.when(context.getSetting(DataEncryptionExtension.ENCRYPTION_KEY_SET, null))
         .thenReturn(keySetAlias);
     Mockito.when(vault.resolveSecret(keySetAlias)).thenReturn("");
+
+    extension.initialize(context);
+
+    Assertions.assertThrows(EdcException.class, () -> extension.start());
+  }
+
+  @Test
+  void testStartExceptionOnStartWithWrongKeySetAlias() {
+    final String keySetAlias = "foo";
+    Mockito.when(context.getSetting(DataEncryptionExtension.ENCRYPTION_ALGORITHM, null))
+        .thenReturn(DataEncrypterFactory.AES_ALGORITHM);
+    Mockito.when(context.getSetting(DataEncryptionExtension.ENCRYPTION_KEY_SET, null))
+        .thenReturn(keySetAlias);
+    Mockito.when(vault.resolveSecret(keySetAlias)).thenReturn("l8b2YHL7VpA=, invalid-key");
 
     extension.initialize(context);
 
