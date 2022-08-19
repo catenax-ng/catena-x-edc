@@ -20,11 +20,11 @@ corresponding [documentation](/docs/migration/Version_0.0.x_0.1.x.md).
   - transfer from and to AWS S3 buckets
 - Control-Plane extension ([data-encryption](edc-extensions/data-encryption))
   - Data-Plane authentication attribute transmitted during data-plane-transfer can be encrypted symmetrically (AES)
-- EDC has been updated to version [0.0.1-20220818-SNAPSHOT](https://oss.sonatype.org/#nexus-search;gav~org.eclipse.dataspaceconnector~~0.0.1-20220818-SNAPSHOT~~)
 
 ### Changed
 
 - Update setting name (`edc.dataplane.token.validation.endpoint` -> `edc.dataplane.token.validation.endpoint`)
+- EDC has been updated to version [0.0.1-20220818-SNAPSHOT](https://oss.sonatype.org/#nexus-search;gav~org.eclipse.dataspaceconnector~~0.0.1-20220818-SNAPSHOT~~) - implications to the behavior of the connector have been covered in the [corresponding migration guide](docs/migration/Version_0.0.x_0.1.x.md)
 
 ### Fixed
 
