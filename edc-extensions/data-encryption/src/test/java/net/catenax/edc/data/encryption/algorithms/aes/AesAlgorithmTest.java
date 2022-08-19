@@ -30,8 +30,8 @@ class AesAlgorithmTest {
   private static final byte[] KEY_256_BIT =
       Base64.decode("OSD+3NcZAmS/6UXbq6NL8UL+aQIAJDLL7BE2rBX5MtA=");
 
-  private AesAlgorithm strategy = new AesAlgorithm(new CryptoDataFactoryImpl());
-  private CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
+  private final AesAlgorithm strategy = new AesAlgorithm(new CryptoDataFactoryImpl());
+  private final CryptoDataFactory cryptoDataFactory = new CryptoDataFactoryImpl();
 
   @Test
   void test128BitKey() {

@@ -54,7 +54,7 @@ class ByteCounterTest {
     byte[] counterValue = new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
     ByteCounter initializationVector = new ByteCounter(counterValue);
 
-    Assertions.assertThrows(IllegalStateException.class, () -> initializationVector.increment());
+    Assertions.assertThrows(IllegalStateException.class, initializationVector::increment);
   }
 
   private static class IncrementArgumentsProvider implements ArgumentsProvider {

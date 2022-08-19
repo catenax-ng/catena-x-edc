@@ -26,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
+@SuppressWarnings("FieldCanBeLocal")
 class DataEncrypterFactoryTest {
 
   private static final String KEY_SET_ALIAS = "keySetAlias";

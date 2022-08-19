@@ -70,13 +70,13 @@ class AesInitializationVectorIteratorTest {
     iterator.initialize();
 
     Mockito.when(counter.isMaxed()).thenReturn(true);
-    Assertions.assertThrows(NoSuchElementException.class, () -> iterator.next());
+    Assertions.assertThrows(NoSuchElementException.class, iterator::next);
   }
 
   @Test
   @SneakyThrows
   void testIllegalStateExceptionOnUninitialized() {
     AesInitializationVectorIterator iterator = new AesInitializationVectorIterator();
-    Assertions.assertThrows(IllegalStateException.class, () -> iterator.next());
+    Assertions.assertThrows(IllegalStateException.class, iterator::next);
   }
 }
