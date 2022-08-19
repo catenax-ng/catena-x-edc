@@ -44,6 +44,7 @@
         <module>control-plane-adapter</module>
         <module>custom-jsonld</module>
         <module>cx-oauth2</module>
+        <module>transferprocess-sftp</module>
     </modules>
 
 </project>
