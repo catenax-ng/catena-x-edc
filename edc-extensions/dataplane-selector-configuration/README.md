@@ -1,4 +1,4 @@
-# Data Plane Selector Configuration Exception
+# Data Plane Selector Configuration Extension
 
 This control-plane extension makes it possible configure one or more Data Plane Instances. During a transfer the control
 plane will look for an instance with matching capabilities to transfer data.
