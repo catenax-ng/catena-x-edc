@@ -37,6 +37,8 @@ Req7: Secrets, credentials, security tokens must not be contained in the audit l
 
 Req8: The audit log should be executed just before the user's action is executed. At the same time it should still be done on appropriate layer which covers the logic of the actions and does not have to be propagated to low level code. E.g. in case of creation of a new asset the audit log should happen just before the sql query is send to the database, the log will be performed by the assetAPIController, but not the sql extension.
 
+Req9: An audit log extension connecting to an external service should be capable of influencing the format of an audit log record. For this essential event information habe to be exposed to the audit log interface. E.g. an audit log event for a transfer process should contain information about related agreementId and assetId.
+
 ## Out of scope requirements
 - The audit log should not be used for metering with billing background
 - Audit log retention period should be handled within the respective extension providing the persistence.
