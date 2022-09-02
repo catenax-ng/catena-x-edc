@@ -9,7 +9,7 @@
  *
  *  Contributors:
  *       Microsoft Corporation - initial API and implementation
- *
+ *       Mercedes-Benz Tech Innovation GmbH - refactoring
  */
 
 package net.catenax.edc.oauth2.jwk;

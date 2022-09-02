@@ -1,3 +1,16 @@
+/*
+ *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ *
+ */
 package net.catenax.edc.oauth2.jwt.validation;
 
 import static java.time.ZoneOffset.UTC;
@@ -33,11 +46,11 @@ public class ExpValidationRule implements TokenValidationRule {
   @Override
   public Result<SignedJWT> checkRule(SignedJWT toVerify, @Nullable Map<String, Object> additional) {
     try {
-      JWTClaimsSet claimsSet = toVerify.getJWTClaimsSet();
-      List<String> errors = new ArrayList<>();
+      final JWTClaimsSet claimsSet = toVerify.getJWTClaimsSet();
+      final List<String> errors = new ArrayList<>();
 
-      Instant now = clock.instant();
-      Date expires = claimsSet.getExpirationTime();
+      final Instant now = clock.instant();
+      final Date expires = claimsSet.getExpirationTime();
       var expiresSet = expires != null;
       if (!expiresSet) {
         errors.add("Required expiration time (exp) claim is missing in token");

@@ -168,7 +168,7 @@
                 </dependency>
                 <dependency>
                     <groupId>net.catenax.edc.extensions</groupId>
-                    <artifactId>cx-ids-oauth2</artifactId>
+                    <artifactId>cx-oauth2</artifactId>
                 </dependency>
                 <!-- edc-controlplane -->
                 <dependency>
