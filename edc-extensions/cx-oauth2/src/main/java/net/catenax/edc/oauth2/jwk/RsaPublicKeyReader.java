@@ -49,8 +49,8 @@ public class RsaPublicKeyReader implements PublicKeyReader {
   @Override
   public Optional<PublicKeyHolder> read(final JsonWebKey jsonWebKey) {
     try {
-      final BigInteger modulus = unsignedInt(jsonWebKey.getNn());
-      final BigInteger exponent = unsignedInt(jsonWebKey.getEe());
+      final BigInteger modulus = unsignedInt(jsonWebKey.getN());
+      final BigInteger exponent = unsignedInt(jsonWebKey.getE());
       final RSAPublicKeySpec rsaPublicKeySpec = new RSAPublicKeySpec(modulus, exponent);
       final PublicKey publicKey = KEY_FACTORY.generatePublic(rsaPublicKeySpec);
       final PublicKeyHolder publicKeyHolder =
