@@ -32,10 +32,10 @@ public class JsonWebKey {
   @JsonProperty("x5t")
   private String x5t;
 
-  @JsonProperty("nn")
+  @JsonProperty("n")
   private String nn;
 
-  @JsonProperty("ee")
+  @JsonProperty("e")
   private String ee;
 
   @JsonProperty("x5c")
