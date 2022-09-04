@@ -29,6 +29,7 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.types.TypeManager;
 import org.junit.jupiter.api.Assertions;
@@ -145,5 +146,59 @@ class JwkPublicKeyResolverTest {
     final PublicKey key = jwkPublicKeyResolver.resolveKey(JWKS_KEY_ID);
 
     Assertions.assertNotNull(key);
+  }
+
+  @Test
+  void testExceptionOnIdentityProviderRespondingWithNon200() {
+    Mockito.when(httpClient.newCall(any(Request.class)))
+        .thenAnswer(
+            (i) -> {
+              final Response response = new Response.Builder().code(404).build();
+
+              final Call call = Mockito.mock(Call.class);
+              Mockito.when(call.execute()).thenReturn(response);
+              return call;
+            });
+
+    Assertions.assertThrows(EdcException.class, () -> jwkPublicKeyResolver.start());
+  }
+
+  @Test
+  void testExceptionOnIdentityProviderRespondingWithEmptyBody() {
+    Mockito.when(httpClient.newCall(any(Request.class)))
+        .thenAnswer(
+            (i) -> {
+              final Response response = new Response.Builder().code(200).build();
+
+              final Call call = Mockito.mock(Call.class);
+              Mockito.when(call.execute()).thenReturn(response);
+              return call;
+            });
+
+    Assertions.assertThrows(EdcException.class, () -> jwkPublicKeyResolver.start());
+  }
+
+  @Test
+  void testExceptionOnIdentityProviderRespondingWithEmptyJwks() {
+    Mockito.when(httpClient.newCall(any(Request.class)))
+        .thenAnswer(
+            (i) -> {
+              final ResponseBody responseBody =
+                  ResponseBody.create("{ \"keys\": [] }", MediaType.get("application/json"));
+              final Response response = new Response.Builder().code(200).body(responseBody).build();
+
+              final Call call = Mockito.mock(Call.class);
+              Mockito.when(call.execute()).thenReturn(response);
+              return call;
+            });
+
+    Assertions.assertThrows(EdcException.class, () -> jwkPublicKeyResolver.start());
+  }
+
+  @Test
+  void testExceptionOnHttpClientException() {
+    Mockito.when(httpClient.newCall(any(Request.class))).thenThrow(new RuntimeException());
+
+    Assertions.assertThrows(EdcException.class, () -> jwkPublicKeyResolver.start());
   }
 }

@@ -58,14 +58,14 @@ class RsaPublicKeyReaderTest {
   }
 
   @Test
-  private void testCanRead() {
+  void testCanRead() {
     final JsonWebKey jwk = deserializeKey();
 
     Assertions.assertTrue(publicKeyReader.canRead(jwk));
   }
 
   @Test
-  private void testReadSuccess() {
+  void testReadSuccess() {
     final JsonWebKey jwk = deserializeKey();
 
     final Optional<PublicKeyHolder> key = publicKeyReader.read(jwk);

@@ -63,8 +63,6 @@ public class OAuth2IdentityService implements IdentityService {
   @NonNull private final TokenGenerationService tokenGenerationService;
   @NonNull private final TokenValidationService tokenValidationService;
 
-  @NonNull private final String audience;
-
   @Override
   public Result<TokenRepresentation> obtainClientCredentials(
       @NonNull final TokenParameters tokenParameters) {
@@ -82,7 +80,7 @@ public class OAuth2IdentityService implements IdentityService {
             .add(GRANT_TYPE, GRANT_TYPE_CLIENT_CREDENTIALS)
             .add(CLIENT_ASSERTION, assertion)
             .add(SCOPE, tokenParameters.getScope())
-            .add(RESOURCE, audience);
+            .add(RESOURCE, tokenParameters.getAudience());
 
     try {
       final HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.get(tokenUrl));

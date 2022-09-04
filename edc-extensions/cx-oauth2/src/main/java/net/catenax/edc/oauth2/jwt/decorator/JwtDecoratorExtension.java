@@ -110,7 +110,10 @@ public class JwtDecoratorExtension implements ServiceExtension {
   private X5tJwtDecorator x5tJwtDecorator(
       @NonNull final ServiceExtensionContext serviceExtensionContext,
       @NonNull final CertificateResolver certificateResolver) {
-    final String publicKeyAlias = serviceExtensionContext.getConfig().getString(PUBLIC_KEY_ALIAS);
+    final String publicKeyAlias = serviceExtensionContext.getSetting(PUBLIC_KEY_ALIAS, null);
+    if (publicKeyAlias == null) {
+      throw new EdcException("Missing required setting: " + PUBLIC_KEY_ALIAS);
+    }
 
     final X509Certificate certificate =
         Optional.ofNullable(certificateResolver.resolveCertificate(publicKeyAlias))

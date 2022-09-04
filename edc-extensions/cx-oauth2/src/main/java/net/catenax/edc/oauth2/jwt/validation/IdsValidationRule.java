@@ -55,15 +55,17 @@ public class IdsValidationRule implements TokenValidationRule {
     try {
       var claims = jwt.getJWTClaimsSet().getClaims();
 
-      // referringConnector (DAT, optional) vs issuerConnector (Message-Header, mandatory)
+      // referringConnector (DAT, optional) vs issuerConnector (Message-Header,
+      // mandatory)
       var referringConnector = claims.get("referringConnector");
 
       if (validateReferring && !issuerConnector.equals(referringConnector)) {
         return Result.failure(
-            "refferingConnector in token does not match issuerConnector in message");
+            "referingConnector in token does not match issuerConnector in message");
       }
 
-      // securityProfile (DAT, mandatory) vs securityProfile (Message-Payload, optional)
+      // securityProfile (DAT, mandatory) vs securityProfile (Message-Payload,
+      // optional)
       try {
         var tokenSecurityProfile = claims.get("securityProfile");
 

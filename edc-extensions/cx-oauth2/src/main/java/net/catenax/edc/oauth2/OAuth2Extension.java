@@ -18,6 +18,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import okhttp3.OkHttpClient;
 import org.eclipse.dataspaceconnector.iam.oauth2.spi.Oauth2JwtDecoratorRegistry;
+import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.iam.IdentityService;
 import org.eclipse.dataspaceconnector.spi.jwt.TokenGenerationService;
@@ -51,20 +52,21 @@ public class OAuth2Extension implements ServiceExtension {
 
   @Override
   public void initialize(@NonNull final ServiceExtensionContext serviceExtensionContext) {
-    final URI tokenUrl = URI.create(serviceExtensionContext.getConfig().getString(TOKEN_URL));
-    final String audience =
-        serviceExtensionContext.getSetting(
-            PROVIDER_AUDIENCE, serviceExtensionContext.getConnectorId());
+    final String tokenUrl = serviceExtensionContext.getSetting(TOKEN_URL, null);
+    if (tokenUrl == null) {
+      throw new EdcException("Missing required setting: " + TOKEN_URL);
+    }
+
+    final URI tokenUri = URI.create(tokenUrl);
 
     final OAuth2IdentityService oAuth2IdentityService =
         new OAuth2IdentityService(
-            tokenUrl,
+            tokenUri,
             okHttpClient,
             serviceExtensionContext.getTypeManager(),
             jwtDecoratorRegistry,
             tokenGenerationService,
-            tokenValidationService,
-            audience);
+            tokenValidationService);
 
     serviceExtensionContext.registerService(IdentityService.class, oAuth2IdentityService);
   }
