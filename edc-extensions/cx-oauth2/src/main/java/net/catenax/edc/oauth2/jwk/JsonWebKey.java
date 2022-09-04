@@ -40,4 +40,7 @@ public class JsonWebKey {
 
   @JsonProperty("x5c")
   private List<String> x5c;
+
+  @JsonProperty("alg")
+  private String alg;
 }
