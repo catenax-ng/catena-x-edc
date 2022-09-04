@@ -48,7 +48,7 @@
         <org.apache.maven.plugins.maven.dependency.plugin.version>3.3.0
         </org.apache.maven.plugins.maven.dependency.plugin.version>
         <org.apache.maven.plugins.maven.jar.plugin.version>3.2.2</org.apache.maven.plugins.maven.jar.plugin.version>
-        <com.diffplug.spotless.maven.plugin.version>2.24.1</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.25.0</com.diffplug.spotless.maven.plugin.version>
         <org.codehaus.mojo.exec.maven.plugin.version>3.1.0</org.codehaus.mojo.exec.maven.plugin.version>
         <org.apache.maven.plugins.javadoc.version>3.4.1</org.apache.maven.plugins.javadoc.version>
         <org.codehaus.mojo.license.maven.plugin>2.0.0</org.codehaus.mojo.license.maven.plugin>
@@ -67,8 +67,8 @@
         <!-- dependency version -->
         <org.eclipse.dataspaceconnector.version>0.0.1-20220902-SNAPSHOT</org.eclipse.dataspaceconnector.version>
         <com.azure.sdk.bom.version>1.2.2</com.azure.sdk.bom.version>
-        <org.postgresql.version>42.4.2</org.postgresql.version>
-        <org.flywaydb.version>9.1.5</org.flywaydb.version>
+        <org.postgresql.version>42.5.0</org.postgresql.version>
+        <org.flywaydb.version>9.2.2</org.flywaydb.version>
 
         <!-- test dependency version -->
         <junit.jupiter.version>5.9.0</junit.jupiter.version>
@@ -82,7 +82,7 @@
         <com.squareup.okhttp3.okhttp.version>4.9.3</com.squareup.okhttp3.okhttp.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
         <org.slf4j.version>2.0.0-beta1</org.slf4j.version>
-        <ch.qos.logback.logback-core.version>1.2.11</ch.qos.logback.logback-core.version>
+        <ch.qos.logback.logback-core.version>1.4.0</ch.qos.logback.logback-core.version>
         <org.hamcrest.hamcrest.version>2.2</org.hamcrest.hamcrest.version>
 
         <!-- TODO: parametrize so that forks can utilize sonar also -->
