@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
 public class JwkPublicKeyResolver implements PublicKeyResolver {
-  private final Object SYNCHRONIZATION_MONITOR = new Object();
+  private final Object synchronizationMonitor = new Object();
 
   @NonNull private final URI jsonWebKeySetUri;
 
@@ -61,7 +61,7 @@ public class JwkPublicKeyResolver implements PublicKeyResolver {
       new AtomicReference<>();
 
   public void start() {
-    synchronized (SYNCHRONIZATION_MONITOR) {
+    synchronized (synchronizationMonitor) {
       if (executorServiceReference.get() != null) {
         return;
       }
@@ -84,7 +84,7 @@ public class JwkPublicKeyResolver implements PublicKeyResolver {
   }
 
   public void stop() {
-    synchronized (SYNCHRONIZATION_MONITOR) {
+    synchronized (synchronizationMonitor) {
       if (executorServiceReference.get() == null) {
         return;
       }
@@ -106,7 +106,7 @@ public class JwkPublicKeyResolver implements PublicKeyResolver {
       return null;
     }
 
-    synchronized (SYNCHRONIZATION_MONITOR) {
+    synchronized (synchronizationMonitor) {
       return keys.get(keyId);
     }
   }
@@ -115,7 +115,7 @@ public class JwkPublicKeyResolver implements PublicKeyResolver {
     final Result<Map<String, PublicKey>> fetchedKeys = fetchKeys();
 
     if (fetchedKeys.succeeded()) {
-      synchronized (SYNCHRONIZATION_MONITOR) {
+      synchronized (synchronizationMonitor) {
         keys.clear();
         keys.putAll(fetchedKeys.getContent());
       }
@@ -145,16 +145,16 @@ public class JwkPublicKeyResolver implements PublicKeyResolver {
             jsonWebKeySet = typeManager.readValue(body.string(), JsonWebKeySet.class);
           }
 
-          final List<JsonWebKey> keys =
+          final List<JsonWebKey> nonNullKeys =
               Optional.ofNullable(jsonWebKeySet.getKeys()).orElseGet(Collections::emptyList);
-          if (keys.isEmpty()) {
+          if (nonNullKeys.isEmpty()) {
             final String message =
                 String.format("No keys returned from identity provider (%s).", jsonWebKeySetUri);
             monitor.warning(message);
             return Result.failure(message);
           }
 
-          return Result.success(deserializeKeys(keys));
+          return Result.success(deserializeKeys(nonNullKeys));
         } else {
           final String message =
               String.format(
