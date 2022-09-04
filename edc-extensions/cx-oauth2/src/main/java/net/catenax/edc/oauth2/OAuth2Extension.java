@@ -39,6 +39,8 @@ public class OAuth2Extension implements ServiceExtension {
 
   @EdcSetting private static final String TOKEN_URL = "edc.oauth.token.url";
 
+  @EdcSetting private static final String PROVIDER_AUDIENCE = "edc.oauth.provider.audience";
+
   @Inject @Setter private OkHttpClient okHttpClient;
 
   @Inject @Setter private Oauth2JwtDecoratorRegistry jwtDecoratorRegistry;
@@ -50,6 +52,9 @@ public class OAuth2Extension implements ServiceExtension {
   @Override
   public void initialize(@NonNull final ServiceExtensionContext serviceExtensionContext) {
     final URI tokenUrl = URI.create(serviceExtensionContext.getConfig().getString(TOKEN_URL));
+    final String audience =
+        serviceExtensionContext.getSetting(
+            PROVIDER_AUDIENCE, serviceExtensionContext.getConnectorId());
 
     final OAuth2IdentityService oAuth2IdentityService =
         new OAuth2IdentityService(
@@ -58,7 +63,8 @@ public class OAuth2Extension implements ServiceExtension {
             serviceExtensionContext.getTypeManager(),
             jwtDecoratorRegistry,
             tokenGenerationService,
-            tokenValidationService);
+            tokenValidationService,
+            audience);
 
     serviceExtensionContext.registerService(IdentityService.class, oAuth2IdentityService);
   }

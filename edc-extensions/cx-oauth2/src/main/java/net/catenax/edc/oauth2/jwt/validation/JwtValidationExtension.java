@@ -134,7 +134,7 @@ public class JwtValidationExtension implements ServiceExtension {
         Objects.requireNonNull(
             serviceExtensionContext.getConfig().getString(EDC_IDS_ENDPOINT_AUDIENCE));
 
-    return new AudValidationRule(audience);
+    return new AudValidationRule(audience, serviceExtensionContext.getMonitor());
   }
 
   private ExpValidationRule expValidationRule() {

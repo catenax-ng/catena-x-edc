@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class RsaPublicKeyReaderTest {
+class RsaPublicKeyReaderTest {
   private static final String JWKS_KEY_ID = "e600c72b-125a-4b30-86a5-9697af62f2a1";
   private static final String JWKS_PUBLIC_KEY =
       "MIICujCCAaKgAwIBAgIECI8fsTANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDExR0ZXN0LWFsZXgucmVhY2g1Lm5ldDAeFw0yMDA3MjkwOTM0MjlaFw0yMjAyMTcxNDIwMzNaMB8xHTAbBgNVBAMTFHRlc3QtYWxleC5yZWFjaDUubmV0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlzRszUeQ4WiSqvmYxMP10ngm8ALIoUwMH7Oa8vrZgD5pqalPjetPAxeVcAv2gTyDlOwtB0fGvlQo6n78pd9pTbgrzUjhmFuYN6OCfT6eN/2wu0LmwryFS2mbh7/1DTiKd2tZaRalskPECXTKkeks85HVqanB0860BYlGvQvfgrvhCWXXFJJeXvNwYNFYdDdrFQhoeOAEvRDKg9DdHZf6XzSR6Qk3w51FKn2b7imen/G52itD/kIen1hqqB2Jwt9SWyX5MSGySY2QwC18F6Dfs8L+t0mwCo6grGW9264Z5vlO0PWssEqGIX/ez6nk1ZdHXhoXwJ0W+6QzeQlUN8jNoQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAETbMWro4HI4ZuqtnjMZrgEOpx6WhAtxpMx5XFPVWbdp/DpPySotoWbbD6qCtYc34E+ec7mH7aHVap+Gl2IyeSHTht4FXfF9q/1Oj/fis/4DDi1iq00rJsU18D71mZ9FGWCWlO1nhW1KSTGbRJ3E0wSrNabcvaXcwEHokR3zm+xfRWjtbrq2hQ19R16xyOLVy4zrF95QxP4UN+Cvm8nmYur6bSqv+gCMvDsl+O/gtRHGgpUukHEJwnee1R3+1aIv+9zOF3HaaUC5neOLBFITGmeXgi8G2IhbG+JoXh/GUkb66TZUlUAM3qXYNL9Nf+2MQ7nAPTXcxlmImFUUrnv0c3";
@@ -52,7 +52,7 @@ public class RsaPublicKeyReaderTest {
   private Monitor monitor;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     monitor = Mockito.mock(Monitor.class);
     publicKeyReader = new RsaPublicKeyReader(monitor);
   }

@@ -34,9 +34,6 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 @Requires(CertificateResolver.class)
 public class JwtDecoratorExtension implements ServiceExtension {
 
-  @EdcSetting private static final String PROVIDER_AUDIENCE = "edc.oauth.provider.audience";
-
-  // NEW
   @EdcSetting
   private static final String TOKEN_EXPIRATION_SECONDS = "edc.oauth.token.expiration.seconds";
 
@@ -54,7 +51,7 @@ public class JwtDecoratorExtension implements ServiceExtension {
         new Oauth2JwtDecoratorRegistryRegistryImpl();
 
     Stream.of(
-            audJwtDecorator(serviceExtensionContext),
+            audJwtDecorator(),
             expJwtDecorator(serviceExtensionContext),
             iatJwtDecorator(serviceExtensionContext),
             issJwtDecorator(serviceExtensionContext),
@@ -72,13 +69,8 @@ public class JwtDecoratorExtension implements ServiceExtension {
     return new DapsJwtDecorator();
   }
 
-  private AudJwtDecorator audJwtDecorator(
-      @NonNull final ServiceExtensionContext serviceExtensionContext) {
-    final String audience =
-        serviceExtensionContext.getSetting(
-            PROVIDER_AUDIENCE, serviceExtensionContext.getConnectorId());
-
-    return new AudJwtDecorator(audience);
+  private IdsAudJwtDecorator audJwtDecorator() {
+    return new IdsAudJwtDecorator();
   }
 
   private ExpJwtDecorator expJwtDecorator(
