@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Moved helm charts from `deployment/helm` to `charts`
+- Update package structure/namespace from `net.catenax` to `org.eclipse.tractusx`
 
 ## [0.1.1] - 2022-09-04
 
