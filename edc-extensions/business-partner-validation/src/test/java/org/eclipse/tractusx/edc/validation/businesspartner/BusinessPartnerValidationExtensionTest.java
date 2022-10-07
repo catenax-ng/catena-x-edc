@@ -18,8 +18,8 @@ import org.eclipse.dataspaceconnector.policy.model.Duty;
 import org.eclipse.dataspaceconnector.policy.model.Permission;
 import org.eclipse.dataspaceconnector.policy.model.Prohibition;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
-import org.eclipse.dataspaceconnector.spi.policy.PolicyEngine;
-import org.eclipse.dataspaceconnector.spi.policy.RuleBindingRegistry;
+import org.eclipse.dataspaceconnector.spi.policy.engine.PolicyEngine;
+import org.eclipse.dataspaceconnector.spi.policy.engine.RuleBindingRegistry;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,22 +32,20 @@ class BusinessPartnerValidationExtensionTest {
   // mocks
   private ServiceExtensionContext serviceExtensionContext;
   private PolicyEngine policyEngine;
+  private RuleBindingRegistry ruleBindingRegistry;
 
   @BeforeEach
   void setup() {
 
     policyEngine = Mockito.mock(PolicyEngine.class);
-    RuleBindingRegistry ruleBindingRegistry = Mockito.mock(RuleBindingRegistry.class);
+    ruleBindingRegistry = Mockito.mock(RuleBindingRegistry.class);
 
     final Monitor monitor = Mockito.mock(Monitor.class);
     serviceExtensionContext = Mockito.mock(ServiceExtensionContext.class);
 
     Mockito.when(serviceExtensionContext.getMonitor()).thenReturn(monitor);
-    Mockito.when(serviceExtensionContext.getService(PolicyEngine.class)).thenReturn(policyEngine);
-    Mockito.when(serviceExtensionContext.getService(RuleBindingRegistry.class))
-        .thenReturn(ruleBindingRegistry);
 
-    extension = new BusinessPartnerValidationExtension();
+    extension = new BusinessPartnerValidationExtension(ruleBindingRegistry, policyEngine);
   }
 
   @Test

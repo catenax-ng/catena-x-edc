@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-   Postman collection under /docs/development/postman
+
 ### Changed
-- Moved helm charts from `deployment/helm` to `charts`
+
 - Update package structure/namespace from `net.catenax` to `org.eclipse.tractusx`
+
+## [0.1.2] - 2022-09-30
+
+### Added
+
+-   Introduced DEPENDENCIES file
+
+### Changed
+
+- Moved helm charts from `deployment/helm` to `charts`
 
 ## [0.1.1] - 2022-09-04
 
@@ -17,16 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--  Control-Plane Extension ([cx-oauth2](/edc-extensions/cx-oauth2/README.md))
+-   Control-Plane Extension ([cx-oauth2](/edc-extensions/cx-oauth2/README.md))
 
 ### Changed
 
-- Introduced git submodule to import EDC dependencies (instead of snapshot- or milestone artifact)
-- Helm Charts: TLS secret name is now configurable
+-   Introduced git submodule to import EDC dependencies (instead of snapshot- or milestone artifact)
+-   Helm Charts: TLS secret name is now configurable
 
 ### Fixed
 
-- Connectors with Azure Vault extension are now starting again [link](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1892)
+-   Connectors with Azure Vault extension are now starting again [link](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1892)
 
 ## [0.1.0] - 2022-08-19
 
@@ -100,7 +114,9 @@ corresponding [documentation](/docs/migration/Version_0.0.x_0.1.x.md).
 
 ## [0.0.1] - 2022-05-13
 
-[Unreleased]: https://github.com/catenax-ng/product-edc/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/catenax-ng/product-edc/compare/0.1.2...HEAD
+
+[0.1.2]: https://github.com/catenax-ng/product-edc/compare/0.1.1...0.1.2
 
 [0.1.1]: https://github.com/catenax-ng/product-edc/compare/0.1.0...0.1.1
 
