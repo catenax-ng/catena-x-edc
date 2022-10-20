@@ -14,13 +14,13 @@
 
 package org.eclipse.tractusx.edc.postgresql.migration;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 
 public class ContractNegotiationPostgresqlMigrationExtension
     extends AbstractPostgresqlMigrationExtension {
   private static final String NAME_SUBSYSTEM = "contractnegotiation";
 
-  @EdcSetting
+  @Setting
   private static final String DATASOURCE_SETTING_NAME = "edc.datasource.contractnegotiation.name";
 
   protected String getDataSourceNameConfigurationKey() {

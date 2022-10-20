@@ -24,8 +24,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eclipse.dataspaceconnector.dataplane.selector.DataPlaneSelectorService;
 import org.eclipse.dataspaceconnector.dataplane.selector.instance.DataPlaneInstanceImpl;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
@@ -86,12 +86,12 @@ import org.eclipse.dataspaceconnector.spi.system.configuration.Config;
 @Requires({DataPlaneSelectorService.class})
 public class DataPlaneSelectorConfigurationServiceExtension implements ServiceExtension {
 
-  @EdcSetting public static final String CONFIG_PREFIX = "edc.dataplane.selector";
-  @EdcSetting public static final String URL_SUFFIX = "url";
-  @EdcSetting public static final String DESTINATION_TYPES_SUFFIX = "destinationtypes";
-  @EdcSetting public static final String SOURCE_TYPES_SUFFIX = "sourcetypes";
-  @EdcSetting public static final String PROPERTIES_SUFFIX = "properties";
-  @EdcSetting public static final String PUBLIC_API_URL_PROPERTY = "publicApiUrl";
+  @Setting public static final String CONFIG_PREFIX = "edc.dataplane.selector";
+  @Setting public static final String URL_SUFFIX = "url";
+  @Setting public static final String DESTINATION_TYPES_SUFFIX = "destinationtypes";
+  @Setting public static final String SOURCE_TYPES_SUFFIX = "sourcetypes";
+  @Setting public static final String PROPERTIES_SUFFIX = "properties";
+  @Setting public static final String PUBLIC_API_URL_PROPERTY = "publicApiUrl";
 
   private static final String NAME = "Data Plane Selector Configuration Extension";
   private static final String COMMA = ",";

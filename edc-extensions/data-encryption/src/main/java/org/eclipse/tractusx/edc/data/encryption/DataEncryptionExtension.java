@@ -16,9 +16,9 @@ package org.eclipse.tractusx.edc.data.encryption;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -38,15 +38,15 @@ public class DataEncryptionExtension implements ServiceExtension {
 
   public static final String NAME = "Data Encryption Extension";
 
-  @EdcSetting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
+  @Setting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
-  @EdcSetting public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
+  @Setting public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
   public static final String ENCRYPTION_ALGORITHM_DEFAULT = DataEncrypterFactory.AES_ALGORITHM;
 
-  @EdcSetting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
+  @Setting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
   public static final boolean CACHING_ENABLED_DEFAULT = false;
 
-  @EdcSetting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
+  @Setting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
   private static final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();

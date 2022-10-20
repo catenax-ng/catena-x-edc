@@ -16,7 +16,7 @@ package org.eclipse.tractusx.edc.hashicorpvault;
 
 import java.time.Duration;
 import okhttp3.OkHttpClient;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 
 /**
@@ -25,29 +25,28 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
  */
 public class AbstractHashicorpVaultExtension {
 
-  @EdcSetting(required = true)
+  @Setting(required = true)
   public static final String VAULT_URL = "edc.vault.hashicorp.url";
 
-  @EdcSetting(required = true)
+  @Setting(required = true)
   public static final String VAULT_TOKEN = "edc.vault.hashicorp.token";
 
-  @EdcSetting
-  public static final String VAULT_API_SECRET_PATH = "edc.vault.hashicorp.api.secret.path";
+  @Setting public static final String VAULT_API_SECRET_PATH = "edc.vault.hashicorp.api.secret.path";
 
   public static final String VAULT_API_SECRET_PATH_DEFAULT = "/v1/secret";
 
-  @EdcSetting
+  @Setting
   public static final String VAULT_API_HEALTH_PATH = "edc.vault.hashicorp.api.health.check.path";
 
   public static final String VAULT_API_HEALTH_PATH_DEFAULT = "/v1/sys/health";
 
-  @EdcSetting
+  @Setting
   public static final String VAULT_HEALTH_CHECK_STANDBY_OK =
       "edc.vault.hashicorp.health.check.standby.ok";
 
   public static final boolean VAULT_HEALTH_CHECK_STANDBY_OK_DEFAULT = false;
 
-  @EdcSetting
+  @Setting
   private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.hashicorp.timeout.seconds";
 
   protected OkHttpClient createOkHttpClient(HashicorpVaultClientConfig config) {

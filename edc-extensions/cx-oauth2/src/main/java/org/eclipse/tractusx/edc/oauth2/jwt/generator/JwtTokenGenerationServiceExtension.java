@@ -16,10 +16,10 @@ package org.eclipse.tractusx.edc.oauth2.jwt.generator;
 import java.security.PrivateKey;
 import lombok.NonNull;
 import lombok.Setter;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.jwt.TokenGenerationService;
 import org.eclipse.dataspaceconnector.spi.security.PrivateKeyResolver;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
@@ -29,7 +29,7 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 @Requires(PrivateKeyResolver.class)
 public class JwtTokenGenerationServiceExtension implements ServiceExtension {
 
-  @EdcSetting private static final String PRIVATE_KEY_ALIAS = "edc.oauth.private.key.alias";
+  @Setting private static final String PRIVATE_KEY_ALIAS = "edc.oauth.private.key.alias";
 
   @Inject @Setter private PrivateKeyResolver privateKeyResolver;
 

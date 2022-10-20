@@ -15,8 +15,8 @@
 package org.eclipse.tractusx.edc.hashicorpvault;
 
 import okhttp3.OkHttpClient;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.spi.system.health.HealthCheckService;
@@ -25,7 +25,7 @@ import org.eclipse.dataspaceconnector.spi.system.health.HealthCheckService;
 public class HashicorpVaultHealthExtension extends AbstractHashicorpVaultExtension
     implements ServiceExtension {
 
-  @EdcSetting
+  @Setting
   public static final String VAULT_HEALTH_CHECK = "edc.vault.hashicorp.health.check.enabled";
 
   public static final boolean VAULT_HEALTH_CHECK_DEFAULT = true;

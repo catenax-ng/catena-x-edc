@@ -14,13 +14,13 @@
 
 package org.eclipse.tractusx.edc.postgresql.migration;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 
 public class TransferProcessPostgresqlMigrationExtension
     extends AbstractPostgresqlMigrationExtension {
   private static final String NAME_SUBSYSTEM = "transferprocess";
 
-  @EdcSetting
+  @Setting
   private static final String DATASOURCE_SETTING_NAME = "edc.datasource.transferprocess.name";
 
   protected String getDataSourceNameConfigurationKey() {

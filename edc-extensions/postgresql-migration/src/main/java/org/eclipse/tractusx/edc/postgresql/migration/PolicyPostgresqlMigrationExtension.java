@@ -14,12 +14,12 @@
 
 package org.eclipse.tractusx.edc.postgresql.migration;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 
 public class PolicyPostgresqlMigrationExtension extends AbstractPostgresqlMigrationExtension {
   private static final String NAME_SUBSYSTEM = "policy";
 
-  @EdcSetting private static final String DATASOURCE_SETTING_NAME = "edc.datasource.policy.name";
+  @Setting private static final String DATASOURCE_SETTING_NAME = "edc.datasource.policy.name";
 
   protected String getDataSourceNameConfigurationKey() {
     return DATASOURCE_SETTING_NAME;

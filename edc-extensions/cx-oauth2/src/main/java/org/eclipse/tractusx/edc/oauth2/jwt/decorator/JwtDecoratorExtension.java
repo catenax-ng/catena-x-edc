@@ -21,10 +21,10 @@ import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.Setter;
 import org.eclipse.dataspaceconnector.iam.oauth2.spi.Oauth2JwtDecoratorRegistry;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.security.CertificateResolver;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
@@ -34,14 +34,14 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 @Requires(CertificateResolver.class)
 public class JwtDecoratorExtension implements ServiceExtension {
 
-  @EdcSetting
+  @Setting
   private static final String TOKEN_EXPIRATION_SECONDS = "edc.oauth.token.expiration.seconds";
 
   private static final Duration DEFAULT_EXPIRATION = Duration.ofMinutes(5);
 
-  @EdcSetting private static final String PUBLIC_KEY_ALIAS = "edc.oauth.public.key.alias";
+  @Setting private static final String PUBLIC_KEY_ALIAS = "edc.oauth.public.key.alias";
 
-  @EdcSetting private static final String CLIENT_ID = "edc.oauth.client.id";
+  @Setting private static final String CLIENT_ID = "edc.oauth.client.id";
 
   @Inject @Setter private CertificateResolver certificateResolver;
 

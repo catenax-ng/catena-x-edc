@@ -25,10 +25,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import okhttp3.OkHttpClient;
 import org.eclipse.dataspaceconnector.iam.oauth2.spi.Oauth2ValidationRulesRegistry;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.jwt.TokenValidationService;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
@@ -40,20 +40,20 @@ import org.eclipse.tractusx.edc.oauth2.jwk.RsaPublicKeyReader;
 @Requires({OkHttpClient.class, Clock.class})
 public class JwtValidationExtension implements ServiceExtension {
 
-  @EdcSetting private static final String EDC_IDS_ENDPOINT_AUDIENCE = "edc.ids.endpoint.audience";
-  @EdcSetting private static final String NOT_BEFORE_LEEWAY = "edc.oauth.validation.nbf.leeway";
+  @Setting private static final String EDC_IDS_ENDPOINT_AUDIENCE = "edc.ids.endpoint.audience";
+  @Setting private static final String NOT_BEFORE_LEEWAY = "edc.oauth.validation.nbf.leeway";
   private static final Duration DEFAULT_NOT_BEFORE_LEEWAY = Duration.ofSeconds(10);
 
-  @EdcSetting
+  @Setting
   private static final String PROVIDER_JWKS_REFRESH =
       "edc.oauth.provider.jwks.refresh"; // in minutes
 
   private static final Duration DEFAULT_PROVIDER_JWKS_REFRESH = Duration.ofMinutes(5);
 
-  @EdcSetting private static final String PROVIDER_JWKS_URL = "edc.oauth.provider.jwks.url";
+  @Setting private static final String PROVIDER_JWKS_URL = "edc.oauth.provider.jwks.url";
   private static final String DEFAULT_JWKS_URL = "http://localhost/empty_jwks_url";
 
-  @EdcSetting
+  @Setting
   public static final String EDC_IDS_VALIDATION_REFERRINGCONNECTOR =
       "edc.ids.validation.referringconnector";
 
