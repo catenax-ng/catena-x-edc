@@ -60,7 +60,7 @@ class DataEncryptionExtensionTest {
 
   @Test
   void testName() {
-    Assertions.assertEquals(DataEncryptionExtension.NAME, extension.name());
+    Assertions.assertEquals(DataEncryptionExtension.EXTENSION_NAME, extension.name());
   }
 
   @Test

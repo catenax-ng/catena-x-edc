@@ -76,7 +76,7 @@ public class AesDataEncrypterImpl implements DataEncrypter {
         .orElseThrow(
             () ->
                 new EdcException(
-                    DataEncryptionExtension.NAME
+                    DataEncryptionExtension.EXTENSION_NAME
                         + ": Failed to decrypt data. This can happen if the key set is empty, contains invalid keys, the decryption key rotated out of the key set or because the data was encrypted by a different algorithm."));
   }
 
@@ -93,7 +93,7 @@ public class AesDataEncrypterImpl implements DataEncrypter {
         | InvalidAlgorithmParameterException e) {
       monitor.warning(
           String.format(
-              DataEncryptionExtension.NAME
+              DataEncryptionExtension.EXTENSION_NAME
                   + ": Exception decrypting data using key from rotating key set. %s",
               e.getMessage()));
       throw new EdcException(e);

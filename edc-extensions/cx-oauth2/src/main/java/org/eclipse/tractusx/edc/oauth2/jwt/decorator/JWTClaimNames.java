@@ -13,6 +13,9 @@
  */
 package org.eclipse.tractusx.edc.oauth2.jwt.decorator;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class JWTClaimNames {
   public static final String ISSUER = "iss";
   public static final String SUBJECT = "sub";

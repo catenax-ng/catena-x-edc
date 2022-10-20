@@ -23,14 +23,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class AudValidationRuleTest {
+class AudValidationRuleTest {
 
   private static final String AUDIENCE = "audience";
 
   private AudValidationRule rule;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     final Monitor monitor = Mockito.mock(Monitor.class);
     rule = new AudValidationRule(AUDIENCE, monitor);
   }

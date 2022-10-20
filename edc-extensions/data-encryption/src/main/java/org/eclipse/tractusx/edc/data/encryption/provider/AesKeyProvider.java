@@ -44,7 +44,8 @@ public class AesKeyProvider implements KeyProvider<AesKey> {
         .orElseThrow(
             () ->
                 new RuntimeException(
-                    DataEncryptionExtension.NAME + ": Vault must contain at least one key."));
+                    DataEncryptionExtension.EXTENSION_NAME
+                        + ": Vault must contain at least one key."));
   }
 
   private Stream<AesKey> getKeysStream() {

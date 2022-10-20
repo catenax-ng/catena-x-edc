@@ -24,7 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class IatValidationRuleTest {
+class IatValidationRuleTest {
 
   private static final String ISSUED_AT = "iat";
   private static final String EXPIRATION = "exp";
@@ -42,7 +42,7 @@ public class IatValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void testSuccess() {
+  void testSuccess() {
     Date issuedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-01");
     Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-01-01");
     final Map<String, Object> claims = Map.of(ISSUED_AT, issuedDate, EXPIRATION, expirationDate);
@@ -56,7 +56,7 @@ public class IatValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void testIssuedAtClaimMissing() {
+  void testIssuedAtClaimMissing() {
     Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-01-01");
     final Map<String, Object> claims = Map.of(EXPIRATION, expirationDate);
     final ClaimToken token = ClaimToken.Builder.newInstance().claims(claims).build();
@@ -69,7 +69,7 @@ public class IatValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void testExpirationClaimMissing() {
+  void testExpirationClaimMissing() {
     Date issuedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-01-01");
     final Map<String, Object> claims = Map.of(ISSUED_AT, issuedDate);
     final ClaimToken token = ClaimToken.Builder.newInstance().claims(claims).build();
@@ -82,7 +82,7 @@ public class IatValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void testNowBeforeIssuedAt() {
+  void testNowBeforeIssuedAt() {
     Date issuedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-01");
     Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-01-01");
     final Map<String, Object> claims = Map.of(ISSUED_AT, issuedDate, EXPIRATION, expirationDate);
@@ -96,7 +96,7 @@ public class IatValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void testExpirationBeforeIssuedAt() {
+  void testExpirationBeforeIssuedAt() {
     Date issuedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-01-01");
     Date expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-01");
     final Map<String, Object> claims = Map.of(ISSUED_AT, issuedDate, EXPIRATION, expirationDate);

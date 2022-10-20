@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class ExpValidationRuleTest {
+class ExpValidationRuleTest {
 
   private static final String EXP = "exp";
 
@@ -35,14 +35,14 @@ public class ExpValidationRuleTest {
   private Clock clock;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     clock = Mockito.mock(Clock.class);
     rule = new ExpValidationRule(clock);
   }
 
   @Test
   @SneakyThrows
-  public void checkNotExpired() {
+  void checkNotExpired() {
     Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-01");
     final Map<String, Object> claims = Map.of(EXP, date);
     final ClaimToken token = ClaimToken.Builder.newInstance().claims(claims).build();
@@ -55,7 +55,7 @@ public class ExpValidationRuleTest {
 
   @Test
   @SneakyThrows
-  public void checkExpired() {
+  void checkExpired() {
     Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-01");
     final Map<String, Object> claims = Map.of(EXP, date);
     final ClaimToken token = ClaimToken.Builder.newInstance().claims(claims).build();

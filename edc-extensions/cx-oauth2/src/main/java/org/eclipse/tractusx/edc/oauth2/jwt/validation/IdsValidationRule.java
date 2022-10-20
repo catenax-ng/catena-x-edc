@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class IdsValidationRule implements TokenValidationRule {
+  private static final String SECURITY_PROFILE = "securityProfile";
+  private static final String ISSUER_CONNECTOR = "issuerConnector";
+  private static final String REFERRING_CONNECTOR = "referringConnector";
+
   private final boolean validateReferring;
 
   public IdsValidationRule(boolean validateReferring) {
@@ -34,14 +38,14 @@ public class IdsValidationRule implements TokenValidationRule {
   public Result<Void> checkRule(
       @NotNull ClaimToken toVerify, @Nullable Map<String, Object> additional) {
     if (additional != null) {
-      var issuerConnector = additional.get("issuerConnector");
+      var issuerConnector = additional.get(ISSUER_CONNECTOR);
       if (issuerConnector == null) {
         return Result.failure("Required issuerConnector is missing in message");
       }
 
       String securityProfile = null;
-      if (additional.containsKey("securityProfile")) {
-        securityProfile = additional.get("securityProfile").toString();
+      if (additional.containsKey(SECURITY_PROFILE)) {
+        securityProfile = additional.get(SECURITY_PROFILE).toString();
       }
 
       return verifyTokenIds(additional, issuerConnector.toString(), securityProfile);
@@ -56,16 +60,17 @@ public class IdsValidationRule implements TokenValidationRule {
 
     // referringConnector (DAT, optional) vs issuerConnector (Message-Header,
     // mandatory)
-    var referringConnector = claims.get("referringConnector");
+    var referringConnector = claims.get(REFERRING_CONNECTOR);
 
     if (validateReferring && !issuerConnector.equals(referringConnector)) {
-      return Result.failure("referingConnector in token does not match issuerConnector in message");
+      return Result.failure(
+          "referringConnector in token does not match issuerConnector in message");
     }
 
     // securityProfile (DAT, mandatory) vs securityProfile (Message-Payload,
     // optional)
     try {
-      var tokenSecurityProfile = claims.get("securityProfile");
+      var tokenSecurityProfile = claims.get(SECURITY_PROFILE);
 
       if (securityProfile != null && !securityProfile.equals(tokenSecurityProfile)) {
         return Result.failure("securityProfile in token does not match securityProfile in payload");

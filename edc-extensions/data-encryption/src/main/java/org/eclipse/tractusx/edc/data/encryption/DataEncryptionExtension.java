@@ -36,7 +36,7 @@ import org.eclipse.tractusx.edc.data.encryption.provider.AesKeyProvider;
 @Requires({Vault.class})
 public class DataEncryptionExtension implements ServiceExtension {
 
-  public static final String NAME = "Data Encryption Extension";
+  public static final String EXTENSION_NAME = "Data Encryption Extension";
 
   @Setting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
@@ -57,7 +57,7 @@ public class DataEncryptionExtension implements ServiceExtension {
 
   @Override
   public String name() {
-    return NAME;
+    return EXTENSION_NAME;
   }
 
   @Override
@@ -75,7 +75,8 @@ public class DataEncryptionExtension implements ServiceExtension {
       final String keyAlias = configuration.getKeySetAlias();
       final String keySecret = vault.resolveSecret(keyAlias);
       if (keySecret == null || keySecret.isEmpty()) {
-        throw new EdcException(NAME + ": No vault key secret found for alias " + keyAlias);
+        throw new EdcException(
+            EXTENSION_NAME + ": No vault key secret found for alias " + keyAlias);
       }
 
       try {
@@ -83,10 +84,12 @@ public class DataEncryptionExtension implements ServiceExtension {
         final List<AesKey> keys = aesKeyProvider.getDecryptionKeySet().collect(Collectors.toList());
         monitor.debug(
             String.format(
-                "Started " + NAME + ": Found %s registered AES keys in vault.", keys.size()));
+                "Started " + EXTENSION_NAME + ": Found %s registered AES keys in vault.",
+                keys.size()));
       } catch (Exception e) {
         throw new EdcException(
-            NAME + ": AES keys from vault must be comma separated and Base64 encoded.", e);
+            EXTENSION_NAME + ": AES keys from vault must be comma separated and Base64 encoded.",
+            e);
       }
     }
   }
@@ -108,7 +111,7 @@ public class DataEncryptionExtension implements ServiceExtension {
     } else {
       final String msg =
           String.format(
-              DataEncryptionExtension.NAME
+              DataEncryptionExtension.EXTENSION_NAME
                   + ": Unsupported encryption algorithm '%s'. Supported algorithms are '%s',  '%s'.",
               algorithm,
               DataEncrypterFactory.AES_ALGORITHM,
@@ -123,7 +126,7 @@ public class DataEncryptionExtension implements ServiceExtension {
       ServiceExtensionContext context) {
     final String key = context.getSetting(ENCRYPTION_KEY_SET, null);
     if (key == null) {
-      throw new EdcException(NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
+      throw new EdcException(EXTENSION_NAME + ": Missing setting " + ENCRYPTION_KEY_SET);
     }
 
     final boolean cachingEnabled = context.getSetting(CACHING_ENABLED, CACHING_ENABLED_DEFAULT);
