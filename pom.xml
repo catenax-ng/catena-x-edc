@@ -48,7 +48,7 @@
         <org.apache.maven.plugins.maven.dependency.plugin.version>3.3.0
         </org.apache.maven.plugins.maven.dependency.plugin.version>
         <org.apache.maven.plugins.maven.jar.plugin.version>3.3.0</org.apache.maven.plugins.maven.jar.plugin.version>
-        <com.diffplug.spotless.maven.plugin.version>2.27.1</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.27.2</com.diffplug.spotless.maven.plugin.version>
         <org.codehaus.mojo.exec.maven.plugin.version>3.1.0</org.codehaus.mojo.exec.maven.plugin.version>
         <org.apache.maven.plugins.javadoc.version>3.4.1</org.apache.maven.plugins.javadoc.version>
         <org.codehaus.mojo.license.maven.plugin>2.0.0</org.codehaus.mojo.license.maven.plugin>
@@ -66,8 +66,8 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.dataspaceconnector.version>0.0.1-20220922-SNAPSHOT</org.eclipse.dataspaceconnector.version>
-        <com.azure.sdk.bom.version>1.2.2</com.azure.sdk.bom.version>
+        <org.eclipse.dataspaceconnector.version>0.0.1-20221006-SNAPSHOT</org.eclipse.dataspaceconnector.version>
+        <com.azure.sdk.bom.version>1.2.6</com.azure.sdk.bom.version>
         <org.postgresql.version>42.5.0</org.postgresql.version>
         <org.flywaydb.version>9.4.0</org.flywaydb.version>
         <com.nimbus.jose.jwt.version>8.23</com.nimbus.jose.jwt.version>
@@ -83,8 +83,8 @@
         <org.bouncycastle.bcpkix-jdk15on.version>1.70</org.bouncycastle.bcpkix-jdk15on.version>
         <com.squareup.okhttp3.okhttp.version>4.9.3</com.squareup.okhttp3.okhttp.version>
         <org.testcontainers.version>1.17.4</org.testcontainers.version>
-        <org.slf4j.version>2.0.0-beta1</org.slf4j.version>
-        <ch.qos.logback.logback-core.version>1.4.3</ch.qos.logback.logback-core.version>
+        <org.slf4j.version>2.0.3</org.slf4j.version>
+        <ch.qos.logback.logback-core.version>1.4.4</ch.qos.logback.logback-core.version>
         <org.hamcrest.hamcrest.version>2.2</org.hamcrest.hamcrest.version>
 
         <!-- TODO: parametrize so that forks can utilize sonar also -->
@@ -867,7 +867,6 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.dataspaceconnector</groupId>
-<<<<<<< HEAD
                 <artifactId>observability-api</artifactId>
                 <version>${org.eclipse.dataspaceconnector.version}</version>
             </dependency>
@@ -974,9 +973,11 @@
             <dependency>
                 <groupId>org.eclipse.dataspaceconnector</groupId>
                 <artifactId>transaction-spi</artifactId>
-=======
+                <version>${org.eclipse.dataspaceconnector.version}</version>
+            </dependency>
+            <dependency>
+                    <groupId>org.eclipse.dataspaceconnector</groupId>
                 <artifactId>data-plane-framework</artifactId>
->>>>>>> 7be524dd52acde19e6bc7cb94fe04d4f7cfa777b
                 <version>${org.eclipse.dataspaceconnector.version}</version>
             </dependency>
             <dependency>

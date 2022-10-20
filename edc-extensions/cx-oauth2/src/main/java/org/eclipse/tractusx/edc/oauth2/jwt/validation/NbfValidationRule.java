@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import net.catenax.edc.oauth2.jwt.decorator.JWTClaimNames;
 import org.eclipse.dataspaceconnector.spi.iam.ClaimToken;
 import org.eclipse.dataspaceconnector.spi.jwt.TokenValidationRule;
 import org.eclipse.dataspaceconnector.spi.result.Result;
+import org.eclipse.tractusx.edc.oauth2.jwt.decorator.JWTClaimNames;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

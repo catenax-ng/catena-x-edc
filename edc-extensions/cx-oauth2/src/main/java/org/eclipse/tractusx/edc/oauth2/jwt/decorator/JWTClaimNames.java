@@ -11,7 +11,7 @@
  *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
  *
  */
-package net.catenax.edc.oauth2.jwt.decorator;
+package org.eclipse.tractusx.edc.oauth2.jwt.decorator;
 
 public final class JWTClaimNames {
   public static final String ISSUER = "iss";

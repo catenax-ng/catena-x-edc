@@ -19,10 +19,10 @@ import static org.eclipse.dataspaceconnector.spi.policy.engine.PolicyEngine.ALL_
 import org.eclipse.dataspaceconnector.policy.model.Duty;
 import org.eclipse.dataspaceconnector.policy.model.Permission;
 import org.eclipse.dataspaceconnector.policy.model.Prohibition;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.policy.engine.PolicyEngine;
 import org.eclipse.dataspaceconnector.spi.policy.engine.RuleBindingRegistry;
-import org.eclipse.dataspaceconnector.spi.system.Inject;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.tractusx.edc.validation.businesspartner.functions.BusinessPartnerDutyFunction;
