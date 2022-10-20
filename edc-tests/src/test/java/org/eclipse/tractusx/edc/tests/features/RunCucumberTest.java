@@ -18,5 +18,5 @@ import org.junit.platform.suite.api.SelectClasspathResource;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectClasspathResource("net/catenax/edc/tests/features")
+@SelectClasspathResource("org/eclipse/tractusx/edc/tests/features")
 public class RunCucumberTest {}
