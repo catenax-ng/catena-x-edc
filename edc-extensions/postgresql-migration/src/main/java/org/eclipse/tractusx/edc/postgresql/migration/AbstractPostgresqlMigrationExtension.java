@@ -34,7 +34,7 @@ abstract class AbstractPostgresqlMigrationExtension implements ServiceExtension 
   private static final String MIGRATION_LOCATION_BASE =
       String.format(
           "classpath:%s",
-          AbstractPostgresqlMigrationExtension.class.getPackageName().replace("\\.", "/"));
+          AbstractPostgresqlMigrationExtension.class.getPackageName().replace(".", "/"));
 
   @Override
   public void initialize(final ServiceExtensionContext context) {
