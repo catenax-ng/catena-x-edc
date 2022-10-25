@@ -102,7 +102,7 @@ This policy is public available, even though the constraint is described correct
 
 ---
 
-**Example 2 for accidentially public:**
+**Example 2 for accidentally public:**
 
 ```json
 {
