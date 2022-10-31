@@ -32,6 +32,8 @@
         <org.apache.httpcomponents.httpclient.version>4.5.13</org.apache.httpcomponents.httpclient.version>
         <ch.qos.logback.version>1.4.4</ch.qos.logback.version>
         <org.slf4j.api.version>2.0.3</org.slf4j.api.version>
+        <com.amazonaws.aws-java-sdk-s3>1.12.329</com.amazonaws.aws-java-sdk-s3>
+        <software.amazon.awssdk.auth>2.18.1</software.amazon.awssdk.auth>
     </properties>
 
     <dependencies>
@@ -98,6 +100,17 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${com.amazonaws.aws-java-sdk-s3}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>auth</artifactId>
+            <version>${software.amazon.awssdk.auth}</version>
             <scope>test</scope>
         </dependency>
 
