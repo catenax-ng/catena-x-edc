@@ -13,7 +13,7 @@
  *
  */
 
-package net.catenax.edc.transferprocess.sftp.provisioner;
+package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.spi.EdcException;

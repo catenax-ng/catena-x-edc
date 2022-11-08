@@ -12,13 +12,13 @@
  *
  */
 
-package net.catenax.edc.transferprocess.sftp.client;
+package org.eclipse.tractusx.edc.transferprocess.sftp.client;
 
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.catenax.edc.trasnferprocess.sftp.common.SftpLocation;
-import net.catenax.edc.trasnferprocess.sftp.common.SftpUser;
+import org.eclipse.tractusx.edc.trasnferprocess.sftp.common.SftpLocation;
+import org.eclipse.tractusx.edc.trasnferprocess.sftp.common.SftpUser;
 import org.apache.sshd.client.ClientBuilder;
 import org.apache.sshd.client.SshClient;
 import org.apache.sshd.client.auth.password.PasswordIdentityProvider;

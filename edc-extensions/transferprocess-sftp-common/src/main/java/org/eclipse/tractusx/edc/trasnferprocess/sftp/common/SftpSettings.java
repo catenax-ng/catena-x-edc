@@ -1,4 +1,4 @@
-package net.catenax.edc.trasnferprocess.sftp.common;
+package org.eclipse.tractusx.edc.trasnferprocess.sftp.common;
 
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 

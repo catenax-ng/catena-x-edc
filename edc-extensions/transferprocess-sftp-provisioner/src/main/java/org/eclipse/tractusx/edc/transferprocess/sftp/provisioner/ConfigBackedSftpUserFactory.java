@@ -12,12 +12,12 @@
  *
  */
 
-package net.catenax.edc.transferprocess.sftp.provisioner;
+package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 
 import lombok.Builder;
 import lombok.NonNull;
-import net.catenax.edc.trasnferprocess.sftp.common.SftpUser;
-import net.catenax.edc.trasnferprocess.sftp.common.SftpUserFactory;
+import org.eclipse.tractusx.edc.trasnferprocess.sftp.common.SftpUser;
+import org.eclipse.tractusx.edc.trasnferprocess.sftp.common.SftpUserFactory;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 
 import java.security.KeyPair;

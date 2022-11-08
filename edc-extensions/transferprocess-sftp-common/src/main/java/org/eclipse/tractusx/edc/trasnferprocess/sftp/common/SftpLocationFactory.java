@@ -12,7 +12,7 @@
  *
  */
 
-package net.catenax.edc.trasnferprocess.sftp.common;
+package org.eclipse.tractusx.edc.trasnferprocess.sftp.common;
 
 public interface SftpLocationFactory {
     SftpLocation createSftpLocation(String transferProcessId);

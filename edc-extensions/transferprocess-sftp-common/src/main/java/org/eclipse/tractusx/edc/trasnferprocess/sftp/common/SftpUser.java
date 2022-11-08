@@ -12,8 +12,21 @@
  *
  */
 
-package net.catenax.edc.trasnferprocess.sftp.common;
+package org.eclipse.tractusx.edc.trasnferprocess.sftp.common;
 
-public interface SftpUserFactory {
-    SftpUser createSftpUser(String transferProcessId);
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
+import java.security.KeyPair;
+
+@Builder
+@Getter
+@ToString(of = "name")
+@EqualsAndHashCode
+public class SftpUser {
+    private final String name;
+    private final String password;
+    private final KeyPair keyPair;
 }

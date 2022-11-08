@@ -12,7 +12,7 @@
  *
  */
 
-package net.catenax.edc.trasnferprocess.sftp.common;
+package org.eclipse.tractusx.edc.trasnferprocess.sftp.common;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
