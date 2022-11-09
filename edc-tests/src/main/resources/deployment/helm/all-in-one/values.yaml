@@ -105,7 +105,7 @@ platovault:
       - |
         { 
         
-        sleep 15
+        sleep 5
 
         /bin/vault kv put secret/plato/data-encryption-aes-keys content=H7j47H6vVQQOv/hbdAYz+w==
 
@@ -224,12 +224,9 @@ platoedccontrolplane:
       java.util.logging.ConsoleHandler.level=ALL
       java.util.logging.SimpleFormatter.format=[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] [%4$-7s] %5$s%6$s%n
   image:
-    #    repository: &edcControlPlaneImage ghcr.io/catenax-ng/product-edc/edc-controlplane-postgresql-hashicorp-vault
-    #    tag: &edcControlPlaneImageTag develop
-    #    pullPolicy: *pullPolicy
-    repository: &edcControlPlaneImage edc-controlplane-postgresql-hashicorp-vault
-    tag: &edcControlPlaneImageTag 0.1.3-SNAPSHOT
-    pullPolicy: Never
+    repository: &edcControlPlaneImage ghcr.io/catenax-ng/product-edc/edc-controlplane-postgresql-hashicorp-vault
+    tag: &edcControlPlaneImageTag develop
+    pullPolicy: *pullPolicy Always
   opentelemetry:
     properties: |-
       otel.javaagent.enabled=false
@@ -361,7 +358,7 @@ sokratesvault:
       - |
         { 
         
-        sleep 15
+        sleep 5
 
         /bin/vault kv put secret/sokrates/data-encryption-aes-keys content=OcvxzWCK8ETSjt1jmZw3RA==
 
@@ -484,7 +481,7 @@ sokratesedccontrolplane:
   image:
     repository: *edcControlPlaneImage
     tag: *edcControlPlaneImageTag
-    pullPolicy: Never
+    pullPolicy: *pullPolicy
   opentelemetry:
     properties: |-
       otel.javaagent.enabled=false
