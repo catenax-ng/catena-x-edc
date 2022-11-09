@@ -226,7 +226,7 @@ platoedccontrolplane:
   image:
     repository: &edcControlPlaneImage ghcr.io/catenax-ng/product-edc/edc-controlplane-postgresql-hashicorp-vault
     tag: &edcControlPlaneImageTag develop
-    pullPolicy: *pullPolicy Always
+    pullPolicy: *pullPolicy
   opentelemetry:
     properties: |-
       otel.javaagent.enabled=false
