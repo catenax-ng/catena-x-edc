@@ -294,8 +294,8 @@ platoedccontrolplane:
 
     # see extension https://github.com/catenax-ng/product-edc/tree/develop/edc-extensions/dataplane-selector-configuration
     EDC_DATAPLANE_SELECTOR_PLATOPLANE_URL: http://plato-edc-dataplane:9999/api/dataplane/control/transfer
-    EDC_DATAPLANE_SELECTOR_PLATOPLANE_SOURCETYPES : AmazonS3
-    EDC_DATAPLANE_SELECTOR_PLATOPLANE_DESTINATIONTYPES: AmazonS3
+    EDC_DATAPLANE_SELECTOR_PLATOPLANE_SOURCETYPES : HttpData,AmazonS3
+    EDC_DATAPLANE_SELECTOR_PLATOPLANE_DESTINATIONTYPES: HttpProxy,AmazonS3
     EDC_DATAPLANE_SELECTOR_PLATOPLANE_PROPERTIES: >-
       { 
         "publicApiUrl": "http://plato-edc-dataplane:8185/api/public/"
