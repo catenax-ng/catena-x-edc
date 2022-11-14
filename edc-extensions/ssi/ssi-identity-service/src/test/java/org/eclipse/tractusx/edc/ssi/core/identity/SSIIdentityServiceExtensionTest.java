@@ -18,21 +18,16 @@
  */
 package org.eclipse.tractusx.edc.ssi.core.identity;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
 import org.eclipse.tractusx.edc.ssi.core.SSIIdentityServiceImpl;
 import org.eclipse.tractusx.edc.ssi.core.claims.SSIVerifiableCredentialsImpl;
 import org.eclipse.tractusx.edc.ssi.core.claims.SSIVerifiablePresentationImpl;
-import org.eclipse.tractusx.edc.ssi.miw.model.VerifiableCredentialDto;
-import org.eclipse.tractusx.edc.ssi.miw.registry.VerifiableCredentialRegistry;
 import org.eclipse.tractusx.edc.ssi.miw.wallet.ManagedIdentityWalletApiServiceImpl;
-import org.eclipse.tractusx.edc.ssi.spi.IdentityWalletApiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SSIIdentityServiceExtensionTest {
 
@@ -42,13 +37,13 @@ public class SSIIdentityServiceExtensionTest {
   private SSIVerifiableCredentialsImpl vcImpl;
   private SSIVerifiablePresentationImpl vpImpl;
 
-    @BeforeEach
-    public void setUp() throws IOException {
-        mockWallet = mock(ManagedIdentityWalletApiServiceImpl.class);
-        vcImpl = mock(SSIVerifiableCredentialsImpl.class);
-        vpImpl = mock(SSIVerifiablePresentationImpl.class);
-        identityService = new SSIIdentityServiceImpl(mockWallet , vcImpl, vpImpl);
-    }
+  @BeforeEach
+  public void setUp() throws IOException {
+    mockWallet = mock(ManagedIdentityWalletApiServiceImpl.class);
+    vcImpl = mock(SSIVerifiableCredentialsImpl.class);
+    vpImpl = mock(SSIVerifiablePresentationImpl.class);
+    identityService = new SSIIdentityServiceImpl(mockWallet, vcImpl, vpImpl);
+  }
 
   @Test
   void testNoConfigObtainClientCredentials() {
