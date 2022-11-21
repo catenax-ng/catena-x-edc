@@ -185,10 +185,6 @@
                 </dependency>
                 <dependency>
                     <groupId>net.catenax.edc.extensions</groupId>
-                    <artifactId>xsuaa-authenticator</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>net.catenax.edc.extensions</groupId>
                     <artifactId>control-plane-adapter</artifactId>
                 </dependency>
                 <!-- edc-controlplane -->

@@ -354,11 +354,6 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.catenax.edc.extensions</groupId>
-                <artifactId>xsuaa-authenticator</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.tractusx.edc.extensions</groupId>
                 <artifactId>cx-oauth2</artifactId>
                 <version>${project.version}</version>
