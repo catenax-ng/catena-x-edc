@@ -111,6 +111,9 @@ Create the name of the service account to use
 Control IDS URL
 */}}
 {{- define "txdc.controlplane.url.ids" -}}
+{{- if .Values.controlplane.url.ids }}{{/* if ids api url has been specified explicitly */}}
+{{- .Values.controlplane.url.ids }}
+{{- else }}{{/* else when ids api url has not been specified explicitly */}}
 {{- with (index .Values.controlplane.ingresses 0) }}
 {{- if .enabled }}{{/* if ingress enabled */}}
 {{- if .tls.enabled }}{{/* if TLS enabled */}}
@@ -122,6 +125,7 @@ Control IDS URL
 {{- printf "http://%s-controlplane:%v" ( include "txdc.fullname" $ ) $.Values.controlplane.endpoints.ids.port -}}
 {{- end }}{{/* end if ingress */}}
 {{- end }}{{/* end with ingress */}}
+{{- end }}{{/* end if .Values.controlplane.url.ids */}}
 {{- end }}
 
 {{/*
@@ -142,6 +146,9 @@ Data Control URL
 Data Public URL
 */}}
 {{- define "txdc.dataplane.url.public" -}}
+{{- if .Values.dataplane.url.public }}{{/* if public api url has been specified explicitly */}}
+{{- .Values.dataplane.url.public }}
+{{- else }}{{/* else when public api url has not been specified explicitly */}}
 {{- with (index  .Values.dataplane.ingresses 0) }}
 {{- if .enabled }}{{/* if ingress enabled */}}
 {{- if .tls.enabled }}{{/* if TLS enabled */}}
@@ -153,6 +160,7 @@ Data Public URL
 {{- printf "http://%s-dataplane:%v%s" (include "txdc.fullname" $ ) $.Values.dataplane.endpoints.public.port $.Values.dataplane.endpoints.public.path -}}
 {{- end }}{{/* end if ingress */}}
 {{- end }}{{/* end with ingress */}}
+{{- end }}{{/* end if .Values.dataplane.url.public */}}
 {{- end }}
 
 {{/*
