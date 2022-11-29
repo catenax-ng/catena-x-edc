@@ -194,7 +194,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | dataplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container  |
 | dataplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | fullnameOverride | string | `""` |  |
-| imagePullSecrets | list | `[]` |  |
+| imagePullSecrets | list | `[]` | Existing image pull secret to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | nameOverride | string | `""` |  |
 | postgresql.enabled | bool | `true` |  |
 | postgresql.jdbcUrl | string | `""` |  |
@@ -202,6 +202,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | postgresql.username | string | `""` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
+| serviceAccount.imagePullSecrets | list | `[]` | Existing image pull secret bound to the servic eaccount to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | serviceAccount.name | string | `""` |  |
 | vault.azure.certificate | string | `""` |  |
 | vault.azure.client | string | `""` |  |
