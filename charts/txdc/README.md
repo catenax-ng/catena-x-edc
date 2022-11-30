@@ -111,6 +111,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | controlplane.service.annotations | object | `{}` |  |
 | controlplane.service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to expose the running application on a set of Pods as a network service. |
 | controlplane.tolerations | list | `[]` |  |
+| controlplane.url.ids | string | `""` | Explicitly declared url for reaching the ids api (e.g. if ingresses not used) |
 | controlplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container  |
 | controlplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | customLabels | object | `{}` |  |
@@ -191,10 +192,11 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | dataplane.service.port | int | `80` |  |
 | dataplane.service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to expose the running application on a set of Pods as a network service. |
 | dataplane.tolerations | list | `[]` |  |
+| dataplane.url.public | string | `""` | Explicitly declared url for reaching the public api (e.g. if ingresses not used) |
 | dataplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container  |
 | dataplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | fullnameOverride | string | `""` |  |
-| imagePullSecrets | list | `[]` |  |
+| imagePullSecrets | list | `[]` | Existing image pull secret to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | nameOverride | string | `""` |  |
 | postgresql.enabled | bool | `true` |  |
 | postgresql.jdbcUrl | string | `""` |  |
@@ -202,6 +204,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | postgresql.username | string | `""` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
+| serviceAccount.imagePullSecrets | list | `[]` | Existing image pull secret bound to the servic eaccount to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
 | serviceAccount.name | string | `""` |  |
 | vault.azure.certificate | string | `""` |  |
 | vault.azure.client | string | `""` |  |
