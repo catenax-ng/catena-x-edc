@@ -70,9 +70,9 @@ jobs:
       ### Build and load recent images into KinD ###
       ##############################################
       -
-        name: Build edc-controlplane-postgresql-hashicorp-vault
+        name: Build edc-controlplane-memory-hashicorp-vault
         run: |-
-          ./mvnw -s settings.xml -B -pl .,edc-controlplane/edc-controlplane-postgresql-hashicorp-vault -am package -Dmaven.test.skip=true -Pwith-docker-image
+          ./mvnw -s settings.xml -B -pl .,edc-controlplane/edc-controlplane-memory-hashicorp-vault -am package -Dmaven.test.skip=true -Pwith-docker-image
         env:
           GITHUB_PACKAGE_USERNAME: ${{ github.actor }}
           GITHUB_PACKAGE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -86,9 +86,9 @@ jobs:
       -
         name: Load images into KinD
         run: |-
-          docker tag edc-controlplane-postgresql-hashicorp-vault:latest edc-controlplane-postgresql-hashicorp-vault:business-test
+          docker tag edc-controlplane-memory-hashicorp-vault:latest edc-controlplane-memory-hashicorp-vault:business-test
           docker tag edc-dataplane-hashicorp-vault:latest edc-dataplane-hashicorp-vault:business-test
-          kind get clusters | xargs -n1 kind load docker-image edc-controlplane-postgresql-hashicorp-vault:business-test edc-dataplane-hashicorp-vault:business-test --name
+          kind get clusters | xargs -n1 kind load docker-image edc-controlplane-memory-hashicorp-vault:business-test edc-dataplane-hashicorp-vault:business-test --name
 
       ############################################
       ### Prepare And Install Test Environment ###
@@ -101,15 +101,11 @@ jobs:
           echo "SOKRATES_DATA_MANAGEMENT_URL=http://sokrates-edc-controlplane:8181/data" | tee -a ${GITHUB_ENV}
           echo "SOKRATES_IDS_URL=http://sokrates-edc-controlplane:8282/api/v1/ids" | tee -a ${GITHUB_ENV}
           echo "SOKRATES_DATA_PLANE_URL=http://sokrates-edc-dataplane:8185/api/public/" | tee -a ${GITHUB_ENV}
-          echo "SOKRATES_DATABASE_URL=jdbc:postgresql://plato-postgresql:5432/edc" | tee -a ${GITHUB_ENV}
-          echo "SOKRATES_DATABASE_USER=postgresql_sandbox_user" | tee -a ${GITHUB_ENV}
           echo "SOKRATES_DATABASE_PASSWORD=psql_password" | tee -a ${GITHUB_ENV}
           echo "PLATO_DATA_MANAGEMENT_API_AUTH_KEY=password" | tee -a ${GITHUB_ENV}
           echo "PLATO_DATA_MANAGEMENT_URL=http://plato-edc-controlplane:8181/data" | tee -a ${GITHUB_ENV}
           echo "PLATO_IDS_URL=http://plato-edc-controlplane:8282/api/v1/ids" | tee -a ${GITHUB_ENV}
           echo "PLATO_DATA_PLANE_URL=http://plato-edc-dataplane:8185/api/public/" | tee -a ${GITHUB_ENV}
-          echo "PLATO_DATABASE_URL=jdbc:postgresql://plato-postgresql:5432/edc" | tee -a ${GITHUB_ENV}
-          echo "PLATO_DATABASE_USER=postgresql_sandbox_user" | tee -a ${GITHUB_ENV}
           echo "PLATO_DATABASE_PASSWORD=psql_password" | tee -a ${GITHUB_ENV}
           echo "EDC_AWS_ENDPOINT_OVERRIDE=http://minio:9000" | tee -a ${GITHUB_ENV}
           echo "PLATO_AWS_SECRET_ACCESS_KEY=platoqwerty123" | tee -a ${GITHUB_ENV}
@@ -124,10 +120,10 @@ jobs:
 
           # Install the all-in-one supporting infrastructure environment (daps, vault, pgsql, minio)
           helm install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
-            --set platoedccontrolplane.image.repository=edc-controlplane-postgresql-hashicorp-vault \
+            --set platoedccontrolplane.image.repository=edc-controlplane-memory-hashicorp-vault \
             --set platoedccontrolplane.image.tag=business-test \
             --set platoedccontrolplane.image.pullPolicy=Never \
-            --set sokratesedccontrolplane.image.repository=edc-controlplane-postgresql-hashicorp-vault \
+            --set sokratesedccontrolplane.image.repository=edc-controlplane-memory-hashicorp-vault \
             --set sokratesedccontrolplane.image.tag=business-test \
             --set sokratesedccontrolplane.image.pullPolicy=Never \
             --set platoedcdataplane.image.repository=edc-dataplane-hashicorp-vault \
@@ -138,9 +134,9 @@ jobs:
             --set sokratesedcdataplane.image.pullPolicy=Never \
             --set idsdaps.enabled=true \
             --set platovault.enabled=true \
-            --set platopostgresql.enabled=true \
+            --set platopostgresql.enabled=false \
             --set sokratesvault.enabled=true \
-            --set sokratespostgresql.enabled=true \
+            --set sokratespostgresql.enabled=false \
             --set platoedccontrolplane.enabled=false \
             --set platoedcdataplane.enabled=false \
             --set platobackendapplication.enabled=false \
@@ -159,16 +155,14 @@ jobs:
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=idsdaps --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=idsdaps --tail 500 && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratesvault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratesvault --tail 500 && exit 1 )
           kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platovault --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platovault --tail 500 && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=sokratespostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=sokratespostgresql --tail 500 && exit 1 )
-          kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=platopostgresql --timeout=120s || ( kubectl logs -l app.kubernetes.io/name=platopostgresql --tail 500 && exit 1 )
           kubectl wait --for=condition=ready pod -l app=minio --timeout=120s || ( kubectl logs -l app=minio --tail 500 && exit 1 )
 
           # Install the all-in-one Control-/DataPlanes and backend-services
           helm upgrade --install test-environment edc-tests/src/main/resources/deployment/helm/all-in-one \
-            --set platoedccontrolplane.image.repository=edc-controlplane-postgresql-hashicorp-vault \
+            --set platoedccontrolplane.image.repository=edc-controlplane-memory-hashicorp-vault \
             --set platoedccontrolplane.image.tag=business-test \
             --set platoedccontrolplane.image.pullPolicy=Never \
-            --set sokratesedccontrolplane.image.repository=edc-controlplane-postgresql-hashicorp-vault \
+            --set sokratesedccontrolplane.image.repository=edc-controlplane-memory-hashicorp-vault \
             --set sokratesedccontrolplane.image.tag=business-test \
             --set sokratesedccontrolplane.image.pullPolicy=Never \
             --set platoedcdataplane.image.repository=edc-dataplane-hashicorp-vault \
@@ -179,9 +173,9 @@ jobs:
             --set sokratesedcdataplane.image.pullPolicy=Never \
             --set idsdaps.enabled=true \
             --set platovault.enabled=true \
-            --set platopostgresql.enabled=true \
+            --set platopostgresql.enabled=false \
             --set sokratesvault.enabled=true \
-            --set sokratespostgresql.enabled=true \
+            --set sokratespostgresql.enabled=false \
             --set platoedccontrolplane.enabled=true \
             --set platoedcdataplane.enabled=true \
             --set platobackendapplication.enabled=true \
