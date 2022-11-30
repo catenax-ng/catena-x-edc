@@ -10,6 +10,16 @@ install:
   minio: true
   backendservice: true
 
+###################
+# Backend Service #
+###################
+backend:
+  fullnameOverride: "backend"
+  service:
+    frontend:
+      port: 80
+
+
 ########
 # DAPS #
 ########
