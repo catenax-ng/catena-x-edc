@@ -134,7 +134,7 @@ controlplane:
   # Extra environment variables that will be pass onto deployment pods
   env: {}
   #  ENV_NAME: value
-  
+
   # "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
   # ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
   envValueFrom: {}
@@ -145,12 +145,12 @@ controlplane:
   #    secretKeyRef:
   #      name: secret-name
   #      key: value_key
-  
+
   # [Kubernetes Secret Resource](https://kubernetes.io/docs/concepts/configuration/secret/) names to load environment variables from
   envSecretNames: []
   #  - first-secret
   #  - second-secret
-  
+
   # [Kubernetes ConfigMap Resource](https://kubernetes.io/docs/concepts/configuration/configmap/) names to load environment variables from
   envConfigMapNames: []
   #  - first-config-map
@@ -205,7 +205,7 @@ controlplane:
         issuer: ""
         # -- If preset enables certificate generation via cert-manager cluster-wide issuer
         clusterIssuer: ""
-  # -- declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container 
+  # -- declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container
   volumeMounts: []
   # -- [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories
   volumes: []
@@ -400,7 +400,7 @@ dataplane:
         issuer: ""
         # -- If preset enables certificate generation via cert-manager cluster-wide issuer
         clusterIssuer: ""
-  # -- declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container 
+  # -- declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container
   volumeMounts: []
   # -- [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories
   volumes: []
