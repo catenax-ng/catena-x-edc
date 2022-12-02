@@ -1,22 +1,27 @@
 /*
- *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
- *  This program and the accompanying materials are made available under the
- *  terms of the Apache License, Version 2.0 which is available at
- *  https://www.apache.org/licenses/LICENSE-2.0
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
  *
- *  SPDX-License-Identifier: Apache-2.0
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
- *  Contributors:
- *       Mercedes-Benz Tech Innovation GmbH - Add vault health check
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.eclipse.tractusx.edc.hashicorpvault;
 
 import java.time.Duration;
 import okhttp3.OkHttpClient;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 
 /**
@@ -25,28 +30,23 @@ import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
  */
 public class AbstractHashicorpVaultExtension {
 
-  @Setting(required = true)
   public static final String VAULT_URL = "edc.vault.hashicorp.url";
 
-  @Setting(required = true)
   public static final String VAULT_TOKEN = "edc.vault.hashicorp.token";
 
-  @Setting public static final String VAULT_API_SECRET_PATH = "edc.vault.hashicorp.api.secret.path";
+  public static final String VAULT_API_SECRET_PATH = "edc.vault.hashicorp.api.secret.path";
 
   public static final String VAULT_API_SECRET_PATH_DEFAULT = "/v1/secret";
 
-  @Setting
   public static final String VAULT_API_HEALTH_PATH = "edc.vault.hashicorp.api.health.check.path";
 
   public static final String VAULT_API_HEALTH_PATH_DEFAULT = "/v1/sys/health";
 
-  @Setting
   public static final String VAULT_HEALTH_CHECK_STANDBY_OK =
       "edc.vault.hashicorp.health.check.standby.ok";
 
   public static final boolean VAULT_HEALTH_CHECK_STANDBY_OK_DEFAULT = false;
 
-  @Setting
   private static final String VAULT_TIMEOUT_SECONDS = "edc.vault.hashicorp.timeout.seconds";
 
   protected OkHttpClient createOkHttpClient(HashicorpVaultClientConfig config) {

@@ -1,15 +1,21 @@
 /*
- *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
- *  This program and the accompanying materials are made available under the
- *  terms of the Apache License, Version 2.0 which is available at
- *  https://www.apache.org/licenses/LICENSE-2.0
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
  *
- *  SPDX-License-Identifier: Apache-2.0
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
- *  Contributors:
- *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 package org.eclipse.tractusx.edc.data.encryption;
 
@@ -18,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.EdcException;
 import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
 import org.eclipse.dataspaceconnector.spi.security.Vault;
@@ -38,15 +43,15 @@ public class DataEncryptionExtension implements ServiceExtension {
 
   public static final String EXTENSION_NAME = "Data Encryption Extension";
 
-  @Setting public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
+  public static final String ENCRYPTION_KEY_SET = "edc.data.encryption.keys.alias";
 
-  @Setting public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
+  public static final String ENCRYPTION_ALGORITHM = "edc.data.encryption.algorithm";
   public static final String ENCRYPTION_ALGORITHM_DEFAULT = DataEncrypterFactory.AES_ALGORITHM;
 
-  @Setting public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
+  public static final String CACHING_ENABLED = "edc.data.encryption.caching.enabled";
   public static final boolean CACHING_ENABLED_DEFAULT = false;
 
-  @Setting public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
+  public static final String CACHING_SECONDS = "edc.data.encryption.caching.seconds";
   public static final int CACHING_SECONDS_DEFAULT = 3600;
 
   private static final CryptoKeyFactory cryptoKeyFactory = new CryptoKeyFactoryImpl();

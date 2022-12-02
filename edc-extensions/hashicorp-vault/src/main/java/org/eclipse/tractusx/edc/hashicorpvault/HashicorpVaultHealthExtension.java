@@ -1,22 +1,27 @@
 /*
- *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
- *  This program and the accompanying materials are made available under the
- *  terms of the Apache License, Version 2.0 which is available at
- *  https://www.apache.org/licenses/LICENSE-2.0
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
  *
- *  SPDX-License-Identifier: Apache-2.0
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
- *  Contributors:
- *       Mercedes-Benz Tech Innovation GmbH - Add vault health check
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.eclipse.tractusx.edc.hashicorpvault;
 
 import okhttp3.OkHttpClient;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
 import org.eclipse.dataspaceconnector.spi.system.health.HealthCheckService;
@@ -25,7 +30,6 @@ import org.eclipse.dataspaceconnector.spi.system.health.HealthCheckService;
 public class HashicorpVaultHealthExtension extends AbstractHashicorpVaultExtension
     implements ServiceExtension {
 
-  @Setting
   public static final String VAULT_HEALTH_CHECK = "edc.vault.hashicorp.health.check.enabled";
 
   public static final boolean VAULT_HEALTH_CHECK_DEFAULT = true;

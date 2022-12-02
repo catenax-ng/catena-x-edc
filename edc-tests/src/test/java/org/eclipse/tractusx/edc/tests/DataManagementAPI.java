@@ -1,15 +1,21 @@
 /*
- *  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
+ * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
- *  This program and the accompanying materials are made available under the
- *  terms of the Apache License, Version 2.0 which is available at
- *  https://www.apache.org/licenses/LICENSE-2.0
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
  *
- *  SPDX-License-Identifier: Apache-2.0
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
- *  Contributors:
- *       Mercedes-Benz Tech Innovation GmbH - Initial API and Implementation
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
  *
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.eclipse.tractusx.edc.tests;
@@ -24,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -40,9 +47,18 @@ import org.eclipse.tractusx.edc.tests.data.ContractDefinition;
 import org.eclipse.tractusx.edc.tests.data.ContractNegotiation;
 import org.eclipse.tractusx.edc.tests.data.ContractNegotiationState;
 import org.eclipse.tractusx.edc.tests.data.ContractOffer;
+import org.eclipse.tractusx.edc.tests.data.DataAddress;
+import org.eclipse.tractusx.edc.tests.data.HttpProxySinkDataAddress;
+import org.eclipse.tractusx.edc.tests.data.HttpProxySourceDataAddress;
+import org.eclipse.tractusx.edc.tests.data.Negotiation;
+import org.eclipse.tractusx.edc.tests.data.NullDataAddress;
 import org.eclipse.tractusx.edc.tests.data.PayMeConstraint;
 import org.eclipse.tractusx.edc.tests.data.Permission;
 import org.eclipse.tractusx.edc.tests.data.Policy;
+import org.eclipse.tractusx.edc.tests.data.S3DataAddress;
+import org.eclipse.tractusx.edc.tests.data.Transfer;
+import org.eclipse.tractusx.edc.tests.data.TransferProcess;
+import org.eclipse.tractusx.edc.tests.data.TransferProcessState;
 
 @Slf4j
 public class DataManagementAPI {
@@ -52,6 +68,7 @@ public class DataManagementAPI {
   private static final String CONTRACT_DEFINITIONS_PATH = "/contractdefinitions";
   private static final String CATALOG_PATH = "/catalog";
   private static final String NEGOTIATIONS_PATH = "/contractnegotiations";
+  private static final String TRANSFER_PATH = "/transferprocess";
 
   private final String dataMgmtUrl;
   private final String dataMgmtAuthKey;
@@ -76,7 +93,7 @@ public class DataManagementAPI {
     return catalog.contractOffers.stream().map(this::mapOffer).collect(Collectors.toList());
   }
 
-  public String initiateNegotiation(
+  public Negotiation initiateNegotiation(
       String receivingConnectorUrl, String definitionId, String assetId, Policy policy)
       throws IOException {
     final DataManagementApiOffer offer = new DataManagementApiOffer();
@@ -100,9 +117,45 @@ public class DataManagementAPI {
       throw new RuntimeException(
           "Initiated negotiation. Connector did not answer with negotiation ID.");
 
-    log.debug("Initiated negotiation ( id= " + response.getId() + " )");
+    log.info(String.format("Initiated negotiation (id=%s)", response.getId()));
 
-    return response.getId();
+    final String negotiationId = response.getId();
+    return new Negotiation(negotiationId);
+  }
+
+  public Transfer initiateTransferProcess(
+      String receivingConnectorUrl,
+      String contractAgreementId,
+      String assetId,
+      DataAddress dataAddress)
+      throws IOException {
+    final DataManagementApiTransfer transfer = new DataManagementApiTransfer();
+
+    transfer.connectorAddress = receivingConnectorUrl;
+    transfer.contractId = contractAgreementId;
+    transfer.assetId = assetId;
+    transfer.transferType = new DataManagementApiTransferType();
+    transfer.managedResources = false;
+    transfer.dataDestination = mapDataAddress(dataAddress);
+    transfer.protocol = "ids-multipart";
+
+    final DataManagementApiTransferResponse response =
+        post(TRANSFER_PATH, transfer, new TypeToken<DataManagementApiTransferResponse>() {});
+
+    if (response == null)
+      throw new RuntimeException(
+          "Initiated transfer process. Connector did not answer with transfer process ID.");
+
+    log.info(String.format("Initiated transfer process (id=%s)", response.getId()));
+
+    final String transferId = response.getId();
+    return new Transfer(transferId);
+  }
+
+  public TransferProcess getTransferProcess(String id) throws IOException {
+    final DataManagementApiTransferProcess transferProcess =
+        get(TRANSFER_PATH + "/" + id, new TypeToken<DataManagementApiTransferProcess>() {});
+    return mapTransferProcess(transferProcess);
   }
 
   public ContractNegotiation getNegotiation(String id) throws IOException {
@@ -111,18 +164,16 @@ public class DataManagementAPI {
     return mapNegotiation(negotiation);
   }
 
-  public void createAsset(Asset asset) throws IOException {
-    final DataManagementApiDataAddress dataAddress = new DataManagementApiDataAddress();
-    dataAddress.properties =
-        Map.of(
-            DataManagementApiDataAddress.TYPE,
-            "HttpData",
-            "baseUrl",
-            "https://jsonplaceholder.typicode.com/todos/1");
+  public List<ContractNegotiation> getNegotiations() throws IOException {
+    final List<DataManagementApiNegotiation> negotiations =
+        get(NEGOTIATIONS_PATH + "/", new TypeToken<List<DataManagementApiNegotiation>>() {});
+    return negotiations.stream().map(this::mapNegotiation).collect(Collectors.toList());
+  }
 
+  public void createAsset(Asset asset) throws IOException {
     final DataManagementApiAssetCreate assetCreate = new DataManagementApiAssetCreate();
     assetCreate.asset = mapAsset(asset);
-    assetCreate.dataAddress = dataAddress;
+    assetCreate.dataAddress = mapDataAddress(asset.getDataAddress());
 
     post(ASSET_PATH, assetCreate);
   }
@@ -214,7 +265,57 @@ public class DataManagementAPI {
         state = ContractNegotiationState.UNKNOWN;
     }
 
-    return new ContractNegotiation(negotiation.id, negotiation.agreementId, state);
+    return new ContractNegotiation(negotiation.id, negotiation.contractAgreementId, state);
+  }
+
+  private TransferProcess mapTransferProcess(DataManagementApiTransferProcess transferProcess) {
+
+    TransferProcessState state;
+
+    switch (transferProcess.state) {
+      case "COMPLETED":
+        state = TransferProcessState.COMPLETED;
+        break;
+      case "ERROR":
+        state = TransferProcessState.ERROR;
+        break;
+      default:
+        state = TransferProcessState.UNKNOWN;
+    }
+
+    return new TransferProcess(transferProcess.id, state);
+  }
+
+  private DataManagementApiDataAddress mapDataAddress(@NonNull DataAddress dataAddress) {
+    final DataManagementApiDataAddress apiObject = new DataManagementApiDataAddress();
+
+    if (dataAddress instanceof HttpProxySourceDataAddress) {
+      final HttpProxySourceDataAddress a = (HttpProxySourceDataAddress) dataAddress;
+      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", a.getBaseUrl()));
+    } else if (dataAddress instanceof HttpProxySinkDataAddress) {
+      apiObject.setProperties(Map.of("type", "HttpProxy"));
+    } else if (dataAddress instanceof S3DataAddress) {
+      final S3DataAddress a = (S3DataAddress) dataAddress;
+      apiObject.setProperties(
+          Map.of(
+              "type",
+              "AmazonS3",
+              "bucketName",
+              a.getBucketName(),
+              "region",
+              a.getRegion(),
+              "keyName",
+              a.getKeyName()));
+    } else if (dataAddress instanceof NullDataAddress) {
+      // set something that passes validation
+      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", "http://localhost"));
+    } else {
+      throw new UnsupportedOperationException(
+          String.format(
+              "Cannot map data address of type %s to EDC domain", dataAddress.getClass()));
+    }
+
+    return apiObject;
   }
 
   private DataManagementApiAsset mapAsset(Asset asset) {
@@ -375,7 +476,13 @@ public class DataManagementAPI {
   private static class DataManagementApiNegotiation {
     private String id;
     private String state;
-    private String agreementId;
+    private String contractAgreementId;
+  }
+
+  @Data
+  private static class DataManagementApiTransferProcess {
+    private String id;
+    private String state;
   }
 
   @Data
@@ -383,6 +490,29 @@ public class DataManagementAPI {
     private String offerId;
     private String assetId;
     private DataManagementApiPolicy policy;
+  }
+
+  @Data
+  private static class DataManagementApiTransfer {
+    private String connectorId = "foo";
+    private String connectorAddress;
+    private String contractId;
+    private String assetId;
+    private String protocol;
+    private DataManagementApiDataAddress dataDestination;
+    private boolean managedResources;
+    private DataManagementApiTransferType transferType;
+  }
+
+  @Data
+  private static class DataManagementApiTransferType {
+    private String contentType = "application/octet-stream";
+    private boolean isFinite = true;
+  }
+
+  @Data
+  private static class DataManagementApiTransferResponse {
+    private String id;
   }
 
   @Data
