@@ -833,6 +833,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-util</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>data-plane-azure-storage</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
