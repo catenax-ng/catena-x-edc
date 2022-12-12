@@ -26,7 +26,8 @@ import org.eclipse.edc.policy.engine.spi.PolicyEngine;
 import org.eclipse.edc.policy.model.Policy;
 import org.eclipse.edc.spi.response.ResponseStatus;
 import org.eclipse.edc.spi.response.StatusResult;
-import org.eclipse.edc.spi.types.domain.DataAddress;
+import org.eclipse.tractusx.edc.transferprocess.sftp.common.EdcSftpException;
+import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
 
@@ -42,11 +43,21 @@ public class NoOpSftpProvisioner
 
   @Override
   public boolean canProvision(@NonNull ResourceDefinition resourceDefinition) {
-    return resourceDefinition instanceof SftpProviderResourceDefinition
-        && DATA_ADDRESS_TYPE.equals(
-            ((SftpProviderResourceDefinition) resourceDefinition).getDataAddressType())
-        && PROVIDER_TYPE.equals(
-            ((SftpProviderResourceDefinition) resourceDefinition).getProviderType());
+    if (!(resourceDefinition instanceof SftpProviderResourceDefinition)) {
+      return false;
+    }
+    if (!(((SftpProviderResourceDefinition) resourceDefinition)
+        .getProviderType()
+        .equals(PROVIDER_TYPE))) {
+      return false;
+    }
+    try {
+      SftpDataAddress.fromDataAddress(
+          ((SftpProviderResourceDefinition) resourceDefinition).getDataAddress());
+    } catch (EdcSftpException e) {
+      return false;
+    }
+    return true;
   }
 
   @Override
@@ -54,14 +65,20 @@ public class NoOpSftpProvisioner
     if (!(provisionedResource instanceof SftpProvisionedContentResource)) {
       return false;
     }
-    SftpProvisionedContentResource resource = (SftpProvisionedContentResource) provisionedResource;
-    DataAddress dataAddress = resource.getDataAddress();
-    if (dataAddress == null) {
+
+    if (!(((SftpProvisionedContentResource) provisionedResource)
+        .getProviderType()
+        .equals(PROVIDER_TYPE))) {
       return false;
     }
-    return DATA_ADDRESS_TYPE.equals(dataAddress.getType())
-        && PROVIDER_TYPE.equals(
-            ((SftpProvisionedContentResource) provisionedResource).getProviderType());
+
+    try {
+      SftpDataAddress.fromDataAddress(
+          ((SftpProvisionedContentResource) provisionedResource).getDataAddress());
+    } catch (EdcSftpException e) {
+      return false;
+    }
+    return true;
   }
 
   @Override
@@ -70,27 +87,26 @@ public class NoOpSftpProvisioner
 
     return CompletableFuture.supplyAsync(
         () -> {
-          SftpLocation location;
-          SftpUser user;
+          if (!this.canProvision(sftpProviderResourceDefinition)) {
+            return StatusResult.failure(ResponseStatus.FATAL_ERROR);
+          }
           // As of the time of writing, policies don't actually do anything in this context.
           // They are included here in case EDC wants to use them eventually.
           Policy scopedPolicy;
-          try {
-            scopedPolicy = policyEngine.filter(policy, policyScope);
-            location = sftpProviderResourceDefinition.getSftpLocation();
-            user = sftpProviderResourceDefinition.getSftpUser();
-            sftpProvider.createLocation(location);
-            sftpProvider.createUser(user);
-          } catch (Exception e) {
-            return StatusResult.failure(ResponseStatus.FATAL_ERROR, e.getMessage());
-          }
+          scopedPolicy = policyEngine.filter(policy, policyScope);
+          sftpProvider.createLocation(
+              sftpProviderResourceDefinition.getDataAddress().getSftpLocation());
+          sftpProvider.createUser(sftpProviderResourceDefinition.getDataAddress().getSftpUser());
 
           SftpProvisionedContentResource sftpProvisionedContentResource =
               SftpProvisionedContentResource.builder()
-                  .sftpUser(user)
-                  .sftpLocation(location)
+                  .dataAddress(sftpProviderResourceDefinition.getDataAddress())
                   .providerType(PROVIDER_TYPE)
                   .scopedPolicy(scopedPolicy)
+                  .provisionedResourceId(
+                      generateResourceId(
+                          sftpProviderResourceDefinition.getDataAddress().getSftpUser(),
+                          sftpProviderResourceDefinition.getDataAddress().getSftpLocation()))
                   .build();
 
           return StatusResult.success(
@@ -105,31 +121,28 @@ public class NoOpSftpProvisioner
       SftpProvisionedContentResource sftpProvisionedContentResource, Policy policy) {
     return CompletableFuture.supplyAsync(
         () -> {
-          SftpLocation location;
-          SftpUser user;
-          Policy scopedPolicy;
-          try {
-            scopedPolicy = policyEngine.filter(policy, policyScope);
-            if (!sftpProvisionedContentResource.getScopedPolicy().equals(scopedPolicy)) {
-              return StatusResult.failure(
-                  ResponseStatus.FATAL_ERROR,
-                  "Policy scope of DeprovisionedResource does not match provided policy scope.");
-            }
-            location = sftpProvisionedContentResource.getSftpLocation();
-            user = sftpProvisionedContentResource.getSftpUser();
-            sftpProvider.deleteLocation(location);
-            sftpProvider.deleteUser(user);
-          } catch (Exception e) {
-            return StatusResult.failure(ResponseStatus.FATAL_ERROR, e.getMessage());
+          if (!this.canDeprovision(sftpProvisionedContentResource)) {
+            return StatusResult.failure(ResponseStatus.FATAL_ERROR);
           }
+          // As of the time of writing, policies don't actually do anything in this context.
+          // They are included here in case EDC wants to use them eventually.
+          sftpProvider.deleteLocation(
+              sftpProvisionedContentResource.getDataAddress().getSftpLocation());
+          sftpProvider.deleteUser(sftpProvisionedContentResource.getDataAddress().getSftpUser());
 
           DeprovisionedResource deprovisionedResource =
               DeprovisionedResource.Builder.newInstance()
-                  .provisionedResourceId(sftpProvisionedContentResource.getTransferProcessId())
+                  .provisionedResourceId(sftpProvisionedContentResource.getProvisionedResourceId())
                   .inProcess(true)
                   .build();
 
           return StatusResult.success(deprovisionedResource);
         });
+  }
+
+  private String generateResourceId(SftpUser sftpUser, SftpLocation sftpLocation) {
+    return String.format(
+        "%s@%s:%d/%s",
+        sftpUser.getName(), sftpLocation.getHost(), sftpLocation.getPort(), sftpLocation.getPath());
   }
 }

@@ -18,16 +18,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
-import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
-import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
+import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 
 @Getter
 @RequiredArgsConstructor
 public class SftpProviderResourceDefinition extends ResourceDefinition {
-  @NonNull private String dataAddressType;
   @NonNull private String providerType;
-  @NonNull private SftpUser sftpUser;
-  @NonNull private SftpLocation sftpLocation;
+  @NonNull private SftpDataAddress dataAddress;
 
   @Override
   public <R extends ResourceDefinition, B extends Builder<R, B>> B toBuilder() {

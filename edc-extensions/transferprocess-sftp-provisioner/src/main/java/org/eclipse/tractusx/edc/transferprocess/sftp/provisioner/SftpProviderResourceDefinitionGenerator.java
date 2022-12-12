@@ -39,11 +39,7 @@ public class SftpProviderResourceDefinitionGenerator
     } catch (EdcSftpException e) {
       return null;
     }
-    return new SftpProviderResourceDefinition(
-        SftpDataAddress.getCONNECTION_TYPE(),
-        PROVIDER_TYPE,
-        sftpDataAddress.getSftpUser(),
-        sftpDataAddress.getSftpLocation());
+    return new SftpProviderResourceDefinition(PROVIDER_TYPE, sftpDataAddress);
   }
 
   @Override

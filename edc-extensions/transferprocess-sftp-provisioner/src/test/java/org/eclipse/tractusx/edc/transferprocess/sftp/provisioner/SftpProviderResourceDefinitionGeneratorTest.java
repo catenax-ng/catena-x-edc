@@ -61,14 +61,15 @@ class SftpProviderResourceDefinitionGeneratorTest {
         (SftpProviderResourceDefinition) generator.generate(dataRequest, dataAddress, policy);
 
     Assertions.assertNotNull(resourceDefinition);
-    Assertions.assertEquals(DATA_ADDRESS_TYPE, resourceDefinition.getDataAddressType());
+    final SftpDataAddress sftpDataAddress = resourceDefinition.getDataAddress();
+
     Assertions.assertEquals(PROVIDER_TYPE, resourceDefinition.getProviderType());
-    Assertions.assertEquals(host, resourceDefinition.getSftpLocation().getHost());
-    Assertions.assertEquals(port, resourceDefinition.getSftpLocation().getPort());
-    Assertions.assertEquals(path, resourceDefinition.getSftpLocation().getPath());
-    Assertions.assertEquals(name, resourceDefinition.getSftpUser().getName());
-    Assertions.assertEquals(password, resourceDefinition.getSftpUser().getPassword());
-    Assertions.assertEquals(keyPair, resourceDefinition.getSftpUser().getKeyPair());
+    Assertions.assertEquals(host, sftpDataAddress.getSftpLocation().getHost());
+    Assertions.assertEquals(port, sftpDataAddress.getSftpLocation().getPort());
+    Assertions.assertEquals(path, sftpDataAddress.getSftpLocation().getPath());
+    Assertions.assertEquals(name, sftpDataAddress.getSftpUser().getName());
+    Assertions.assertEquals(password, sftpDataAddress.getSftpUser().getPassword());
+    Assertions.assertEquals(keyPair, sftpDataAddress.getSftpUser().getKeyPair());
   }
 
   @Test

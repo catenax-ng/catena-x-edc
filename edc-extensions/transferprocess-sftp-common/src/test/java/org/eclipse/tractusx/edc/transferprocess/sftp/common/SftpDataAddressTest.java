@@ -23,7 +23,7 @@ import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SftpDataAddressTest {
+class SftpDataAddressTest {
 
   @Test
   void fromDataAddress__password() {
