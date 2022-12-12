@@ -14,14 +14,14 @@
 
 package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
-import org.eclipse.dataspaceconnector.spi.monitor.Monitor;
-import org.eclipse.dataspaceconnector.spi.policy.engine.PolicyEngine;
-import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
-import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
-import org.eclipse.dataspaceconnector.spi.transfer.provision.ProviderResourceDefinitionGenerator;
-import org.eclipse.dataspaceconnector.spi.transfer.provision.ProvisionManager;
+import org.eclipse.edc.connector.transfer.spi.provision.ProviderResourceDefinitionGenerator;
+import org.eclipse.edc.connector.transfer.spi.provision.ProvisionManager;
+import org.eclipse.edc.policy.engine.spi.PolicyEngine;
+import org.eclipse.edc.runtime.metamodel.annotation.Inject;
+import org.eclipse.edc.runtime.metamodel.annotation.Provides;
+import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.edc.spi.system.ServiceExtension;
+import org.eclipse.edc.spi.system.ServiceExtensionContext;
 
 @Provides(NoOpSftpProvisioner.class)
 public class SftpProvisionerExtension implements ServiceExtension {

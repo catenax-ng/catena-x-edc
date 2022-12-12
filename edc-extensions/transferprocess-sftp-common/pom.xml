@@ -109,7 +109,7 @@
     <dependencies>
         <!-- EDC Depencencies -->
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>core-spi</artifactId>
         </dependency>
 

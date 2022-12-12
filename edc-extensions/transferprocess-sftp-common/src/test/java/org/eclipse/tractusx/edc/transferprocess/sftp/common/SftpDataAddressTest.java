@@ -19,7 +19,7 @@ import java.security.KeyPairGenerator;
 import java.util.Base64;
 import java.util.Map;
 import lombok.SneakyThrows;
-import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
+import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

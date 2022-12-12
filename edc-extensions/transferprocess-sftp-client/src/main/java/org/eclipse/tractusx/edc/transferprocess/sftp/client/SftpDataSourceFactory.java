@@ -15,10 +15,10 @@
 package org.eclipse.tractusx.edc.transferprocess.sftp.client;
 
 import lombok.RequiredArgsConstructor;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSource;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSourceFactory;
-import org.eclipse.dataspaceconnector.spi.result.Result;
-import org.eclipse.dataspaceconnector.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSourceFactory;
+import org.eclipse.edc.spi.result.Result;
+import org.eclipse.edc.spi.types.domain.transfer.DataFlowRequest;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.EdcSftpException;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 import org.jetbrains.annotations.NotNull;

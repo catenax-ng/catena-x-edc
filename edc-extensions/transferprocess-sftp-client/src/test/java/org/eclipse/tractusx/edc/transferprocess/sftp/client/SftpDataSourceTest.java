@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.apache.sshd.sftp.client.SftpClient;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSource;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
 import org.junit.jupiter.api.Assertions;

@@ -14,7 +14,7 @@
 
 package org.eclipse.tractusx.edc.transferprocess.sftp.common;
 
-import org.eclipse.dataspaceconnector.spi.EdcException;
+import org.eclipse.edc.spi.EdcException;
 
 public class EdcSftpException extends EdcException {
   public EdcSftpException(String message) {

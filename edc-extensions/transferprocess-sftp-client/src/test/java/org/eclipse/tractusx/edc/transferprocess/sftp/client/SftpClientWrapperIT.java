@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
-import org.eclipse.dataspaceconnector.junit.extensions.EdcExtension;
+import org.eclipse.edc.junit.extensions.EdcExtension;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
 import org.junit.jupiter.api.Assertions;

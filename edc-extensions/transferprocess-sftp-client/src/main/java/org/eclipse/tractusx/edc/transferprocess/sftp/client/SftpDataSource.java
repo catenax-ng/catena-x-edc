@@ -17,7 +17,7 @@ package org.eclipse.tractusx.edc.transferprocess.sftp.client;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.NonNull;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSource;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 
 @Builder
 public class SftpDataSource implements DataSource {

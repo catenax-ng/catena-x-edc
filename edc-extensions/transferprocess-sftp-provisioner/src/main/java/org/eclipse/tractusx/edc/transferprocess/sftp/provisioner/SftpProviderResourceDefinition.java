@@ -17,7 +17,7 @@ package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.dataspaceconnector.spi.types.domain.transfer.ResourceDefinition;
+import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
 

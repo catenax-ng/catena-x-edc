@@ -26,9 +26,9 @@ import static org.eclipse.tractusx.edc.transferprocess.sftp.provisioner.NoOpSftp
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import lombok.SneakyThrows;
-import org.eclipse.dataspaceconnector.policy.model.Policy;
-import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
-import org.eclipse.dataspaceconnector.spi.types.domain.transfer.DataRequest;
+import org.eclipse.edc.connector.transfer.spi.types.DataRequest;
+import org.eclipse.edc.policy.model.Policy;
+import org.eclipse.edc.spi.types.domain.DataAddress;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpLocation;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;

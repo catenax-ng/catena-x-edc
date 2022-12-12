@@ -18,10 +18,10 @@ import java.io.IOException;
 import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
-import org.eclipse.dataspaceconnector.dataplane.common.sink.ParallelSink;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSource;
-import org.eclipse.dataspaceconnector.spi.response.ResponseStatus;
-import org.eclipse.dataspaceconnector.spi.response.StatusResult;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
+import org.eclipse.edc.connector.dataplane.util.sink.ParallelSink;
+import org.eclipse.edc.spi.response.ResponseStatus;
+import org.eclipse.edc.spi.response.StatusResult;
 
 @Builder
 public class SftpDataSink extends ParallelSink {

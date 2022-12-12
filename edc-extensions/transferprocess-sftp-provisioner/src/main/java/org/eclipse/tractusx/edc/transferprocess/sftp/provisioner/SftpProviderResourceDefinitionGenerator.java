@@ -17,11 +17,12 @@ package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 import static org.eclipse.tractusx.edc.transferprocess.sftp.provisioner.NoOpSftpProvisioner.PROVIDER_TYPE;
 
 import lombok.RequiredArgsConstructor;
-import org.eclipse.dataspaceconnector.policy.model.Policy;
-import org.eclipse.dataspaceconnector.spi.transfer.provision.ProviderResourceDefinitionGenerator;
-import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
-import org.eclipse.dataspaceconnector.spi.types.domain.transfer.DataRequest;
-import org.eclipse.dataspaceconnector.spi.types.domain.transfer.ResourceDefinition;
+import org.eclipse.edc.connector.transfer.spi.provision.ProviderResourceDefinitionGenerator;
+import org.eclipse.edc.connector.transfer.spi.types.DataRequest;
+import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
+import org.eclipse.edc.policy.model.Policy;
+import org.eclipse.edc.spi.types.domain.DataAddress;
+import org.eclipse.tractusx.edc.transferprocess.sftp.common.EdcSftpException;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +36,7 @@ public class SftpProviderResourceDefinitionGenerator
     SftpDataAddress sftpDataAddress;
     try {
       sftpDataAddress = SftpDataAddress.fromDataAddress(assetAddress);
-    } catch (NullPointerException e) {
+    } catch (EdcSftpException e) {
       return null;
     }
     return new SftpProviderResourceDefinition(
@@ -43,5 +44,15 @@ public class SftpProviderResourceDefinitionGenerator
         PROVIDER_TYPE,
         sftpDataAddress.getSftpUser(),
         sftpDataAddress.getSftpLocation());
+  }
+
+  @Override
+  public boolean canGenerate(DataRequest dataRequest, DataAddress dataAddress, Policy policy) {
+    try {
+      SftpDataAddress.fromDataAddress(dataAddress);
+    } catch (EdcSftpException e) {
+      return false;
+    }
+    return true;
   }
 }

@@ -18,7 +18,7 @@ import java.io.InputStream;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSource;
+import org.eclipse.edc.connector.dataplane.spi.pipeline.DataSource;
 
 @Builder
 public class SftpPart implements DataSource.Part {

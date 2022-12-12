@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
+import org.eclipse.edc.spi.types.domain.DataAddress;
 
 @AllArgsConstructor
 @Builder
