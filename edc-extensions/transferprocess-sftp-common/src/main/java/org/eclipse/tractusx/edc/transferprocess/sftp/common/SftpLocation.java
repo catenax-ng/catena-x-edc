@@ -18,14 +18,17 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.ToString;
 
 @Builder
 @Getter
-@ToString
 @EqualsAndHashCode
 public class SftpLocation {
   @NonNull private final String host;
   @NonNull private final Integer port;
   @NonNull private final String path;
+
+  @Override
+  public String toString() {
+    return String.format("%s:%d/%s", host, port, path);
+  }
 }

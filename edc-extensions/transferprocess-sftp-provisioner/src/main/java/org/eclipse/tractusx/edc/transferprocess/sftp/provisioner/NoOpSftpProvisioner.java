@@ -14,7 +14,6 @@
 
 package org.eclipse.tractusx.edc.transferprocess.sftp.provisioner;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -78,8 +77,8 @@ public class NoOpSftpProvisioner
           Policy scopedPolicy;
           try {
             scopedPolicy = policyEngine.filter(policy, policyScope);
-            location = Objects.requireNonNull(sftpProviderResourceDefinition.getSftpLocation());
-            user = Objects.requireNonNull(sftpProviderResourceDefinition.getSftpUser());
+            location = sftpProviderResourceDefinition.getSftpLocation();
+            user = sftpProviderResourceDefinition.getSftpUser();
             sftpProvider.createLocation(location);
             sftpProvider.createUser(user);
           } catch (Exception e) {
@@ -116,8 +115,8 @@ public class NoOpSftpProvisioner
                   ResponseStatus.FATAL_ERROR,
                   "Policy scope of DeprovisionedResource does not match provided policy scope.");
             }
-            location = Objects.requireNonNull(sftpProvisionedContentResource.getSftpLocation());
-            user = Objects.requireNonNull(sftpProvisionedContentResource.getSftpUser());
+            location = sftpProvisionedContentResource.getSftpLocation();
+            user = sftpProvisionedContentResource.getSftpUser();
             sftpProvider.deleteLocation(location);
             sftpProvider.deleteUser(user);
           } catch (Exception e) {

@@ -21,6 +21,7 @@ import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSink;
 import org.eclipse.dataspaceconnector.dataplane.spi.pipeline.DataSinkFactory;
 import org.eclipse.dataspaceconnector.spi.result.Result;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.DataFlowRequest;
+import org.eclipse.tractusx.edc.transferprocess.sftp.common.EdcSftpException;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +32,7 @@ public class SftpDataSinkFactory implements DataSinkFactory {
     try {
       SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
       return true;
-    } catch (ClassCastException | NullPointerException e) {
+    } catch (EdcSftpException e) {
       return false;
     }
   }
@@ -41,15 +42,19 @@ public class SftpDataSinkFactory implements DataSinkFactory {
     try {
       SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
       return VALID;
-    } catch (ClassCastException | NullPointerException e) {
-      return Result.failure(String.format("Invalid dataflow request: %s", request.getId()));
+    } catch (EdcSftpException e) {
+      return Result.failure(String.format("Invalid DataFlowRequest: %s", request.getId()));
     }
   }
 
   @Override
   public DataSink createSink(DataFlowRequest request) {
-    SftpDataAddress destination =
-        SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
+    SftpDataAddress destination;
+    try {
+      destination = SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
+    } catch (EdcSftpException e) {
+      throw new EdcSftpException(String.format("Invalid DataFlowRequest: %s", request.getId()), e);
+    }
 
     SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder()

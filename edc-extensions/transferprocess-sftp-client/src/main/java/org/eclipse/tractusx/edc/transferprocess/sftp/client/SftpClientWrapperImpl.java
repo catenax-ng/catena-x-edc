@@ -41,7 +41,7 @@ public class SftpClientWrapperImpl implements SftpClientWrapper {
   public SftpClientWrapperImpl(SftpClientConfig config) {
     this.config = config;
     try {
-      this.sftpClient = getSftpClient();
+      this.sftpClient = getSftpClient(config);
     } catch (IOException e) {
       throw new EdcSftpException("Unable to create SftpClient.", e);
     }
@@ -75,26 +75,21 @@ public class SftpClientWrapperImpl implements SftpClientWrapper {
     } catch (final IOException e) {
       sftpClient.close();
       throw new EdcSftpException(
-          String.format(
-              "Unable to download file at %s:%d/%s",
-              config.getSftpLocation().getHost(),
-              config.getSftpLocation().getPort(),
-              config.getSftpLocation().getPath()),
-          e);
+          String.format("Unable to download file at %s", config.getSftpLocation().toString()), e);
     }
 
     return new SftpInputStreamWrapper(sftpClient, delegateInputStream);
   }
 
-  private SftpClient getSftpClient() throws IOException {
-    final ClientSession session = getSshClientSession();
+  private static SftpClient getSftpClient(SftpClientConfig config) throws IOException {
+    final ClientSession session = getSshClientSession(config);
     final SftpClientFactory factory = SftpClientFactory.instance();
     final SftpClient sftpClient = factory.createSftpClient(session);
     return sftpClient.singleSessionInstance();
   }
 
-  private ClientSession getSshClientSession() throws IOException {
-    final SshClient sshClient = getSshClient();
+  private static ClientSession getSshClientSession(SftpClientConfig config) throws IOException {
+    final SshClient sshClient = getSshClient(config);
     sshClient.start();
     final ClientSession session =
         sshClient
@@ -109,7 +104,7 @@ public class SftpClientWrapperImpl implements SftpClientWrapper {
     return session;
   }
 
-  private SshClient getSshClient() {
+  private static SshClient getSshClient(SftpClientConfig config) {
     final SshClient sshClient = ClientBuilder.builder().build();
 
     if (config.getSftpUser().getKeyPair() != null) {

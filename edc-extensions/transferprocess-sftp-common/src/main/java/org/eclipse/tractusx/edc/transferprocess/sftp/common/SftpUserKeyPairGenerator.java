@@ -9,22 +9,26 @@ import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPublicKeySpec;
-import lombok.RequiredArgsConstructor;
+import java.util.Base64;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class SftpUserKeyPairGenerator {
-  public static KeyPair getKeyPairFromPrivateKey(byte[] privateKeyBytes, String sftpUserName) {
+  public static KeyPair getKeyPairFromPrivateKey(
+      byte[] privateKeyBytes, @NonNull String sftpUserName) {
     if (privateKeyBytes == null) {
       return null;
     }
 
     try {
-      KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-      PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
+      final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+      final PrivateKey privateKey =
+          keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
 
-      RSAPrivateCrtKey privateKeySpec = (RSAPrivateCrtKey) privateKey;
+      final RSAPrivateCrtKey privateKeySpec = (RSAPrivateCrtKey) privateKey;
 
-      PublicKey publicKey =
+      final PublicKey publicKey =
           keyFactory.generatePublic(
               new RSAPublicKeySpec(
                   privateKeySpec.getModulus(), privateKeySpec.getPublicExponent()));
@@ -34,5 +38,21 @@ public class SftpUserKeyPairGenerator {
       throw new EdcSftpException(
           String.format("Unable to parse provided keypair for Sftp user %s", sftpUserName), e);
     }
+  }
+
+  public static KeyPair getKeyPairFromPrivateKey(String privateKey, @NonNull String sftpUserName) {
+    if (privateKey == null) {
+      return null;
+    }
+
+    byte[] publicBytes;
+    try {
+      publicBytes = Base64.getDecoder().decode(privateKey);
+    } catch (IllegalArgumentException e) {
+      throw new EdcSftpException(
+          String.format("Cannot decode base64 private key for user %s", sftpUserName), e);
+    }
+
+    return getKeyPairFromPrivateKey(publicBytes, sftpUserName);
   }
 }

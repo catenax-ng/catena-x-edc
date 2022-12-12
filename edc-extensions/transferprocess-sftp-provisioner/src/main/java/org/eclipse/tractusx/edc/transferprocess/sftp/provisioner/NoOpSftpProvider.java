@@ -19,27 +19,48 @@ import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpProvider;
 import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpUser;
 
 public class NoOpSftpProvider implements SftpProvider {
+
+  /**
+   * This provisioner does not create cloud resources. The assumption is that users and locations
+   * already exist cloud-side. Thus, this method has no functionality.
+   *
+   * @param user The user whose credentials should be deployed.
+   */
   @Override
   public void createUser(SftpUser user) {
-    // This provisioner does not create cloud resources.
-    // The assumption is that users and locations already exist cloud-side.
+    // do nothing
   }
 
+  /**
+   * This provisioner does not create cloud resources. The assumption is that users and locations
+   * already exist cloud-side. Thus, this method has no functionality.
+   *
+   * @param user The user whose credentials should be deleted.
+   */
   @Override
   public void deleteUser(SftpUser user) {
-    // This provisioner does not create cloud resources.
-    // The assumption is that users and locations already exist cloud-side.
+    // do nothing
   }
 
+  /**
+   * This provisioner does not create cloud resources. The assumption is that users and locations
+   * already exist cloud-side. Thus, this method has no functionality.
+   *
+   * @param location The location of the cloud resource that should be made available.
+   */
   @Override
   public void createLocation(SftpLocation location) {
-    // This provisioner does not create cloud resources.
-    // The assumption is that users and locations already exist cloud-side.
+    // do nothing
   }
 
+  /**
+   * This provisioner does not create cloud resources. The assumption is that users and locations
+   * already exist cloud-side. Thus, this method has no functionality.
+   *
+   * @param location The location of the cloud resource that should be made unavailable.
+   */
   @Override
   public void deleteLocation(SftpLocation location) {
-    // This provisioner does not create cloud resources.
-    // The assumption is that users and locations already exist cloud-side.
+    // do nothing
   }
 }
