@@ -52,7 +52,7 @@ Feature: Contract Offers
       | id       | action | businessPartnerNumber |
       | policy-1 | USE    |                       |
       | policy-2 | USE    | BPNFOO                |
-      | policy-3 | USE    | BPNSOKRATES           |
+      | policy-3 | USE    | BPNSOKRATES,BPNF00    |
     And 'Plato' has the following contract definitions
       | id                    | access policy | contract policy | asset   |
       | contract-definition-1 | policy-1      | policy-1        | asset-1 |

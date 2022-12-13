@@ -20,16 +20,15 @@
 
 package org.eclipse.tractusx.edc.tests;
 
+import static java.util.Arrays.stream;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.tractusx.edc.tests.data.BusinessPartnerNumberConstraint;
-import org.eclipse.tractusx.edc.tests.data.Constraint;
-import org.eclipse.tractusx.edc.tests.data.PayMeConstraint;
-import org.eclipse.tractusx.edc.tests.data.Permission;
-import org.eclipse.tractusx.edc.tests.data.Policy;
+import java.util.stream.Collectors;
+import org.eclipse.tractusx.edc.tests.data.*;
 
 public class PolicyStepDefs {
 
@@ -50,8 +49,14 @@ public class PolicyStepDefs {
 
       List<Constraint> constraints = new ArrayList<>();
       final String businessPartnerNumber = map.get("businessPartnerNumber");
-      if (businessPartnerNumber != null && !businessPartnerNumber.isBlank())
-        constraints.add(new BusinessPartnerNumberConstraint(businessPartnerNumber));
+      if (businessPartnerNumber != null && !businessPartnerNumber.isBlank()) {
+        var bpnConstraints =
+            stream(businessPartnerNumber.split(","))
+                .map(BusinessPartnerNumberConstraint::new)
+                .collect(Collectors.toList());
+
+        constraints.add(new OrConstraint(bpnConstraints));
+      }
 
       final String payMe = map.get("payMe");
       if (payMe != null && !payMe.isBlank())

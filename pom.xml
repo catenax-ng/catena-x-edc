@@ -363,6 +363,11 @@
                 <artifactId>control-plane-adapter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>custom-jsonld</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- CX Control-/Data-Plane modules -->
             <dependency>
@@ -1056,9 +1061,14 @@
                 <version>${org.eclipse.dataspaceconnector.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.dataspaceconnector</groupId>
-                <artifactId>jdk-logger-monitor</artifactId>
-                <version>${org.eclipse.dataspaceconnector.version}</version>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-jsonld-serdes</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
+                <artifactId>monitor-jdk-logger</artifactId>
+                <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.dataspaceconnector</groupId>

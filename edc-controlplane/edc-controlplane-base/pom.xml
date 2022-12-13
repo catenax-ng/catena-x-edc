@@ -73,6 +73,10 @@
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
             <artifactId>cx-oauth2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+            <artifactId>custom-jsonld</artifactId>
+        </dependency>
 
         <!-- Core -->
         <dependency>

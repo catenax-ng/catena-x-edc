@@ -40,20 +40,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.eclipse.tractusx.edc.tests.data.Asset;
-import org.eclipse.tractusx.edc.tests.data.AssetWithDataAddress;
-import org.eclipse.tractusx.edc.tests.data.BusinessPartnerNumberConstraint;
-import org.eclipse.tractusx.edc.tests.data.Constraint;
-import org.eclipse.tractusx.edc.tests.data.ContractDefinition;
-import org.eclipse.tractusx.edc.tests.data.ContractNegotiation;
-import org.eclipse.tractusx.edc.tests.data.ContractNegotiationState;
-import org.eclipse.tractusx.edc.tests.data.ContractOffer;
-import org.eclipse.tractusx.edc.tests.data.DataAddress;
-import org.eclipse.tractusx.edc.tests.data.PayMeConstraint;
-import org.eclipse.tractusx.edc.tests.data.Permission;
-import org.eclipse.tractusx.edc.tests.data.Policy;
-import org.eclipse.tractusx.edc.tests.data.TransferProcess;
-import org.eclipse.tractusx.edc.tests.data.TransferProcessState;
+import org.eclipse.tractusx.edc.tests.data.*;
 
 @Slf4j
 public class DataManagementAPI {
@@ -342,7 +329,7 @@ public class DataManagementAPI {
     final DataManagementApiRuleAction apiAction = new DataManagementApiRuleAction();
     apiAction.type = action;
 
-    final List<DataManagementApiConstraint> constraints =
+    var constraints =
         permission.getConstraints().stream().map(this::mapConstraint).collect(Collectors.toList());
 
     final DataManagementApiPermission apiObject = new DataManagementApiPermission();
@@ -352,9 +339,10 @@ public class DataManagementAPI {
     return apiObject;
   }
 
-  private DataManagementApiConstraint mapConstraint(Constraint constraint) {
-
-    if (BusinessPartnerNumberConstraint.class.equals(constraint.getClass())) {
+  private DataManagementConstraint mapConstraint(Constraint constraint) {
+    if (OrConstraint.class.equals(constraint.getClass())) {
+      return mapConstraint((OrConstraint) constraint);
+    } else if (BusinessPartnerNumberConstraint.class.equals(constraint.getClass())) {
       return mapConstraint((BusinessPartnerNumberConstraint) constraint);
     } else if (PayMeConstraint.class.equals(constraint.getClass())) {
       return mapConstraint((PayMeConstraint) constraint);
@@ -364,7 +352,7 @@ public class DataManagementAPI {
     }
   }
 
-  private DataManagementApiConstraint mapConstraint(PayMeConstraint constraint) {
+  private DataManagementAtomicConstraint mapConstraint(PayMeConstraint constraint) {
     final DataManagementApiLiteralExpression leftExpression =
         new DataManagementApiLiteralExpression();
     leftExpression.value = "PayMe";
@@ -373,8 +361,8 @@ public class DataManagementAPI {
         new DataManagementApiLiteralExpression();
     rightExpression.value = String.valueOf(constraint.getAmount());
 
-    final DataManagementApiConstraint dataManagementApiConstraint =
-        new DataManagementApiConstraint();
+    final DataManagementAtomicConstraint dataManagementApiConstraint =
+        new DataManagementAtomicConstraint();
     dataManagementApiConstraint.leftExpression = leftExpression;
     dataManagementApiConstraint.rightExpression = rightExpression;
     dataManagementApiConstraint.operator = "EQ";
@@ -382,7 +370,7 @@ public class DataManagementAPI {
     return dataManagementApiConstraint;
   }
 
-  private DataManagementApiConstraint mapConstraint(BusinessPartnerNumberConstraint constraint) {
+  private DataManagementAtomicConstraint mapConstraint(BusinessPartnerNumberConstraint constraint) {
     final DataManagementApiLiteralExpression leftExpression =
         new DataManagementApiLiteralExpression();
     leftExpression.value = "BusinessPartnerNumber";
@@ -391,13 +379,20 @@ public class DataManagementAPI {
         new DataManagementApiLiteralExpression();
     rightExpression.value = constraint.getBusinessPartnerNumber();
 
-    final DataManagementApiConstraint dataManagementApiConstraint =
-        new DataManagementApiConstraint();
+    final DataManagementAtomicConstraint dataManagementApiConstraint =
+        new DataManagementAtomicConstraint();
     dataManagementApiConstraint.leftExpression = leftExpression;
     dataManagementApiConstraint.rightExpression = rightExpression;
     dataManagementApiConstraint.operator = "EQ";
 
     return dataManagementApiConstraint;
+  }
+
+  private DataManagementOrConstraint mapConstraint(OrConstraint constraint) {
+    var orConstraint = new DataManagementOrConstraint();
+    orConstraint.constraints =
+        constraint.getConstraints().stream().map(this::mapConstraint).collect(Collectors.toList());
+    return orConstraint;
   }
 
   private ContractOffer mapOffer(DataManagementApiContractOffer dataManagementApiContractOffer) {
@@ -526,16 +521,24 @@ public class DataManagementAPI {
     private String edctype = "dataspaceconnector:permission";
     private DataManagementApiRuleAction action;
     private String target;
-    private List<DataManagementApiConstraint> constraints = new ArrayList<>();
+    private List<DataManagementConstraint> constraints = new ArrayList<>();
   }
 
   @Data
-  private static class DataManagementApiConstraint {
+  private static class DataManagementAtomicConstraint implements DataManagementConstraint {
     private String edctype = "AtomicConstraint";
     private DataManagementApiLiteralExpression leftExpression;
     private DataManagementApiLiteralExpression rightExpression;
     private String operator;
   }
+
+  @Data
+  private static class DataManagementOrConstraint implements DataManagementConstraint {
+    private String edctype = "dataspaceconnector:orconstraint";
+    private List<DataManagementConstraint> constraints;
+  }
+
+  private interface DataManagementConstraint {}
 
   @Data
   private static class DataManagementApiLiteralExpression {
