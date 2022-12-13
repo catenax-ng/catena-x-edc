@@ -22,15 +22,15 @@ package org.eclipse.tractusx.edc.jsonld;
 
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
-import org.eclipse.dataspaceconnector.ids.core.serialization.IdsConstraintImpl;
-import org.eclipse.dataspaceconnector.ids.jsonld.JsonLd;
-import org.eclipse.dataspaceconnector.ids.jsonld.JsonLdSerializer;
-import org.eclipse.dataspaceconnector.ids.spi.domain.IdsConstants;
-import org.eclipse.dataspaceconnector.ids.spi.service.ConnectorService;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
-import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
-import org.eclipse.dataspaceconnector.spi.system.ServiceExtensionContext;
-import org.eclipse.dataspaceconnector.spi.types.TypeManager;
+import org.eclipse.edc.protocol.ids.jsonld.JsonLd;
+import org.eclipse.edc.protocol.ids.jsonld.JsonLdSerializer;
+import org.eclipse.edc.protocol.ids.serialization.IdsConstraintImpl;
+import org.eclipse.edc.protocol.ids.spi.domain.IdsConstants;
+import org.eclipse.edc.protocol.ids.spi.service.ConnectorService;
+import org.eclipse.edc.runtime.metamodel.annotation.Inject;
+import org.eclipse.edc.spi.system.ServiceExtension;
+import org.eclipse.edc.spi.system.ServiceExtensionContext;
+import org.eclipse.edc.spi.types.TypeManager;
 
 /**
  * This extension is a temporary fix for a serialization bug:

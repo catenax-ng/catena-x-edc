@@ -146,26 +146,17 @@ public class DataManagementAPI {
     return mapNegotiation(negotiation);
   }
 
-  public void createAsset(Asset asset) throws IOException {
-    final ManagementApiDataAddress dataAddress = new ManagementApiDataAddress();
-    final ManagementApiAssetCreate assetCreate = new ManagementApiAssetCreate();
-    dataAddress.properties =
-        Map.of(
-            ManagementApiDataAddress.TYPE,
-            "HttpData",
-            "baseUrl",
-            "https://jsonplaceholder.typicode.com/todos/1");
-
-    assetCreate.asset = mapAsset(asset);
-    assetCreate.dataAddress = dataAddress;
-
-    post(ASSET_PATH, assetCreate);
+  public List<ContractNegotiation> getNegotiations() throws IOException {
+    final List<ManagementApiNegotiation> negotiations =
+        get(NEGOTIATIONS_PATH + "/", new TypeToken<List<ManagementApiNegotiation>>() {});
+    return negotiations.stream().map(this::mapNegotiation).collect(Collectors.toList());
   }
 
-  public void createAsset(AssetWithDataAddress assetWithDataAddress) throws IOException {
+  public void createAsset(Asset asset) throws IOException {
     final ManagementApiAssetCreate assetCreate = new ManagementApiAssetCreate();
-    assetCreate.asset = mapAsset(assetWithDataAddress.getAsset());
-    assetCreate.dataAddress = mapDataAddress(assetWithDataAddress.getDataAddress());
+
+    assetCreate.asset = mapAsset(asset);
+    assetCreate.dataAddress = mapDataAddress(asset.getDataAddress());
 
     post(ASSET_PATH, assetCreate);
   }
@@ -280,7 +271,33 @@ public class DataManagementAPI {
 
   private ManagementApiDataAddress mapDataAddress(@NonNull DataAddress dataAddress) {
     final ManagementApiDataAddress apiObject = new ManagementApiDataAddress();
-    apiObject.setProperties(dataAddress.getProperties());
+
+    if (dataAddress instanceof HttpProxySourceDataAddress) {
+      final HttpProxySourceDataAddress a = (HttpProxySourceDataAddress) dataAddress;
+      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", a.getBaseUrl()));
+    } else if (dataAddress instanceof HttpProxySinkDataAddress) {
+      apiObject.setProperties(Map.of("type", "HttpProxy"));
+    } else if (dataAddress instanceof S3DataAddress) {
+      final S3DataAddress a = (S3DataAddress) dataAddress;
+      apiObject.setProperties(
+          Map.of(
+              "type",
+              "AmazonS3",
+              "bucketName",
+              a.getBucketName(),
+              "region",
+              a.getRegion(),
+              "keyName",
+              a.getKeyName()));
+    } else if (dataAddress instanceof NullDataAddress) {
+      // set something that passes validation
+      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", "http://localhost"));
+    } else {
+      throw new UnsupportedOperationException(
+          String.format(
+              "Cannot map data address of type %s to EDC domain", dataAddress.getClass()));
+    }
+
     return apiObject;
   }
 

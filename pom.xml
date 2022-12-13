@@ -1066,16 +1066,16 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
+                <artifactId>ids-jsonld-serdes</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>monitor-jdk-logger</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.dataspaceconnector</groupId>
-                <artifactId>ids-jsonld-serdes</artifactId>
-                <version>${org.eclipse.dataspaceconnector.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.dataspaceconnector</groupId>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>jersey</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
