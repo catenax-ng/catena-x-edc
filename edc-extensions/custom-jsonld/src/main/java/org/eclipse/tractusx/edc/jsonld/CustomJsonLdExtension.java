@@ -38,6 +38,7 @@ import org.eclipse.edc.spi.types.TypeManager;
  */
 public class CustomJsonLdExtension implements ServiceExtension {
 
+  public static final String IDS = "ids";
   // this is only needed to ensure that this extension is initialized after the
   // IdsCoreServiceExtension
   @Inject private ConnectorService connectorService;
@@ -50,122 +51,50 @@ public class CustomJsonLdExtension implements ServiceExtension {
   @Override
   public void initialize(ServiceExtensionContext context) {
     var typeManager = context.getTypeManager();
-    typeManager.registerContext("ids", JsonLd.getObjectMapper());
+    typeManager.registerContext(IDS, JsonLd.getObjectMapper());
 
     registerIdsClasses(typeManager);
     registerCustomConstraintImpl(typeManager);
   }
 
   private void registerIdsClasses(TypeManager typeManager) {
-    typeManager.registerSerializer(
-        "ids",
-        ArtifactRequestMessage.class,
-        new JsonLdSerializer<>(ArtifactRequestMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        RequestInProcessMessage.class,
-        new JsonLdSerializer<>(RequestInProcessMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        MessageProcessedNotificationMessage.class,
-        new JsonLdSerializer<>(MessageProcessedNotificationMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        DescriptionRequestMessage.class,
-        new JsonLdSerializer<>(DescriptionRequestMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        NotificationMessage.class,
-        new JsonLdSerializer<>(NotificationMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ParticipantUpdateMessage.class,
-        new JsonLdSerializer<>(ParticipantUpdateMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        RejectionMessage.class,
-        new JsonLdSerializer<>(RejectionMessage.class, IdsConstants.CONTEXT));
-
-    typeManager.registerSerializer(
-        "ids",
-        ContractAgreementMessage.class,
-        new JsonLdSerializer<>(ContractAgreementMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ContractRejectionMessage.class,
-        new JsonLdSerializer<>(ContractRejectionMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ContractOfferMessage.class,
-        new JsonLdSerializer<>(ContractOfferMessage.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ContractRequestMessage.class,
-        new JsonLdSerializer<>(ContractRequestMessage.class, IdsConstants.CONTEXT));
-
-    typeManager.registerSerializer(
-        "ids",
-        DynamicAttributeToken.class,
-        new JsonLdSerializer<>(DynamicAttributeToken.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", TokenFormat.class, new JsonLdSerializer<>(TokenFormat.class, IdsConstants.CONTEXT));
-
-    typeManager.registerSerializer(
-        "ids",
-        ContractAgreement.class,
-        new JsonLdSerializer<>(ContractAgreement.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ContractOffer.class,
-        new JsonLdSerializer<>(ContractOffer.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Contract.class, new JsonLdSerializer<>(Contract.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Permission.class, new JsonLdSerializer<>(Permission.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Prohibition.class, new JsonLdSerializer<>(Prohibition.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Duty.class, new JsonLdSerializer<>(Duty.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Action.class, new JsonLdSerializer<>(Action.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        LogicalConstraint.class,
-        new JsonLdSerializer<>(LogicalConstraint.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Constraint.class, new JsonLdSerializer<>(Constraint.class, IdsConstants.CONTEXT));
-
-    typeManager.registerSerializer(
-        "ids", Artifact.class, new JsonLdSerializer<>(Artifact.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        BaseConnector.class,
-        new JsonLdSerializer<>(BaseConnector.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        Representation.class,
-        new JsonLdSerializer<>(Representation.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids", Resource.class, new JsonLdSerializer<>(Resource.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        TypedLiteral.class,
-        new JsonLdSerializer<>(TypedLiteral.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        ResourceCatalog.class,
-        new JsonLdSerializer<>(ResourceCatalog.class, IdsConstants.CONTEXT));
-    typeManager.registerSerializer(
-        "ids",
-        CustomMediaType.class,
-        new JsonLdSerializer<>(CustomMediaType.class, IdsConstants.CONTEXT));
+    registerSerializer(typeManager, ArtifactRequestMessage.class);
+    registerSerializer(typeManager, RequestInProcessMessage.class);
+    registerSerializer(typeManager, MessageProcessedNotificationMessage.class);
+    registerSerializer(typeManager, DescriptionRequestMessage.class);
+    registerSerializer(typeManager, NotificationMessage.class);
+    registerSerializer(typeManager, ParticipantUpdateMessage.class);
+    registerSerializer(typeManager, RejectionMessage.class);
+    registerSerializer(typeManager, ContractAgreementMessage.class);
+    registerSerializer(typeManager, ContractRejectionMessage.class);
+    registerSerializer(typeManager, ContractOfferMessage.class);
+    registerSerializer(typeManager, ContractRequestMessage.class);
+    registerSerializer(typeManager, DynamicAttributeToken.class);
+    registerSerializer(typeManager, TokenFormat.class);
+    registerSerializer(typeManager, ContractAgreement.class);
+    registerSerializer(typeManager, ContractOffer.class);
+    registerSerializer(typeManager, Contract.class);
+    registerSerializer(typeManager, Permission.class);
+    registerSerializer(typeManager, Prohibition.class);
+    registerSerializer(typeManager, Duty.class);
+    registerSerializer(typeManager, Action.class);
+    registerSerializer(typeManager, LogicalConstraint.class);
+    registerSerializer(typeManager, Constraint.class);
+    registerSerializer(typeManager, Artifact.class);
+    registerSerializer(typeManager, BaseConnector.class);
+    registerSerializer(typeManager, Representation.class);
+    registerSerializer(typeManager, Resource.class);
+    registerSerializer(typeManager, TypedLiteral.class);
+    registerSerializer(typeManager, ResourceCatalog.class);
+    registerSerializer(typeManager, CustomMediaType.class);
   }
 
   private void registerCustomConstraintImpl(TypeManager typeManager) {
-    typeManager.registerSerializer(
-        "ids",
-        IdsConstraintImpl.class,
-        new JsonLdSerializer<>(IdsConstraintImpl.class, IdsConstants.CONTEXT));
-    typeManager.registerTypes("ids", IdsConstraintImpl.class);
+    registerSerializer(typeManager, IdsConstraintImpl.class);
+    typeManager.registerTypes(IDS, IdsConstraintImpl.class);
+  }
+
+  private <T> void registerSerializer(TypeManager typeManager, Class<T> clazz) {
+    typeManager.registerSerializer(IDS, clazz, new JsonLdSerializer<>(clazz, IdsConstants.CONTEXT));
   }
 }

@@ -21,52 +21,44 @@
 package org.eclipse.tractusx.edc.tests;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.eclipse.tractusx.edc.tests.data.*;
 
 public class PolicyStepDefs {
 
   @Given("'{connector}' has the following policies")
   public void hasPolicies(Connector connector, DataTable table) throws Exception {
-    final DataManagementAPI api = connector.getDataManagementAPI();
-    final List<Policy> policies = parseDataTable(table);
+    var api = connector.getDataManagementAPI();
+    var policies = table.asMaps().stream().map(this::parseRow).collect(toList());
 
-    for (Policy policy : policies) api.createPolicy(policy);
+    for (var policy : policies) api.createPolicy(policy);
   }
 
-  private List<Policy> parseDataTable(DataTable table) {
-    final List<Policy> policies = new ArrayList<>();
+  private Policy parseRow(Map<String, String> row) {
+    var id = row.get("id");
+    var action = row.get("action");
+    var constraints = new ArrayList<Constraint>();
 
-    for (Map<String, String> map : table.asMaps()) {
-      final String id = map.get("id");
-      final String action = map.get("action");
-
-      List<Constraint> constraints = new ArrayList<>();
-      final String businessPartnerNumber = map.get("businessPartnerNumber");
-      if (businessPartnerNumber != null && !businessPartnerNumber.isBlank()) {
-        var bpnConstraints =
-            stream(businessPartnerNumber.split(","))
-                .map(BusinessPartnerNumberConstraint::new)
-                .collect(Collectors.toList());
-
-        constraints.add(new OrConstraint(bpnConstraints));
-      }
-
-      final String payMe = map.get("payMe");
-      if (payMe != null && !payMe.isBlank())
-        constraints.add(new PayMeConstraint(Double.parseDouble(payMe)));
-
-      final List<Permission> permission = List.of(new Permission(action, null, constraints));
-
-      policies.add(new Policy(id, permission));
+    var businessPartnerNumber = row.get("businessPartnerNumber");
+    if (businessPartnerNumber != null && !businessPartnerNumber.isBlank()) {
+      var bpnConstraints =
+          stream(businessPartnerNumber.split(","))
+              .map(BusinessPartnerNumberConstraint::new)
+              .collect(toList());
+      constraints.add(new OrConstraint(bpnConstraints));
     }
 
-    return policies;
+    var payMe = row.get("payMe");
+    if (payMe != null && !payMe.isBlank())
+      constraints.add(new PayMeConstraint(Double.parseDouble(payMe)));
+
+    var permission = new Permission(action, null, constraints);
+    return new Policy(id, List.of(permission));
   }
 }
