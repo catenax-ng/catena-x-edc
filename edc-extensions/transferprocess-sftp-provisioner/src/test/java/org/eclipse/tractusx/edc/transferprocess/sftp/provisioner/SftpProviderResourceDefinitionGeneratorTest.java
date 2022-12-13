@@ -61,7 +61,7 @@ class SftpProviderResourceDefinitionGeneratorTest {
         (SftpProviderResourceDefinition) generator.generate(dataRequest, dataAddress, policy);
 
     Assertions.assertNotNull(resourceDefinition);
-    final SftpDataAddress sftpDataAddress = resourceDefinition.getDataAddress();
+    final SftpDataAddress sftpDataAddress = resourceDefinition.getSftpDataAddress();
 
     Assertions.assertEquals(PROVIDER_TYPE, resourceDefinition.getProviderType());
     Assertions.assertEquals(host, sftpDataAddress.getSftpLocation().getHost());

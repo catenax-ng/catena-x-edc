@@ -53,7 +53,7 @@ public class NoOpSftpProvisioner
     }
     try {
       SftpDataAddress.fromDataAddress(
-          ((SftpProviderResourceDefinition) resourceDefinition).getDataAddress());
+          ((SftpProviderResourceDefinition) resourceDefinition).getSftpDataAddress());
     } catch (EdcSftpException e) {
       return false;
     }
@@ -95,18 +95,19 @@ public class NoOpSftpProvisioner
           Policy scopedPolicy;
           scopedPolicy = policyEngine.filter(policy, policyScope);
           sftpProvider.createLocation(
-              sftpProviderResourceDefinition.getDataAddress().getSftpLocation());
-          sftpProvider.createUser(sftpProviderResourceDefinition.getDataAddress().getSftpUser());
+              sftpProviderResourceDefinition.getSftpDataAddress().getSftpLocation());
+          sftpProvider.createUser(
+              sftpProviderResourceDefinition.getSftpDataAddress().getSftpUser());
 
           SftpProvisionedContentResource sftpProvisionedContentResource =
               SftpProvisionedContentResource.builder()
-                  .dataAddress(sftpProviderResourceDefinition.getDataAddress())
+                  .dataAddress(sftpProviderResourceDefinition.getSftpDataAddress())
                   .providerType(PROVIDER_TYPE)
                   .scopedPolicy(scopedPolicy)
                   .provisionedResourceId(
                       generateResourceId(
-                          sftpProviderResourceDefinition.getDataAddress().getSftpUser(),
-                          sftpProviderResourceDefinition.getDataAddress().getSftpLocation()))
+                          sftpProviderResourceDefinition.getSftpDataAddress().getSftpUser(),
+                          sftpProviderResourceDefinition.getSftpDataAddress().getSftpLocation()))
                   .build();
 
           return StatusResult.success(

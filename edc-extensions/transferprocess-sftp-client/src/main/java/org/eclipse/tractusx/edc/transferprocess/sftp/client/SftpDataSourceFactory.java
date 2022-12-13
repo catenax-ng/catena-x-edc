@@ -37,22 +37,20 @@ public class SftpDataSourceFactory implements DataSourceFactory {
 
   @Override
   public @NotNull Result<Boolean> validate(DataFlowRequest request) {
-    try {
-      SftpDataAddress.fromDataAddress(request.getSourceDataAddress());
-      return VALID;
-    } catch (EdcSftpException e) {
-      return Result.failure(String.format("Invalid dataflow request: %s", request.getId()));
+    if (!canHandle(request)) {
+      return Result.failure(String.format("Invalid DataFlowRequest: %s", request.getId()));
     }
+
+    return VALID;
   }
 
   @Override
   public DataSource createSource(DataFlowRequest request) {
-    SftpDataAddress source;
-    try {
-      source = SftpDataAddress.fromDataAddress(request.getSourceDataAddress());
-    } catch (EdcSftpException e) {
-      throw new EdcSftpException(String.format("Invalid DataFlowRequest: %s", request.getId()), e);
+    if (!canHandle(request)) {
+      return null;
     }
+
+    SftpDataAddress source = SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
 
     SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder()

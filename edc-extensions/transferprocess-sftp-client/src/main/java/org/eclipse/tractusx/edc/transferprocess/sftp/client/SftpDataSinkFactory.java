@@ -39,22 +39,21 @@ public class SftpDataSinkFactory implements DataSinkFactory {
 
   @Override
   public @NotNull Result<Boolean> validate(DataFlowRequest request) {
-    try {
-      SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
-      return VALID;
-    } catch (EdcSftpException e) {
+    if (!canHandle(request)) {
       return Result.failure(String.format("Invalid DataFlowRequest: %s", request.getId()));
     }
+
+    return VALID;
   }
 
   @Override
   public DataSink createSink(DataFlowRequest request) {
-    SftpDataAddress destination;
-    try {
-      destination = SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
-    } catch (EdcSftpException e) {
-      throw new EdcSftpException(String.format("Invalid DataFlowRequest: %s", request.getId()), e);
+    if (!canHandle(request)) {
+      return null;
     }
+
+    SftpDataAddress destination =
+        SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
 
     SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder()

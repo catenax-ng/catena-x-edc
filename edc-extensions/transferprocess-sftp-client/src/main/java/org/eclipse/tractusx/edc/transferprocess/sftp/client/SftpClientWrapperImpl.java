@@ -81,7 +81,7 @@ public class SftpClientWrapperImpl implements SftpClientWrapper {
     return new SftpInputStreamWrapper(sftpClient, delegateInputStream);
   }
 
-  private static SftpClient getSftpClient(SftpClientConfig config) throws IOException {
+  static SftpClient getSftpClient(SftpClientConfig config) throws IOException {
     final ClientSession session = getSshClientSession(config);
     final SftpClientFactory factory = SftpClientFactory.instance();
     final SftpClient sftpClient = factory.createSftpClient(session);

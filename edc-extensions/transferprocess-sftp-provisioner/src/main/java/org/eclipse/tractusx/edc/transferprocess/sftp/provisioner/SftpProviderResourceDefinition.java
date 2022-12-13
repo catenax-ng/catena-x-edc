@@ -24,7 +24,7 @@ import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 @RequiredArgsConstructor
 public class SftpProviderResourceDefinition extends ResourceDefinition {
   @NonNull private String providerType;
-  @NonNull private SftpDataAddress dataAddress;
+  @NonNull private SftpDataAddress sftpDataAddress;
 
   @Override
   public <R extends ResourceDefinition, B extends Builder<R, B>> B toBuilder() {

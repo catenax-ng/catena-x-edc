@@ -24,10 +24,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class SftpUserKeyPairGenerator {
   public static KeyPair getKeyPairFromPrivateKey(
       byte[] privateKeyBytes, @NonNull String sftpUserName) {
