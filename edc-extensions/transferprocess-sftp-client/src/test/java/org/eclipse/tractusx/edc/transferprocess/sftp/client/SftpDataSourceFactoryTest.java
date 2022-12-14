@@ -71,8 +71,7 @@ class SftpDataSourceFactoryTest {
             "userName", "name",
             "userPassword", "password");
 
-    final DataAddress dataAddress =
-        DataAddress.Builder.newInstance().properties(properties).build();
+    DataAddress dataAddress = DataAddress.Builder.newInstance().properties(properties).build();
     DataFlowRequest request = Mockito.mock(DataFlowRequest.class);
     Mockito.when(request.getSourceDataAddress()).thenReturn(dataAddress);
 

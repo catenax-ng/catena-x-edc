@@ -36,16 +36,16 @@ class SftpClientWrapperTest {
   @Test
   @SneakyThrows
   void uploadFile() {
-    final SftpUser userMock = Mockito.mock(SftpUser.class);
-    final SftpLocation locationMock = Mockito.mock(SftpLocation.class);
-    final SftpClientConfig sftpClientConfig =
+    SftpUser userMock = Mockito.mock(SftpUser.class);
+    SftpLocation locationMock = Mockito.mock(SftpLocation.class);
+    SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder().sftpUser(userMock).sftpLocation(locationMock).build();
-    final SftpClient sftpClientMock = Mockito.mock(SftpClient.class);
-    final SftpClientWrapperImpl sftpClientWrapper =
+    SftpClient sftpClientMock = Mockito.mock(SftpClient.class);
+    SftpClientWrapperImpl sftpClientWrapper =
         Mockito.spy(new SftpClientWrapperImpl(sftpClientConfig, sftpClientMock));
-    final byte[] content = new byte[] {0, 1, 2};
-    final InputStream inputStream = new ByteArrayInputStream(content);
-    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    byte[] content = new byte[] {0, 1, 2};
+    InputStream inputStream = new ByteArrayInputStream(content);
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     Mockito.when(locationMock.getPath()).thenReturn("path");
     Mockito.when(
@@ -61,25 +61,25 @@ class SftpClientWrapperTest {
   @Test
   @SneakyThrows
   void downloadFile() {
-    final SftpUser userMock = Mockito.mock(SftpUser.class);
-    final SftpLocation locationMock = Mockito.mock(SftpLocation.class);
-    final SftpClientConfig sftpClientConfig =
+    SftpUser userMock = Mockito.mock(SftpUser.class);
+    SftpLocation locationMock = Mockito.mock(SftpLocation.class);
+    SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder().sftpUser(userMock).sftpLocation(locationMock).build();
-    final SftpClient sftpClientMock = Mockito.mock(SftpClient.class);
-    final SftpClientWrapperImpl sftpClientWrapper =
+    SftpClient sftpClientMock = Mockito.mock(SftpClient.class);
+    SftpClientWrapperImpl sftpClientWrapper =
         Mockito.spy(new SftpClientWrapperImpl(sftpClientConfig, sftpClientMock));
-    final byte[] content = new byte[] {0, 1, 2};
-    final InputStream inputStream = new ByteArrayInputStream(content);
+    byte[] content = new byte[] {0, 1, 2};
+    InputStream inputStream = new ByteArrayInputStream(content);
 
     Mockito.when(locationMock.getPath()).thenReturn("path");
     Mockito.when(
             sftpClientMock.read(Mockito.anyString(), Mockito.anyInt(), Mockito.anyCollection()))
         .thenReturn(inputStream);
 
-    InputStream resultStream = sftpClientWrapper.downloadFile();
-
-    Assertions.assertArrayEquals(content, resultStream.readAllBytes());
-    Mockito.verify(sftpClientMock, Mockito.times(1))
-        .read("path", 4096, List.of(SftpClient.OpenMode.Read));
+    try (InputStream resultStream = sftpClientWrapper.downloadFile()) {
+      Assertions.assertArrayEquals(content, resultStream.readAllBytes());
+      Mockito.verify(sftpClientMock, Mockito.times(1))
+          .read("path", 4096, List.of(SftpClient.OpenMode.Read));
+    }
   }
 }
