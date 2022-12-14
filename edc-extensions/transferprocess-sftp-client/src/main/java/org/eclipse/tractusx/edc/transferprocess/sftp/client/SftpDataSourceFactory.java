@@ -50,7 +50,7 @@ public class SftpDataSourceFactory implements DataSourceFactory {
       return null;
     }
 
-    SftpDataAddress source = SftpDataAddress.fromDataAddress(request.getDestinationDataAddress());
+    SftpDataAddress source = SftpDataAddress.fromDataAddress(request.getSourceDataAddress());
 
     SftpClientConfig sftpClientConfig =
         SftpClientConfig.builder()

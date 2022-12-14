@@ -34,10 +34,10 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 class SftpDataSourceFactoryTest {
-  private final SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
 
   @Test
   void validate__valid() {
+    SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
     SftpUser sftpUser = SftpUser.builder().name("name").build();
     SftpLocation sftpLocation = SftpLocation.builder().host("host").port(22).path("path").build();
 
@@ -51,6 +51,7 @@ class SftpDataSourceFactoryTest {
 
   @Test
   void validate__invalidDataAddressType() {
+    SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
     DataAddress dataAddress = DataAddress.Builder.newInstance().type("wrong").build();
     DataFlowRequest request = Mockito.mock(DataFlowRequest.class);
     Mockito.when(request.getSourceDataAddress()).thenReturn(dataAddress);
@@ -60,6 +61,7 @@ class SftpDataSourceFactoryTest {
 
   @Test
   void validate__invalidDataAddressParameters() {
+    SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
     final Map<String, String> properties =
         Map.of(
             "type", "sftp",
@@ -80,6 +82,7 @@ class SftpDataSourceFactoryTest {
   @Test
   @SneakyThrows
   void createSink__successful() {
+    SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
     SftpUser sftpUser = SftpUser.builder().name("name").build();
     SftpLocation sftpLocation =
         SftpLocation.builder().host("127.0.0.1").port(22).path("path").build();
@@ -106,6 +109,7 @@ class SftpDataSourceFactoryTest {
   @Test
   @SneakyThrows
   void createSink__invalidDataAddressType() {
+    SftpDataSourceFactory dataSourceFactory = new SftpDataSourceFactory();
     DataAddress dataAddress = DataAddress.Builder.newInstance().type("wrong").build();
     DataFlowRequest request = Mockito.mock(DataFlowRequest.class);
     Mockito.when(request.getSourceDataAddress()).thenReturn(dataAddress);
