@@ -52,13 +52,4 @@ public class SftpProviderResourceDefinitionGenerator
     return true;
   }
 
-  @Override
-  public boolean canGenerate(DataRequest dataRequest, DataAddress dataAddress, Policy policy) {
-    try {
-      SftpDataAddress.fromDataAddress(dataAddress);
-    } catch (EdcSftpException e) {
-      return false;
-    }
-    return true;
-  }
 }

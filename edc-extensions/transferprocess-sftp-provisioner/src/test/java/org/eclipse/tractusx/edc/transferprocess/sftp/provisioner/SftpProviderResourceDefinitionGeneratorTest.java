@@ -85,19 +85,6 @@ class SftpProviderResourceDefinitionGeneratorTest {
     Assertions.assertNull(resourceDefinition);
   }
 
-  @Test
-  void generate__wrongDataAddressType() {
-    final DataRequest dataRequest =
-        DataRequest.Builder.newInstance().destinationType(DATA_ADDRESS_TYPE).build();
-    final DataAddress dataAddress = DataAddress.Builder.newInstance().type("wrong").build();
-    final Policy policy = Policy.Builder.newInstance().build();
-
-    final SftpProviderResourceDefinition resourceDefinition =
-        (SftpProviderResourceDefinition) generator.generate(dataRequest, dataAddress, policy);
-
-    Assertions.assertNull(resourceDefinition);
-  }
-
   @SneakyThrows
   static KeyPair generateKeyPair() {
     final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
