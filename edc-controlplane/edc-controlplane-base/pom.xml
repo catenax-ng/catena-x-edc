@@ -146,6 +146,12 @@
             <artifactId>jwt-spi</artifactId>
         </dependency>
 
+        <!-- Provision -->
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>provision-oauth2</artifactId>
+        </dependency>
+
         <!-- Data-Plane -->
         <dependency>
             <groupId>org.eclipse.edc</groupId>

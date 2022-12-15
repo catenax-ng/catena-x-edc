@@ -1233,6 +1233,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
+                <artifactId>provision-oauth2</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>registration-service</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
