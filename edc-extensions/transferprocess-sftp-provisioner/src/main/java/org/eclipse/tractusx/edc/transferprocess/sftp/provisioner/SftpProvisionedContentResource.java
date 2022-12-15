@@ -27,6 +27,6 @@ import org.eclipse.tractusx.edc.transferprocess.sftp.common.SftpDataAddress;
 public class SftpProvisionedContentResource extends ProvisionedContentResource {
   @NonNull private String providerType;
   @NonNull private Policy scopedPolicy;
-  @NonNull private SftpDataAddress dataAddress;
+  @NonNull private SftpDataAddress sftpDataAddress;
   @NonNull private String provisionedResourceId;
 }

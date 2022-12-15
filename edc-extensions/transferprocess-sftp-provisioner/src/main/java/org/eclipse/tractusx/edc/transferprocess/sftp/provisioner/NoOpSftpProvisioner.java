@@ -74,7 +74,7 @@ public class NoOpSftpProvisioner
 
     try {
       SftpDataAddress.fromDataAddress(
-          ((SftpProvisionedContentResource) provisionedResource).getDataAddress());
+          ((SftpProvisionedContentResource) provisionedResource).getSftpDataAddress());
     } catch (EdcSftpException e) {
       return false;
     }
@@ -101,7 +101,7 @@ public class NoOpSftpProvisioner
 
           SftpProvisionedContentResource sftpProvisionedContentResource =
               SftpProvisionedContentResource.builder()
-                  .dataAddress(sftpProviderResourceDefinition.getSftpDataAddress())
+                  .sftpDataAddress(sftpProviderResourceDefinition.getSftpDataAddress())
                   .providerType(PROVIDER_TYPE)
                   .scopedPolicy(scopedPolicy)
                   .provisionedResourceId(
@@ -128,8 +128,9 @@ public class NoOpSftpProvisioner
           // As of the time of writing, policies don't actually do anything in this context.
           // They are included here in case EDC wants to use them eventually.
           sftpProvider.deleteLocation(
-              sftpProvisionedContentResource.getDataAddress().getSftpLocation());
-          sftpProvider.deleteUser(sftpProvisionedContentResource.getDataAddress().getSftpUser());
+              sftpProvisionedContentResource.getSftpDataAddress().getSftpLocation());
+          sftpProvider.deleteUser(
+              sftpProvisionedContentResource.getSftpDataAddress().getSftpUser());
 
           DeprovisionedResource deprovisionedResource =
               DeprovisionedResource.Builder.newInstance()
