@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.eclipse.tractusx.edc</groupId>
         <artifactId>product-edc-parent</artifactId>
-        <version>0.1.4</version>
+        <version>0.2.0</version>
     </parent>
 
     <artifactId>edc-dataplane</artifactId>

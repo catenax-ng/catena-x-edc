@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2022-12-15
+
+### Fixed
+
+-   Fixed Json LD serialization bug which prevented multi-BPN policies to be defined and used. Checkout the [docs](https://github.com/catenax-ng/product-edc/blob/0.2.0/edc-extensions/business-partner-validation/README.md) for more info.
+
 ## [0.1.3] - 2022-11-30
 
 ### Added
@@ -125,7 +131,9 @@ corresponding [documentation](/docs/migration/Version_0.0.x_0.1.x.md).
 
 ## [0.0.1] - 2022-05-13
 
-[Unreleased]: https://github.com/catenax-ng/product-edc/compare/0.1.3...HEAD
+[Unreleased]: https://github.com/catenax-ng/product-edc/compare/0.2.0...HEAD
+
+[0.2.0]: https://github.com/catenax-ng/product-edc/compare/0.1.3...0.2.0
 
 [0.1.3]: https://github.com/catenax-ng/product-edc/compare/0.1.2...0.1.3
 
