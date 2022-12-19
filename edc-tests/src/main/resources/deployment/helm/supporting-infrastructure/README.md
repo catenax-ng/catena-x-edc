@@ -1,11 +1,63 @@
-# All-In-One Deployment
+# Supporting Infrastructure Deployment
 
-The Product EDC Demo Deployment creates a complete, independent and already configured EDC test environment.
+The Supporting Infrastructure Deployment creates a complete, independent and already configured EDC test environment.
+During the automated business tests, these infrastructure components are deployed together with two connectors (Plato & Sokrates).
 
-This deployment may function as
+This deployment could also be used as
 
 - reference setup for teams, that want to create their own connector
-- standalone test environment to try different things out
+- standalone infrastructure to try things out
+
+This deployment should **never** be used
+
+- in **any** production or near production environments
+- in **any** long living internet facing connector setups
+
+## Components
+
+Overview of the installed components.
+
+![Deployed Components](diagrams/deployed_components.png)
+
+### Omejdn DAPS
+
+The Dynamic Attribute Provisioning Service (DAPS) is a component of the IDS Ecosystem.
+The Fraunhofer Institute has created a DAPS reference implementation, the Omejdn
+DAPS ([link](https://github.com/Fraunhofer-AISEC/omejdn-server)). This deplyoment configures and deployes a instance of
+this reference implementation.
+
+Definition of DAPS from the IDS Reference architecture v3.0
+> The Identity Provider acts as an agent for the International
+> Data Spaces Association. It is responsible for issuing technical identities to parties that have been approved to become
+> Participants in the International Data Spaces. The Identity
+> Provider is instructed to issue identities based on approved
+> roles (e.g., App Store or App Provider). Only if equipped with
+> such an identity, an entity is allowed to participate in the International Data Spaces
+
+Also, please note, that the Omejdn DAPS is meant as research sandbox and should not be used in anq
+productive environment.
+
+> **IMPORTANT:** Omejdn is meant to be a research sandbox in which we can (re)implement standard protocols and
+> potentially extend and modify functionality under the hood to support research projects. Use at your own
+> risk! ([source](https://github.com/Fraunhofer-AISEC/omejdn-server))
+
+### HashiCorp Vault
+
+The Control- and Data Plane persist confidential in the vault and persist and communicate using only the secret
+names. Hence, it is not possible to run a connector without an instance of a vault.
+
+### Backend Application
+
+After a Data Transfer is successfully prepared the control plane will contact the a configurable endpoint with the
+information it needs to initiate the data transfer. This transfer flow, where something like a Backend Application is
+required, is unique to the HTTP Proxy data transfer flow.
+
+The Backend Application has an API endpoint, that is configured in the control plane. After it gets called with the data
+transfer information, it will do the actual data transfer and store the data on disk.
+
+### PostgreSQL
+
+This database is used to persist the state of the Control Plane.
 
 ## Setup
 
@@ -31,64 +83,13 @@ helm dependency update
 **Install Demo Chart**
 
 ```bash
-helm install edc-all-in-one --namespace edc-all-in-one --create-namespace .
+helm install tx-infrastructure --namespace tx --create-namespace .
 ```
-
-This will deploy the following components:
-
-![Deployed Components](diagrams/deployed_components.png)
 
 ## Stop Demo Environment
 
 **Uninstall Demo Chart**
 
 ```bash
-helm uninstall edc-all-in-one --namespace edc-all-in-one
+helm uninstall tx-infrastructure --namespace tx
 ```
-
-## Components
-
-Overview of the installed components.
-
-### EDC Control Plane
-
-The EDC Control Plane does
-
-- data/contract offering
-- contract negotiation
-- data transfer coordination
-
-Two control planes always talk to each other using IDS messages. Therefore, when telling one connector to talk to
-another connector, the target endpoint must point to the IDS API (e.g `http://[myTargetConnector].com/api/v1/ids`).
-
-The connector owner should only talk to the control plane via the Data Management API. The API is not only used for
-simple data management, but for initiating inter-connector communication as well.
-
-### EDC Data Plane
-
-The EDC Data Plane is used for the actual data transfer.
-
-At the time of writing the Data Plane may only function as HTTP proxy and does not support any other type of
-transfer. Additional transfer capabilities could be added by including new EDC extensions in the Data Plane application.
-
-### PostgreSQL
-
-This database is used to persist the state of the Control Plane.
-
-### HashiCorp Vault
-
-The Control- and Data Plane will persist confidential in the vault and persist and communicate using only the secret
-names.
-
-### Backend Application
-
-After a Data Transfer is successfully prepared the control plane will contact the a configurable endpoint with the
-information it needs to initiate the data transfer. This transfer flow, where something like a Backend Application is
-required, is unique to the HTTP Proxy data transfer flow.
-
-The Backend Application has an API endpoint, that is configured in the control plane. After it gets called with the data
-transfer information, it will do the actual data transfer and store the data on disk.
-
-### Omejdn DAPS
-
-Instead of the Catena-X DAPS this demo configures and deploys it's own DAPS instance.
