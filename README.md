@@ -91,6 +91,7 @@ Derivatives of the Data-Plane can be found here
 ### Build
 
 Build Product-EDC Container Images
+
 ```shell
 ./mvnw package -Pwith-docker-image
 ```
