@@ -9,7 +9,7 @@
 ### Configuration
 
 Listed below are configuration keys needed to get the `edc-controlplane-postgresql-hashicorp-vault` up and running.
-Details regarding each configuration property can be found at the [documentary section of the EDC](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/tree/main/docs).
+Details regarding each configuration property can be found at the [documentary section of the EDC](https://github.com/eclipse-edc/Connector/tree/main/docs).
 
 | Key  	                                                | Required  | Example | Description |
 |---	                                                |---	    |---	  |---          |

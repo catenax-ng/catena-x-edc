@@ -212,7 +212,7 @@ opentelemetry:
     otel.javaagent.debug=false
 
 configuration:
-  # -- EDC configuration.properties configuring aspects of the [eclipse-dataspaceconnector](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector)
+  # -- EDC configuration.properties configuring aspects of the [eclipse-dataspaceconnector](https://github.com/eclipse-edc/Connector)
   properties: |-
     # edc.atomikos.checkpoint.interval=
     # edc.atomikos.directory=
