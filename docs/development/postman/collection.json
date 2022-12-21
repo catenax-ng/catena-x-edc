@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0e923447-f09f-4cd9-8d2f-5bd4a09d378e",
+		"_postman_id": "17367045-5915-431f-87ab-974e178f35a6",
 		"name": "EDC",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -393,7 +393,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{CONSUMER_DATAMGMT_URL}}/data/catalog?providerUrl={{PROVIDER_IDS_URL}}/api/v1/ids/data",
+					"raw": "{{CONSUMER_DATAMGMT_URL}}/data/catalog?providerUrl={{PROVIDER_IDS_URL}}/api/v1/ids/data&size=50",
 					"host": [
 						"{{CONSUMER_DATAMGMT_URL}}"
 					],
@@ -405,7 +405,39 @@
 						{
 							"key": "providerUrl",
 							"value": "{{PROVIDER_IDS_URL}}/api/v1/ids/data"
+						},
+						{
+							"key": "size",
+							"value": "50"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Catalog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"providerUrl\": \"{{PROVIDER_IDS_URL}}/api/v1/ids/data\",\r\n    \"querySpec\": {\r\n        \"offset\": 0,\r\n        \"limit\": 100,\r\n        \"filter\": \"\",\r\n        \"range\": {\r\n            \"from\": 0,\r\n            \"to\": 100\r\n        },\r\n        \"sortOrder\": \"ASC\",\r\n        \"sortField\": \"\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_DATAMGMT_URL}}/data/catalog/request",
+					"host": [
+						"{{CONSUMER_DATAMGMT_URL}}"
+					],
+					"path": [
+						"data",
+						"catalog",
+						"request"
 					]
 				}
 			},
@@ -415,33 +447,27 @@
 			"name": "Negotation",
 			"event": [
 				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.collectionVariables.set(\"AGREEMENT_ID\", jsonData.contractAgreementId);",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"connectorId\": \"foo\",\n    \"connectorAddress\": \"{{PROVIDER_IDS_URL}}/api/v1/ids/data\",\n    \"offer\": {\n        \"offerId\": \"{{POLICY_ID}}:foo\",\n        \"assetId\": \"{{ASSET_ID}}\",\n        \"policy\": {\n            \"prohibitions\": [],\n            \"obligations\": [],\n            \"permissions\": [\n                {\n                    \"edctype\": \"dataspaceconnector:permission\",\n                    \"action\": {\n                        \"type\": \"USE\"\n                    },\n                    \"target\": \"{{ASSET_ID}}\",\n                    \"constraints\": []\n                }\n            ]\n        }\n    }\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
 					"raw": "{{CONSUMER_DATAMGMT_URL}}/data/contractnegotiations/{{NEGOTIATION_ID}}",
 					"host": [
@@ -478,7 +504,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"connectorId\": \"foo\",\n    \"connectorAddress\": \"{{PROVIDER_IDS_URL}}/api/v1/ids/data\",\n    \"offer\": {\n        \"offerId\": \"{{POLICY_ID}}:foo\",\n        \"assetId\": \"{{ASSET_ID}}\",\n        \"policy\": {\n            \"prohibitions\": [],\n            \"obligations\": [],\n            \"permissions\": [\n                {\n                    \"edctype\": \"dataspaceconnector:permission\",\n                    \"action\": {\n                        \"type\": \"USE\"\n                    },\n                    \"target\": \"{{ASSET_ID}}\",\n                    \"constraints\": []\n                }\n            ]\n        }\n    }\n}",
+					"raw": "{\n    \"connectorId\": \"foo\",\n    \"connectorAddress\": \"{{PROVIDER_IDS_URL}}/api/v1/ids/data\",\n    \"offer\": {\n        \"offerId\": \"{{CONTRACT_DEFINITION_ID}}:foo\",\n        \"assetId\": \"{{ASSET_ID}}\",\n        \"policy\": {\n            \"prohibitions\": [],\n            \"obligations\": [],\n            \"permissions\": [\n                {\n                    \"edctype\": \"dataspaceconnector:permission\",\n                    \"action\": {\n                        \"type\": \"USE\"\n                    },\n                    \"target\": \"{{ASSET_ID}}\",\n                    \"constraints\": []\n                }\n            ]\n        }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -670,29 +696,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Data (Test Setup Only)",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Accept",
-						"value": "application/octet-stream",
-						"type": "default"
-					}
-				],
-				"url": {
-					"raw": "{{CONSUMER_BACKEND_URL}}/{{TRANSFER_ID}}",
-					"host": [
-						"{{CONSUMER_BACKEND_URL}}"
-					],
-					"path": [
-						"{{TRANSFER_ID}}"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {
@@ -700,7 +703,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "password",
+				"value": "",
 				"type": "string"
 			},
 			{
@@ -733,20 +736,15 @@
 	"variable": [
 		{
 			"key": "CONSUMER_DATAMGMT_URL",
-			"value": "http://192.168.49.2:31639"
+			"value": "https://sokrates-txdc.int.demo.catena-x.net"
 		},
 		{
 			"key": "PROVIDER_IDS_URL",
-			"value": "http://plato-edc-controlplane:8282"
+			"value": "https://plato-txdc.int.demo.catena-x.net"
 		},
 		{
 			"key": "PROVIDER_DATAMGMT_URL",
-			"value": "http://192.168.49.2:31495"
-		},
-		{
-			"key": "CONSUMER_BACKEND_URL",
-			"value": "http://192.168.49.2:31612",
-			"type": "default"
+			"value": "https://plato-txdc.int.demo.catena-x.net"
 		},
 		{
 			"key": "ASSET_ID",
