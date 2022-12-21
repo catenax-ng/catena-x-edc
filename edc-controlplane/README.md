@@ -32,7 +32,7 @@ As it is possible to configure EDC settings via environment variables, one way t
 
 Please have a look at the open issues in the open source repository. The list below might not be maintained well and
 only contains the most important issues.
-EDC Github Repository https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues
+EDC Github Repository https://github.com/eclipse-edc/Connector/issues
 
 ---
 
@@ -42,8 +42,8 @@ EDC commit the Product-EDC uses.
 ---
 
 **Persistence**
-- ContractDefinition-AssetSelector of InMemory Connector selects 50 Asset max.([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1779))
+- ContractDefinition-AssetSelector of InMemory Connector selects 50 Asset max.([issue](https://github.com/eclipse-edc/Connector/issues/1779))
 
 **Other**
-- Non-IDS-Transformable-ContractDefinition causes connector to be unable to send out self-descriptions/catalogs([issue](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector/issues/1265))
+- Non-IDS-Transformable-ContractDefinition causes connector to be unable to send out self-descriptions/catalogs([issue](https://github.com/eclipse-edc/Connector/issues/1265))
   - **Workaround:** Delete non-transformable ContractDefinition or Policy.
