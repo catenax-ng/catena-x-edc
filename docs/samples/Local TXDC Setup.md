@@ -43,8 +43,15 @@ set can be skipped, as it's only used by AWS S3 Transfer Business Tests. Also, t
 mandatory to try out the EDC. So it can be disabled as well.
 
 ```sh
-helm install -n tractusx infrastructure edc-tests/src/main/resources/deployment/helm/supporting-infrastructure \
-  --set install.minio=false  --set install.postgresql=false
+helm dependency update edc-tests/src/main/resources/deployment/helm/supporting-infrastructure
+```
+
+```sh
+helm install infrastructure edc-tests/src/main/resources/deployment/helm/supporting-infrastructure \
+    --namespace tractusx \
+    --create-namespace \
+    --set install.minio=false \
+    --set install.postgresql=false
 ```
 
 ### Plato Connector
@@ -55,7 +62,9 @@ Deployment has a DAPS Client and Vault Secrets configured accordingly. So that t
 Install Plato by running the following command from the project root directory.
 
 ```sh
-helm install -n tractusx plato charts/tractusx-connector  \
+helm install plato charts/tractusx-connector \
+    --namespace tractusx \
+    --create-namespace \
     --set fullnameOverride=plato \
     --set controlplane.service.type=NodePort \
     --set controlplane.endpoints.data.authKey=password \
@@ -85,7 +94,9 @@ Client ID with different public-/private keys.
 Install Sokrates by running the following command from the project root directory.
 
 ```shell
-helm install -n tractusx sokrates charts/tractusx-connector  \
+helm install sokrates charts/tractusx-connector  \
+    --namespace tractusx \
+    --create-namespace \
     --set fullnameOverride=sokrates \
     --set controlplane.service.type=NodePort \
     --set controlplane.endpoints.data.authKey=password \
