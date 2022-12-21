@@ -42,13 +42,13 @@ dependencies:
   # PostgreSQL
   - name: postgresql
     alias: plato-postgresql
-    version: 11.2.4
+    version: 12.1.6
     repository: https://charts.bitnami.com/bitnami
     condition: install.postgresql
 
   - name: postgresql
     alias: sokrates-postgresql
-    version: 11.2.4
+    version: 12.1.6
     repository: https://charts.bitnami.com/bitnami
     condition: install.postgresql
 
