@@ -7,7 +7,7 @@ A Helm chart for Tractus-X Eclipse Data Space Connector
 ## TL;DR
 ```shell
 $ helm repo add catenax-ng-product-edc https://catenax-ng.github.io/product-edc
-$ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --version 0.2.0
+$ helm install tractusx-connector catenax-ng-product-edc/tractusx-connector --version 0.2.0
 ```
 
 ## Values
@@ -112,7 +112,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | controlplane.service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to expose the running application on a set of Pods as a network service. |
 | controlplane.tolerations | list | `[]` |  |
 | controlplane.url.ids | string | `""` | Explicitly declared url for reaching the ids api (e.g. if ingresses not used) |
-| controlplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container  |
+| controlplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container |
 | controlplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | customLabels | object | `{}` |  |
 | daps.clientId | string | `""` |  |
@@ -193,7 +193,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | dataplane.service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to expose the running application on a set of Pods as a network service. |
 | dataplane.tolerations | list | `[]` |  |
 | dataplane.url.public | string | `""` | Explicitly declared url for reaching the public api (e.g. if ingresses not used) |
-| dataplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container  |
+| dataplane.volumeMounts | list | `[]` | declare where to mount [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) into the container |
 | dataplane.volumes | list | `[]` | [volume](https://kubernetes.io/docs/concepts/storage/volumes/) directories |
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` | Existing image pull secret to use to [obtain the container image from private registries](https://kubernetes.io/docs/concepts/containers/images/#using-a-private-registry) |
@@ -212,7 +212,7 @@ $ helm install tractus-x-connector catenax-ng-product-edc/tractus-x-connector --
 | vault.azure.name | string | `""` |  |
 | vault.azure.secret | string | `""` |  |
 | vault.azure.tenant | string | `""` |  |
-| vault.hashicorp.enabled | bool | `true` |  |
+| vault.hashicorp.enabled | bool | `false` |  |
 | vault.hashicorp.healthCheck.enabled | bool | `true` |  |
 | vault.hashicorp.healthCheck.standbyOk | bool | `true` |  |
 | vault.hashicorp.paths.health | string | `"/v1/sys/health"` |  |
