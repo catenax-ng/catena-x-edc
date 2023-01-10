@@ -80,7 +80,7 @@
         <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
 
         <!-- test dependency version -->
-        <junit.jupiter.version>5.9.1</junit.jupiter.version>
+        <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
         <cucumber.version>7.10.1</cucumber.version>
         <io.rest.assured.version>5.3.0</io.rest.assured.version>
