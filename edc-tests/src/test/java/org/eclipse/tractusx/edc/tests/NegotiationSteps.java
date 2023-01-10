@@ -43,8 +43,8 @@ public class NegotiationSteps {
 
   private ContractNegotiation lastInitiatedNegotiation;
 
-  @When("'{connector}' sends '{connector}' a counter offer without constraints")
-  public void sendOfferWithoutConstraints(Connector sender, Connector receiver, DataTable table)
+  @When("'{connector}' sends '{connector}' an offer without constraints")
+  public void sendAnOfferWithoutConstraints(Connector sender, Connector receiver, DataTable table)
       throws IOException {
 
     final DataManagementAPI dataManagementAPI = sender.getDataManagementAPI();

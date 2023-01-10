@@ -48,8 +48,11 @@ public class ContractDefinitionStepDefs {
       String assetId = map.get("asset");
       List<String> assetIds = assetId == null ? new ArrayList<>() : List.of(assetId);
 
+      String mapValidity = map.get("validity");
+      Long validity = mapValidity == null ? null : Long.parseLong(mapValidity);
+
       contractDefinitions.add(
-          new ContractDefinition(id, contractPolicyId, accessPolicyId, assetIds));
+          new ContractDefinition(id, contractPolicyId, accessPolicyId, assetIds, validity));
     }
 
     return contractDefinitions;
