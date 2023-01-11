@@ -106,7 +106,7 @@
 
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>data-plane-transfer-client</artifactId>
+            <artifactId>transfer-data-plane</artifactId>
         </dependency>
     </dependencies>
 

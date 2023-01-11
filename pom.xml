@@ -72,11 +72,11 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.edc.version>0.0.1-20221201-SNAPSHOT</org.eclipse.edc.version>
+        <org.eclipse.edc.version>0.0.1-20230109-SNAPSHOT</org.eclipse.edc.version>
         <com.azure.sdk.bom.version>1.2.8</com.azure.sdk.bom.version>
         <org.postgresql.version>42.5.1</org.postgresql.version>
         <org.flywaydb.version>9.11.0</org.flywaydb.version>
-        <com.nimbus.jose.jwt.version>8.23</com.nimbus.jose.jwt.version>
+        <com.nimbus.jose.jwt.version>9.28</com.nimbus.jose.jwt.version>
         <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
 
         <!-- test dependency version -->
@@ -916,17 +916,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
-                <artifactId>data-plane-transfer</artifactId>
-                <version>${org.eclipse.edc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.edc</groupId>
-                <artifactId>data-plane-transfer-client</artifactId>
-                <version>${org.eclipse.edc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.edc</groupId>
-                <artifactId>data-plane-transfer-spi</artifactId>
+                <artifactId>transfer-data-plane-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
                 <exclusions>
                     <exclusion>
@@ -949,7 +939,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
-                <artifactId>data-plane-transfer-sync</artifactId>
+                <artifactId>transfer-data-plane</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>
@@ -1012,7 +1002,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
-                <artifactId>http-receiver</artifactId>
+                <artifactId>transfer-pull-http-receiver</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>

@@ -22,7 +22,7 @@ package org.eclipse.tractusx.edc.data.encryption;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eclipse.edc.connector.dataplane.transfer.spi.security.DataEncrypter;
+import org.eclipse.edc.connector.transfer.dataplane.spi.security.DataEncrypter;
 import org.eclipse.edc.runtime.metamodel.annotation.Provides;
 import org.eclipse.edc.runtime.metamodel.annotation.Requires;
 import org.eclipse.edc.spi.EdcException;

@@ -103,7 +103,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>data-plane-transfer-spi</artifactId>
+            <artifactId>transfer-data-plane-spi</artifactId>
         </dependency>
 
         <!-- External Dependencies -->

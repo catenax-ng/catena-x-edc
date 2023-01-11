@@ -159,7 +159,7 @@
         <!-- Data-Plane -->
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>data-plane-transfer-sync</artifactId>
+            <artifactId>transfer-data-plane</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
@@ -172,10 +172,6 @@
         <dependency>
             <groupId>org.eclipse.edc</groupId>
             <artifactId>data-plane-selector-spi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.edc</groupId>
-            <artifactId>data-plane-transfer-client</artifactId>
         </dependency>
 
         <!-- Telemetry -->
@@ -206,7 +202,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>http-receiver</artifactId>
+            <artifactId>transfer-pull-http-receiver</artifactId>
         </dependency>
 
         <!-- patch versions -->
