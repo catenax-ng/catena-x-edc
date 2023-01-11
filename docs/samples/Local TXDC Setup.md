@@ -48,7 +48,7 @@ helm dependency update edc-tests/src/main/resources/deployment/helm/supporting-i
 
 ```sh
 helm install infrastructure edc-tests/src/main/resources/deployment/helm/supporting-infrastructure \
-    --namespace tractusx \
+    --namespace cx \
     --create-namespace \
     --set install.minio=false \
     --set install.postgresql=false
@@ -63,9 +63,10 @@ Install Plato by running the following command from the project root directory.
 
 ```sh
 helm install plato charts/tractusx-connector \
-    --namespace tractusx \
+    --namespace cx \
     --create-namespace \
     --set fullnameOverride=plato \
+    --set controlplane.image.tag=0.2.0 \
     --set controlplane.service.type=NodePort \
     --set controlplane.endpoints.data.authKey=password \
     --set vault.hashicorp.enabled=true \
@@ -82,7 +83,7 @@ helm install plato charts/tractusx-connector \
 ```
 
 The different settings are explained in the [TXDC Connector](../../charts/tractusx-connector/README.md) documentation.
-Basically this deployment overrides the full name, wo avoid naming conflicts, and sets a NodePort, to access the
+Basically this deployment overrides the full name, to avoid naming conflicts, and sets a NodePort, to access the
 containers from outside the local Kubernetes cluster. Then it configures a DAPS instance and the corresponding vault,
 where the DAPS secrets are persisted, so that the connector has its own identity.
 
@@ -95,9 +96,10 @@ Install Sokrates by running the following command from the project root director
 
 ```shell
 helm install sokrates charts/tractusx-connector  \
-    --namespace tractusx \
+    --namespace cx \
     --create-namespace \
     --set fullnameOverride=sokrates \
+    --set controlplane.image.tag=0.2.0 \
     --set controlplane.service.type=NodePort \
     --set controlplane.endpoints.data.authKey=password \
     --set vault.hashicorp.enabled=true \
@@ -111,4 +113,12 @@ helm install sokrates charts/tractusx-connector  \
     --set daps.url=http://ids-daps:4567 \
     --set daps.clientId=E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65:keyid:E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65 \
     --set backendService.httpProxyTokenReceiverUrl=http://backend:8080
+```
+
+## Uninstall
+
+```shell
+helm uninstall --namespace cx infrastructure
+helm uninstall --namespace cx plato
+helm uninstall --namespace cx sokrates
 ```
