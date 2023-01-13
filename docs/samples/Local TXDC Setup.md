@@ -2,7 +2,7 @@
 
 This document describes how to set up two TXDConnector instances locally. The Supporting Infrastructure Deployment, used
 by this
-example, must never be used publicy. The deployment of the two TXDConnector instances, done by this example, is not
+example, must never be used productively. The deployment of the two TXDConnector instances, done by this example, is not
 suitable for
 productive deployment scenarios.
 
@@ -14,7 +14,7 @@ productive deployment scenarios.
 
 ## Local Deployment
 
-The Local TXDC Setup consists of three separate deployments. One time the Supporting Infrastructure, that is required to
+The Local TXDC Setup consists of three separate deployments. The Supporting Infrastructure, that is required to
 run connectors, and two different TXDC Connector instances, that can communicate with each other.
 
 - [TXDC Supporting Infrastructure](../../edc-tests/src/main/resources/deployment/helm/supporting-infrastructure/README.md)
@@ -31,10 +31,10 @@ run connectors, and two different TXDC Connector instances, that can communicate
 
 ### Supporting Infrastructure
 
-Before the connectors can be setup, the Supporting Infrastructure must be in place. The TXDConnector configuration must
-match the different supporting infrastructure components.
+Before the connectors can be setup, the Supporting Infrastructure must be in place. It comes with pre-configured with
+everything to run two connectors independently.
 
-For the local test scenario,
+For this local test scenario,
 the [Supporting Infrastructure](../../edc-tests/src/main/resources/deployment/helm/supporting-infrastructure/README.md)
 of the TXDC Business Tests can be used.
 
@@ -112,3 +112,5 @@ helm install sokrates charts/tractusx-connector  \
     --set daps.clientId=E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65:keyid:E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65 \
     --set backendService.httpProxyTokenReceiverUrl=http://backend:8080
 ```
+
+> To try out the local setup, have a look at the [Transfer Example Documentation](Transfer%20Data.md)
