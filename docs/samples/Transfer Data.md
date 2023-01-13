@@ -158,9 +158,7 @@ Let's assume we will use Sokrates as Bob, and Plato as Alice.
 Set up a data offer in **Bob**, so that **Alice** has something to consume.
 
 In case you are unfamiliar with the EDC terms `Asset`, `Policy` or `ContractDefinition` please have a look at the
-official open
-source
-documentation ([link](https://github.com/eclipse-edc/Connector/blob/main/docs/developer/architecture/domain-model.md)).
+official open source documentation ([link](https://github.com/eclipse-edc/Connector/blob/main/docs/developer/architecture/domain-model.md)).
 
 ![Sequence 1](diagrams/transfer_sequence_1.png)
 
