@@ -99,6 +99,10 @@
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
             <artifactId>postgresql-migration</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+            <artifactId>data-encryption</artifactId>
+        </dependency>
 
         <!-- Stores -->
         <dependency>

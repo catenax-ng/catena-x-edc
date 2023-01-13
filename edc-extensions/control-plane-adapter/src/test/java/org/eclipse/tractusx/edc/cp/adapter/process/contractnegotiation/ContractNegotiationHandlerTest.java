@@ -116,7 +116,7 @@ public class ContractNegotiationHandlerTest {
         .assetId("assetId")
         .provider("provider")
         .catalogExpiryTime(30)
-        .contractAgreementCacheOn(true)
+        .contractAgreementReuseOn(true)
         .build();
   }
 

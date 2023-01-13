@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eclipse.edc.connector.dataplane.selector.spi.DataPlaneSelectorService;
-import org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstanceImpl;
+import org.eclipse.edc.connector.dataplane.selector.spi.instance.DataPlaneInstance;
 import org.eclipse.edc.runtime.metamodel.annotation.Requires;
 import org.eclipse.edc.spi.EdcException;
 import org.eclipse.edc.spi.monitor.Monitor;
@@ -180,8 +180,8 @@ public class DataPlaneSelectorConfigurationServiceExtension implements ServiceEx
       return;
     }
 
-    final DataPlaneInstanceImpl.Builder builder =
-        DataPlaneInstanceImpl.Builder.newInstance().id(id).url(url);
+    final DataPlaneInstance.Builder builder =
+        DataPlaneInstance.Builder.newInstance().id(id).url(url);
 
     sourceTypes.forEach(builder::allowedSourceType);
     destinationTypes.forEach(builder::allowedDestType);

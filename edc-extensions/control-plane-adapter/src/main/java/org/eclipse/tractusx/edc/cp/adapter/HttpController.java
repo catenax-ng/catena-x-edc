@@ -45,14 +45,14 @@ public class HttpController {
       @PathParam("assetId") String assetId,
       @QueryParam("providerUrl") String providerUrl,
       @QueryParam("contractAgreementId") String contractAgreementId,
-      @QueryParam("contractAgreementCache") String contractAgreementCache) {
+      @QueryParam("contractAgreementReuse") String contractAgreementReuse) {
 
     if (invalidParams(assetId, providerUrl)) {
       return badRequestResponse();
     }
 
     String traceId =
-        initiateProcess(assetId, providerUrl, contractAgreementId, contractAgreementCache);
+        initiateProcess(assetId, providerUrl, contractAgreementId, contractAgreementReuse);
 
     try {
       ProcessData processData = resultService.pull(traceId);
@@ -87,13 +87,13 @@ public class HttpController {
       String assetId,
       String providerUrl,
       String contractAgreementId,
-      String contractAgreementCache) {
+      String contractAgreementReuse) {
     ProcessData processData =
         ProcessData.builder()
             .assetId(assetId)
             .provider(providerUrl)
             .contractAgreementId(contractAgreementId)
-            .contractAgreementCacheOn(isContractAgreementCacheOn(contractAgreementCache))
+            .contractAgreementReuseOn(isContractAgreementReuseOn(contractAgreementReuse))
             .catalogExpiryTime(config.getCatalogExpireAfterTime())
             .build();
 
@@ -103,8 +103,8 @@ public class HttpController {
     return message.getTraceId();
   }
 
-  private boolean isContractAgreementCacheOn(String contractAgreementCache) {
-    return !"0".equals(contractAgreementCache) && config.isContractAgreementCacheOn();
+  private boolean isContractAgreementReuseOn(String contractAgreementReuse) {
+    return !"0".equals(contractAgreementReuse) && config.isContractAgreementReuseOn();
   }
 
   private Response notFoundResponse() {

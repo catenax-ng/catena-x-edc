@@ -34,7 +34,7 @@ public class ProcessData {
   private final String provider;
   private String contractOfferId;
   private int catalogExpiryTime;
-  private boolean contractAgreementCacheOn;
+  private boolean contractAgreementReuseOn;
 
   // contract data
   @Setter private String contractNegotiationId;
