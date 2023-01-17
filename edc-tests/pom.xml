@@ -189,10 +189,6 @@
                 </dependency>
                 <dependency>
                     <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-                    <artifactId>custom-jsonld</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.tractusx.edc.extensions</groupId>
                     <artifactId>transferprocess-sftp-client</artifactId>
                 </dependency>
                 <dependency>

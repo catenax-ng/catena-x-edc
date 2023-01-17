@@ -77,10 +77,6 @@
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
             <artifactId>control-plane-adapter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-            <artifactId>custom-jsonld</artifactId>
-        </dependency>
 
         <!-- Core -->
         <dependency>
