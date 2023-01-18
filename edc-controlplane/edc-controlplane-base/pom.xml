@@ -198,7 +198,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>transfer-pull-http-receiver</artifactId>
+            <artifactId>transfer-pull-http-dynamic-receiver</artifactId>
         </dependency>
 
         <!-- patch versions -->

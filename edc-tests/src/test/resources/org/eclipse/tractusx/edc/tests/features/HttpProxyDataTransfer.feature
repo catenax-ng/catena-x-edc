@@ -38,6 +38,6 @@ Feature: HttpProxy Data Transfer
       | contract offer id     | asset id | policy id |
       | contract-definition-1 | asset-1  | policy-1  |
     And 'Sokrates' initiates HttpProxy transfer from 'Plato'
-      | asset id |
-      | asset-1  |
+      | asset id | receiverHttpEndpoint |
+      | asset-1  | http://backend:8080  |
     Then the backend application of 'Sokrates' has received data

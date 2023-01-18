@@ -23,6 +23,7 @@ public class HttpProxyTransferSteps {
   private static final String BASE_URL = "baseUrl";
   private static final String DEFINITION_ID = "definition id";
   private static final String ASSET_ID = "asset id";
+  private static final String RECEIVER_HTTP_ENDPOINT = "receiverHttpEndpoint";
 
   @Given("'{connector}' has a http proxy assets")
   public void hasAssets(Connector connector, DataTable table) throws Exception {
@@ -52,8 +53,10 @@ public class HttpProxyTransferSteps {
 
     for (var map : dataTable.asMaps()) {
       final String assetId = map.get(ASSET_ID);
+      final String receiverHttpEndpoint = map.get(RECEIVER_HTTP_ENDPOINT);
       final Transfer transfer =
-          api.initiateTransferProcess(receiverUrl, agreementId, assetId, dataAddress);
+          api.initiateTransferProcess(
+              receiverUrl, agreementId, assetId, dataAddress, receiverHttpEndpoint);
 
       transfer.waitUntilComplete(api);
     }
