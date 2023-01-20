@@ -122,7 +122,7 @@ public class S3FileTransferStepsDefs {
 
     final Transfer transferProcess =
         dataManagementAPI.initiateTransferProcess(
-            receiverIdsUrl, agreementId, assetId, dataAddress, null);
+            receiverIdsUrl, agreementId, assetId, dataAddress);
     transferProcess.waitUntilComplete(dataManagementAPI);
 
     Assertions.assertNotNull(transferProcess.getId());

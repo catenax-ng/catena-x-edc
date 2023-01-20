@@ -110,6 +110,25 @@ public class DataManagementAPI {
       String receivingConnectorUrl,
       String contractAgreementId,
       String assetId,
+      DataAddress dataAddress)
+      throws IOException {
+    final ManagementApiTransfer transfer = new ManagementApiTransfer();
+
+    transfer.connectorAddress = receivingConnectorUrl;
+    transfer.contractId = contractAgreementId;
+    transfer.assetId = assetId;
+    transfer.transferType = new ManagementApiTransferType();
+    transfer.managedResources = false;
+    transfer.dataDestination = mapDataAddress(dataAddress);
+    transfer.protocol = "ids-multipart";
+
+    return initiateTransferProcess(transfer);
+  }
+
+  public Transfer initiateTransferProcess(
+      String receivingConnectorUrl,
+      String contractAgreementId,
+      String assetId,
       DataAddress dataAddress,
       String receiverEndpoint)
       throws IOException {
@@ -124,6 +143,10 @@ public class DataManagementAPI {
     transfer.protocol = "ids-multipart";
     transfer.properties = new ManagementApiProperties(receiverEndpoint);
 
+    return initiateTransferProcess(transfer);
+  }
+
+  private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
     final ManagementApiTransferResponse response =
         post(TRANSFER_PATH, transfer, new TypeToken<ManagementApiTransferResponse>() {});
 
