@@ -34,7 +34,7 @@ Definition of DAPS from the IDS Reference architecture v3.0
 > roles (e.g., App Store or App Provider). Only if equipped with
 > such an identity, an entity is allowed to participate in the International Data Spaces
 
-Also, please note, that the Omejdn DAPS is meant as research sandbox and should not be used in anq
+Also, please note, that the Omejdn DAPS is meant as research sandbox and should not be used in any
 productive environment.
 
 > **IMPORTANT:** Omejdn is meant to be a research sandbox in which we can (re)implement standard protocols and

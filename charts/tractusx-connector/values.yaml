@@ -227,9 +227,9 @@ controlplane:
   autoscaling:
     # -- Enables [horizontal pod autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
     enabled: false
-    # -- Minimal replicas if resource consumption falls below resource threshholds
+    # -- Minimal replicas if resource consumption falls below resource thresholds
     minReplicas: 1
-    # -- Maximum replicas if resource consumption exceeds resource threshholds
+    # -- Maximum replicas if resource consumption exceeds resource thresholds
     maxReplicas: 100
     # -- targetAverageUtilization of cpu provided to a pod
     targetCPUUtilizationPercentage: 80
