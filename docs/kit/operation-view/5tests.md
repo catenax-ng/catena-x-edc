@@ -2,8 +2,15 @@
 
 ## Automated Business Test
 
-## Create Asset, policy, contract definition
-API reference (help!!!!)
+In addition to unit and integration testing, our EDC releases undergo end-to-end testing.
+You can run these business tests against your local environment via Maven:
 
-## Data Transfer ???????????
-hope that s3 extension saves us
+```shell
+./mvnw -pl edc-tests -Pbusiness-tests -pl edc-tests test -Dtest=net.catenax.edc.tests.features.RunCucumberTest
+```
+
+You can also run the entire test cycle via [ACT](https://github.com/nektos/act):
+
+```shell
+act -j business-test
+```
