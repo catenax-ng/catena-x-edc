@@ -51,6 +51,7 @@ public class DataManagementAPI {
   private static final String CATALOG_PATH = "/catalog";
   private static final String NEGOTIATIONS_PATH = "/contractnegotiations";
   private static final String TRANSFER_PATH = "/transferprocess";
+  private static final String ADAPTER_PATH = "/adapter";
 
   private final String dataMgmtUrl;
   private final String dataMgmtAuthKey;
@@ -174,6 +175,19 @@ public class DataManagementAPI {
 
   public void createContractDefinition(ContractDefinition contractDefinition) throws IOException {
     post(CONTRACT_DEFINITIONS_PATH, mapContractDefinition(contractDefinition));
+  }
+
+  public Endpoint getEdcEndpoint(String assetId, String receivingConnectorUrl) throws IOException {
+    final String encodedUrl = URLEncoder.encode(receivingConnectorUrl, StandardCharsets.UTF_8);
+
+    final Endpoint endpoint =
+        get(
+            ADAPTER_PATH,
+            "providerUrl=" + encodedUrl,
+            new TypeToken<ManagementApiContractOfferCatalog>() {});
+
+    log.debug("Received " + endpoint.getEndpoint() + " endpoint with " + endpoint.getId() + " id");
+    return endpoint;
   }
 
   private <T> T get(String path, String params, TypeToken<?> typeToken) throws IOException {
