@@ -22,30 +22,26 @@ package org.eclipse.tractusx.edc.tests;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import lombok.extern.slf4j.Slf4j;
-import org.eclipse.tractusx.edc.tests.data.Asset;
-import org.eclipse.tractusx.edc.tests.data.Endpoint;
-
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.tractusx.edc.tests.data.Endpoint;
 
 @Slf4j
 public class ControlPlaneAdapterSteps {
 
-    private static final String ASSET_ID = "asset id";
+  private static final String ASSET_ID = "asset id";
 
-    private Endpoint endpoint;
+  private Endpoint endpoint;
 
-    @When("'{connector}' gets a request Endpoint from '{connector}'")
-    public void getEndPointFromGetRequest(
-            Connector consumer, String UrlProvider) throws IOException {
-        final var api = consumer.getDataManagementAPI();
-        endpoint = api.getEdcEndpoint(ASSET_ID, UrlProvider);
-        System.out.println("id" + endpoint.getId() + "" + endpoint.getEndpoint());
+  @When("'{connector}' gets a request Endpoint from '{connector}'")
+  public void getEndPointFromGetRequest(Connector consumer, String UrlProvider) throws IOException {
+    final var api = consumer.getDataManagementAPI();
+    endpoint = api.getEdcEndpoint(ASSET_ID, UrlProvider);
+    System.out.println("id" + endpoint.getId() + "" + endpoint.getEndpoint());
+  }
 
-    }
-
-    @Then("'{connector}' has received the endpoint connector")
-    public void receiveEndpointConnector(Connector consumer) {
-        final BackendServiceBackendAPI api = consumer.getBackendServiceBackendAPI();
-    }
+  @Then("'{connector}' has received the endpoint connector")
+  public void receiveEndpointConnector(Connector consumer) {
+    final BackendServiceBackendAPI api = consumer.getBackendServiceBackendAPI();
+  }
 }

@@ -20,16 +20,15 @@
 
 package org.eclipse.tractusx.edc.tests.data;
 
+import java.util.Map;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.Map;
-
 @Value
 public class Endpoint {
-    @NonNull String id;
-    @NonNull String endpoint;
-    String authKey;
-    String authCode;
-    @NonNull Map<String, String> properties;
+  @NonNull String id;
+  @NonNull String endpoint;
+  String authKey;
+  String authCode;
+  @NonNull Map<String, String> properties;
 }
