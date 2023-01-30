@@ -31,8 +31,8 @@ run connectors, and two different TXDC Connector instances, that can communicate
 
 ### Supporting Infrastructure
 
-Before the connectors can be setup, the Supporting Infrastructure must be in place. It comes with pre-configured with
-everything to run two connectors independently.
+Before the connectors can be setup, the Supporting Infrastructure must be in place. It comes with pre-configured everything
+to run two connectors independently.
 
 For this local test scenario,
 the [Supporting Infrastructure](../../edc-tests/src/main/resources/deployment/helm/supporting-infrastructure/README.md)

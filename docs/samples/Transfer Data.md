@@ -6,16 +6,16 @@ For this transfer connector **Bob** will act as data provider, and connector **A
 consumer. But the roles could be inverse as well.
 
 > Please note: Before running the examples the corresponding environment variables must be set.
-> How such an environment can be setup locally is documented in chapter 0.
+> How such an environment can be setup locally is documented in [chapter 0](#0--optional--local-setup).
 
 **Contents**
 
-0. (optional) Local Setup
-1. Setup Data Offer
-2. Request Contract Offers
-3. Negotiate Contract
-4. Transfer Data
-5. Verify Data Transfer
+0. [(optional) Local Setup](#0--optional--local-setup)
+1. [Setup Data Offer](#1-setup-data-offer)
+2. [Request Contract Offers](#2-request-contract-offer-catalog)
+3. [Negotiate Contract](#3-negotiate-contract)
+4. [Transfer Data](#4-transfer-data)
+5. [Verify Data Transfer](#5-verify-data-transfer)
 
 ## 0. (optional) Local Setup
 
@@ -62,8 +62,8 @@ Minikube will then print out something like this:
 |-------------|-----------------------|-----------------|---------------------------|
 ```
 
-The most important APIs, used by this example, are highlighted. How they are used is described in subchapter 'Set
-Environment Variables, used by this example' below.
+The most important APIs, used by this example, are highlighted. How they are used is described in subchapter ['Set
+Environment Variables](#set-environment-variables-used-by-this-example), used by this example below.
 
 ### See Node Ports using Kubernetes
 
@@ -130,8 +130,8 @@ External Traffic Policy:  Cluster
 Events:                   <none>
 ```
 
-The most important APIs, used by this example, are highlighted. How they are used is described in subchapter 'Set
-Environment Variables, used by this example' below.
+The most important APIs, used by this example, are highlighted. How they are used is described in subchapter ['Set
+Environment Variables](#set-environment-variables-used-by-this-example), used by this example below.
 In comparison to the Minikube example this call shows only the ports. To call the ports the Kubernetes Node IP / URL is
 required. Where to get the IP may vary depending on how Kubernetes is deployed.
 
