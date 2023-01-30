@@ -38,6 +38,24 @@ Feature: HttpProxy Data Transfer
       | contract offer id     | asset id | policy id |
       | contract-definition-1 | asset-1  | policy-1  |
     And 'Sokrates' initiates HttpProxy transfer from 'Plato'
+      | asset id | receiverHttpEndpoint |
+      | asset-1  | http://backend:8080  |
+    Then the backend application of 'Sokrates' has received data
+
+  Scenario: Connector transfers data via HttpProxy, data on provider side requires oauth2 authentication
+    Given 'Plato' has a http proxy assets
+      | id      | description               | baseUrl                          | oauth2 token url     | oauth2 client id | oauth2 client secret | oauth2 scope |
+      | asset-1 | http proxy transfer asset | http://localhost:8081/api/health | http://ids-daps:4567 | provision-oauth2 | supersecret          | openid       |
+    And 'Plato' has the following policies
+      | id       | action |
+      | policy-1 | USE    |
+    And 'Plato' has the following contract definitions
+      | id                    | access policy | contract policy | asset   |
+      | contract-definition-1 | policy-1      | policy-1        | asset-1 |
+    When 'Sokrates' negotiates the contract successfully with 'Plato'
+      | contract offer id     | asset id | policy id |
+      | contract-definition-1 | asset-1  | policy-1  |
+    And 'Sokrates' initiates HttpProxy transfer from 'Plato'
       | asset id |
       | asset-1  |
     Then the backend application of 'Sokrates' has received data

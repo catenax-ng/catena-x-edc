@@ -21,11 +21,13 @@
 package org.eclipse.tractusx.edc.tests;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -121,6 +123,31 @@ public class DataManagementAPI {
     transfer.dataDestination = mapDataAddress(dataAddress);
     transfer.protocol = "ids-multipart";
 
+    return initiateTransferProcess(transfer);
+  }
+
+  public Transfer initiateTransferProcess(
+      String receivingConnectorUrl,
+      String contractAgreementId,
+      String assetId,
+      DataAddress dataAddress,
+      String receiverEndpoint)
+      throws IOException {
+    final ManagementApiTransfer transfer = new ManagementApiTransfer();
+
+    transfer.connectorAddress = receivingConnectorUrl;
+    transfer.contractId = contractAgreementId;
+    transfer.assetId = assetId;
+    transfer.transferType = new ManagementApiTransferType();
+    transfer.managedResources = false;
+    transfer.dataDestination = mapDataAddress(dataAddress);
+    transfer.protocol = "ids-multipart";
+    transfer.properties = new ManagementApiProperties(receiverEndpoint);
+
+    return initiateTransferProcess(transfer);
+  }
+
+  private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
     final ManagementApiTransferResponse response =
         post(TRANSFER_PATH, transfer, new TypeToken<ManagementApiTransferResponse>() {});
 
@@ -273,8 +300,18 @@ public class DataManagementAPI {
     final ManagementApiDataAddress apiObject = new ManagementApiDataAddress();
 
     if (dataAddress instanceof HttpProxySourceDataAddress) {
-      final HttpProxySourceDataAddress a = (HttpProxySourceDataAddress) dataAddress;
-      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", a.getBaseUrl()));
+      final var address = (HttpProxySourceDataAddress) dataAddress;
+      var properties = new HashMap<String, Object>();
+      properties.put("type", "HttpData");
+      properties.put("baseUrl", address.getBaseUrl());
+      var oauth2Provision = address.getOauth2Provision();
+      if (oauth2Provision != null) {
+        properties.put("oauth2:tokenUrl", oauth2Provision.getTokenUrl());
+        properties.put("oauth2:clientId", oauth2Provision.getClientId());
+        properties.put("oauth2:clientSecret", oauth2Provision.getClientSecret());
+        properties.put("oauth2:scope", oauth2Provision.getScope());
+      }
+      apiObject.setProperties(properties);
     } else if (dataAddress instanceof HttpProxySinkDataAddress) {
       apiObject.setProperties(Map.of("type", "HttpProxy"));
     } else if (dataAddress instanceof S3DataAddress) {
@@ -486,6 +523,7 @@ public class DataManagementAPI {
     private ManagementApiDataAddress dataDestination;
     private boolean managedResources;
     private ManagementApiTransferType transferType;
+    private ManagementApiProperties properties;
   }
 
   @Data
@@ -517,6 +555,12 @@ public class DataManagementAPI {
   private static class ManagementApiDataAddress {
     public static final String TYPE = "type";
     private Map<String, Object> properties;
+  }
+
+  @Data
+  private static class ManagementApiProperties {
+    @SerializedName(value = "receiver.http.endpoint")
+    private final String receiverHttpEndpoint;
   }
 
   @Data

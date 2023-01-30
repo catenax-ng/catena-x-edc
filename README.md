@@ -19,7 +19,7 @@
   <p align="center">
     Container images and deployments of the Eclipse Dataspace Components open source project.
     <br />
-    <a href="https://github.com/catenax-ng/product-edc/tree/feature/update-readme-md/docs"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/catenax-ng/product-edc/tree/main/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/eclipse-edc/Connector">View Eclipse Dataspace Components</a>

@@ -89,6 +89,7 @@ jobs:
           output: "trivy-results-${{ matrix.image }}.sarif"
           exit-code: "1"
           severity: "CRITICAL,HIGH"
+          timeout: "10m0s"
       -
         name: Upload Trivy scan results to GitHub Security tab
         if: always()

@@ -54,7 +54,7 @@
         <!-- plugins -->
         <org.apache.maven.plugins.maven.dependency.plugin.version>3.5.0</org.apache.maven.plugins.maven.dependency.plugin.version>
         <org.apache.maven.plugins.maven.jar.plugin.version>3.3.0</org.apache.maven.plugins.maven.jar.plugin.version>
-        <com.diffplug.spotless.maven.plugin.version>2.29.0</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.30.0</com.diffplug.spotless.maven.plugin.version>
         <org.codehaus.mojo.exec.maven.plugin.version>3.1.0</org.codehaus.mojo.exec.maven.plugin.version>
         <org.apache.maven.plugins.javadoc.version>3.4.1</org.apache.maven.plugins.javadoc.version>
         <org.codehaus.mojo.license.maven.plugin>2.0.0</org.codehaus.mojo.license.maven.plugin>
@@ -72,20 +72,20 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.edc.version>0.0.1-20230109-SNAPSHOT</org.eclipse.edc.version>
+        <org.eclipse.edc.version>0.0.1-20230125-SNAPSHOT</org.eclipse.edc.version>
         <com.azure.sdk.bom.version>1.2.8</com.azure.sdk.bom.version>
         <org.postgresql.version>42.5.1</org.postgresql.version>
-        <org.flywaydb.version>9.11.0</org.flywaydb.version>
-        <com.nimbus.jose.jwt.version>9.28</com.nimbus.jose.jwt.version>
+        <org.flywaydb.version>9.12.0</org.flywaydb.version>
+        <com.nimbus.jose.jwt.version>9.29</com.nimbus.jose.jwt.version>
         <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
 
         <!-- test dependency version -->
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
-        <cucumber.version>7.10.1</cucumber.version>
+        <cucumber.version>7.11.0</cucumber.version>
         <io.rest.assured.version>5.3.0</io.rest.assured.version>
         <org.junit.platform.surefire.provider.version>1.1.0</org.junit.platform.surefire.provider.version>
-        <mockito.version>4.11.0</mockito.version>
+        <mockito.version>5.0.0</mockito.version>
         <org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
         <org.bouncycastle.bcpkix-jdk15on.version>1.70</org.bouncycastle.bcpkix-jdk15on.version>
         <com.squareup.okhttp3.okhttp.version>4.9.3</com.squareup.okhttp3.okhttp.version>
@@ -361,11 +361,6 @@
             <dependency>
                 <groupId>org.eclipse.tractusx.edc.extensions</groupId>
                 <artifactId>control-plane-adapter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-                <artifactId>custom-jsonld</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -1002,7 +997,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
-                <artifactId>transfer-pull-http-receiver</artifactId>
+                <artifactId>transfer-pull-http-dynamic-receiver</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>

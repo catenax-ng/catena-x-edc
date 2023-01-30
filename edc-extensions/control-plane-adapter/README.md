@@ -33,7 +33,7 @@ Additional requirements, that affects the architecture of the extension:
    http://localhost:9193/api/v1/data/adapter/asset/sync/123?providerUrl=http://localhost:8182/api/v1/ids/data
    ```
    
-   Oprional request parameters:
+   Optional request parameters:
 
    | Name                | Description                                                                                                                                                                                                             |
    |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|

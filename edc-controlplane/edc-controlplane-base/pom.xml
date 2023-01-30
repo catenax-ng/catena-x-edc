@@ -77,10 +77,6 @@
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
             <artifactId>control-plane-adapter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-            <artifactId>custom-jsonld</artifactId>
-        </dependency>
 
         <!-- Core -->
         <dependency>
@@ -202,7 +198,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>transfer-pull-http-receiver</artifactId>
+            <artifactId>transfer-pull-http-dynamic-receiver</artifactId>
         </dependency>
 
         <!-- patch versions -->

@@ -1,10 +1,8 @@
 # Local TXDC Setup
 
 This document describes how to set up two TXDConnector instances locally. The Supporting Infrastructure Deployment, used
-by this
-example, must never be used productively. The deployment of the two TXDConnector instances, done by this example, is not
-suitable for
-productive deployment scenarios.
+by this example, must never be used productively. The deployment of the two TXDConnector instances, done by this example,
+is not suitable for productive deployment scenarios.
 
 ## Prerequisites
 

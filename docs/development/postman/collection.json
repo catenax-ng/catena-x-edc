@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "17367045-5915-431f-87ab-974e178f35a6",
+		"_postman_id": "b61c0075-e360-45df-9756-c9bc432fe76a",
 		"name": "EDC",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6134257"
 	},
 	"item": [
 		{
@@ -659,6 +660,56 @@
 			"response": []
 		},
 		{
+			"name": "Transfer dynamic http receiver",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"TRANSFER_ID\", Math.random());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"TRANSFER_PROCESS_ID\", jsonData.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"id\": \"{{TRANSFER_ID}}\",\n  \"connectorId\": \"foo\", \n  \"connectorAddress\": \"{{PROVIDER_IDS_URL}}/api/v1/ids/data\", \n  \"contractId\": \"{{AGREEMENT_ID}}\", \n  \"assetId\": \"{{ASSET_ID}}\",\n  \"managedResources\": \"false\", \n  \"dataDestination\": { \"type\": \"HttpProxy\" },\n  \"properties\": {\n        \"receiver.http.endpoint\": \"{{BACKEND_SERVICE}}\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_DATAMGMT_URL}}/data/transferprocess",
+					"host": [
+						"{{CONSUMER_DATAMGMT_URL}}"
+					],
+					"path": [
+						"data",
+						"transferprocess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Transfer",
 			"event": [
 				{
@@ -791,6 +842,11 @@
 		{
 			"key": "TRANSFER_PROCESS_ID",
 			"value": ""
+		},
+		{
+			"key": "BACKEND_SERVICE",
+			"value": "http://backend:8080",
+			"type": "string"
 		}
 	]
 }
