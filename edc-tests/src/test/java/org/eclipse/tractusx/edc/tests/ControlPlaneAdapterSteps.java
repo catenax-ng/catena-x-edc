@@ -23,10 +23,8 @@ package org.eclipse.tractusx.edc.tests;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.edc.tests.data.Endpoint;
 import org.junit.jupiter.api.Assertions;
@@ -38,9 +36,14 @@ public class ControlPlaneAdapterSteps {
 
   private Endpoint endpoint;
 
-  Map<String, String> propertiesMap  = new HashMap<>() {{put("cid", "1:b2367617-5f51-48c5-9f25-e30a7299235c");}};
-  private final Endpoint comparingEndpoint = new Endpoint("id", "endpoint","key",
-          "code",propertiesMap);
+  Map<String, String> propertiesMap =
+      new HashMap<>() {
+        {
+          put("cid", "1:b2367617-5f51-48c5-9f25-e30a7299235c");
+        }
+      };
+  private final Endpoint comparingEndpoint =
+      new Endpoint("id", "endpoint", "key", "code", propertiesMap);
 
   @When("'{connector}' gets a request Endpoint from '{connector}'")
   public void getEndPointFromGetRequest(Connector consumer, String UrlProvider) throws IOException {
@@ -52,10 +55,11 @@ public class ControlPlaneAdapterSteps {
   @Then("'{connector}' has received the endpoint connector")
   public void receiveEndpointConnector(Connector consumer) {
 
-    Assertions.assertEquals(endpoint.getId(),comparingEndpoint.getId());
-    Assertions.assertEquals(endpoint.getEndpoint(),comparingEndpoint.getEndpoint());
-    Assertions.assertEquals(endpoint.getAuthCode(),comparingEndpoint.getAuthCode());
-    Assertions.assertEquals(endpoint.getAuthKey(),comparingEndpoint.getAuthKey());
-    Assertions.assertEquals(endpoint.getProperties().get("cid"),comparingEndpoint.getProperties().get("cid"));
+    Assertions.assertEquals(endpoint.getId(), comparingEndpoint.getId());
+    Assertions.assertEquals(endpoint.getEndpoint(), comparingEndpoint.getEndpoint());
+    Assertions.assertEquals(endpoint.getAuthCode(), comparingEndpoint.getAuthCode());
+    Assertions.assertEquals(endpoint.getAuthKey(), comparingEndpoint.getAuthKey());
+    Assertions.assertEquals(
+        endpoint.getProperties().get("cid"), comparingEndpoint.getProperties().get("cid"));
   }
 }
