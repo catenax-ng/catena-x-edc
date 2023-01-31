@@ -24,7 +24,7 @@ Feature: API-Wrapper Extension
     Given 'Plato' has an empty database
     Given 'Sokrates' has an empty database
 
-  Scenario: Connector transfers data via HttpProxy
+  Scenario: Connector receives an endpoint connector
     Given 'Plato' has the following assets
       | id      | description               | baseUrl                          |
       | asset-1 | http proxy transfer asset | http://localhost:8081/api/health |
