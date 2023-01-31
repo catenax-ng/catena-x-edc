@@ -4,7 +4,8 @@ name: "Business Tests"
 on:
   pull_request:
     paths-ignore:
-      - docs/**
+      - 'docs/**'
+      - '**/*.md'
     branches:
       - develop
       - release/**
