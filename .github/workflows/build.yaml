@@ -15,6 +15,7 @@ on:
     paths-ignore:
       - 'charts/**'
       - 'docs/**'
+      - '**/*.md'
     branches:
       - '*'
   workflow_dispatch:
