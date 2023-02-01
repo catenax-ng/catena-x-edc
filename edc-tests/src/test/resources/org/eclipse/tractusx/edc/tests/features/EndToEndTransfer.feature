@@ -35,6 +35,6 @@ Feature: API-Wrapper Extension
       | id                    | access policy | contract policy | asset   |
       | contract-definition-1 | policy-1      | policy-1        | asset-1 |
     When 'Sokrates' gets a request Endpoint from 'Plato'
-      | asset id | url provider |
-      | asset-1  | policy-1     |
+      | asset id | url provider                                                                                               |
+      | asset-1  | http://localhost:9193/api/v1/data/adapter/asset/sync/123?providerUrl=http://localhost:8182/api/v1/ids/data |
     Then 'Sokrates' has received the endpoint connector
