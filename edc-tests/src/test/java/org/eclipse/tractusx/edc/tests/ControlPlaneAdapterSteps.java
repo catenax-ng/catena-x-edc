@@ -45,7 +45,8 @@ public class ControlPlaneAdapterSteps {
       new Endpoint("id", "endpoint", "key", "code", propertiesMap);
 
   @When("'{connector}' gets a request Endpoint from '{connector}'")
-  public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table) throws IOException {
+  public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table)
+      throws IOException {
 
     final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
     final String receiverIdsUrl = receiver.getEnvironment().getIdsUrl() + "/data";

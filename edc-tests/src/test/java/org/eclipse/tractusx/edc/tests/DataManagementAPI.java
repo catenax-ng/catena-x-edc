@@ -177,12 +177,14 @@ public class DataManagementAPI {
     post(CONTRACT_DEFINITIONS_PATH, mapContractDefinition(contractDefinition));
   }
 
-  public Endpoint getEdcEndpoint(String assetId, String consumerConnectorUrl,String receivingConnectorUrl) throws IOException {
+  public Endpoint getEdcEndpoint(
+      String assetId, String consumerConnectorUrl, String receivingConnectorUrl)
+      throws IOException {
     final String encodedUrl = URLEncoder.encode(receivingConnectorUrl, StandardCharsets.UTF_8);
 
     final Endpoint endpoint =
         get(
-                consumerConnectorUrl+ADAPTER_PATH+assetId,
+            consumerConnectorUrl + ADAPTER_PATH + assetId,
             "providerUrl=" + encodedUrl,
             new TypeToken<ManagementApiContractOfferCatalog>() {});
 
