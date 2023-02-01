@@ -20,6 +20,7 @@
 
 package org.eclipse.tractusx.edc.tests;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
@@ -31,8 +32,6 @@ import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 public class ControlPlaneAdapterSteps {
-
-  private static final String ASSET_ID = "asset id";
 
   private Endpoint endpoint;
 
@@ -46,10 +45,18 @@ public class ControlPlaneAdapterSteps {
       new Endpoint("id", "endpoint", "key", "code", propertiesMap);
 
   @When("'{connector}' gets a request Endpoint from '{connector}'")
-  public void getEndPointFromGetRequest(Connector consumer, String UrlProvider) throws IOException {
-    final var api = consumer.getDataManagementAPI();
-    endpoint = api.getEdcEndpoint(ASSET_ID, UrlProvider);
-    System.out.println("id" + endpoint.getId() + "" + endpoint.getEndpoint());
+  public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table) throws IOException {
+
+    final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
+    final String receiverIdsUrl = receiver.getEnvironment().getIdsUrl() + "/data";
+    final String ConsumersUrl = consumer.getEnvironment().getIdsUrl() + "/data";
+
+    for (Map<String, String> map : table.asMaps()) {
+      final String assetId = map.get("asset id");
+      endpoint = dataManagementAPI.getEdcEndpoint(assetId, ConsumersUrl, receiverIdsUrl);
+
+      System.out.println("id" + endpoint.getId() + "" + endpoint.getEndpoint());
+    }
   }
 
   @Then("'{connector}' has received the endpoint connector")
