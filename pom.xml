@@ -74,7 +74,7 @@
         <!-- dependency version -->
         <org.eclipse.edc.version>0.0.1-20230131-SNAPSHOT</org.eclipse.edc.version>
         <com.azure.sdk.bom.version>1.2.9</com.azure.sdk.bom.version>
-        <org.postgresql.version>42.5.1</org.postgresql.version>
+        <org.postgresql.version>42.5.2</org.postgresql.version>
         <org.flywaydb.version>9.14.1</org.flywaydb.version>
         <com.nimbus.jose.jwt.version>9.30</com.nimbus.jose.jwt.version>
         <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
