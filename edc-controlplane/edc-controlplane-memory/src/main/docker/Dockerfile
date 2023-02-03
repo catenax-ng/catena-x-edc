@@ -1,4 +1,5 @@
 #
+#  Copyright (c) 2023 ZF Friedrichshafen AG
 #  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
 #  Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
 #
@@ -64,6 +65,6 @@ CMD ["java", \
      "-Dotel.javaagent.configuration-file=/app/opentelemetry.properties", \
      "-Dotel.metrics.exporter=prometheus", \
      "-Dotel.exporter.prometheus.port=9090", \
-     "-Djava.security.edg=file:/dev/.urandom", \
+     "-Djava.security.egd=file:/dev/urandom", \
      "-jar", \
      "edc-controlplane.jar"]
