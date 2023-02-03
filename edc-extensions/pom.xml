@@ -43,6 +43,7 @@
         <module>data-encryption</module>
         <module>control-plane-adapter</module>
         <module>cx-oauth2</module>
+        <module>provision-additional-headers</module>
         <module>transferprocess-sftp-common</module>
         <module>transferprocess-sftp-client</module>
         <module>transferprocess-sftp-provisioner</module>
