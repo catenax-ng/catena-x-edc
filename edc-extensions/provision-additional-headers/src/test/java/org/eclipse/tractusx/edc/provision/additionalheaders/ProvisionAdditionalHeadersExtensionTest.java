@@ -47,8 +47,7 @@ class ProvisionAdditionalHeadersExtensionTest {
         assertThat(result).matches(StatusResult::succeeded);
 
         await().untilAsserted(() -> {
-            // TODO: change contractId header name to something better
-            verify(dataFlowController).initiateFlow(any(), argThat(it -> it.hasProperty("header:contractId")), any());
+            verify(dataFlowController).initiateFlow(any(), argThat(it -> "aContractId".equals(it.getProperty("header:Edc-Contract-Id"))), any());
         });
     }
 }

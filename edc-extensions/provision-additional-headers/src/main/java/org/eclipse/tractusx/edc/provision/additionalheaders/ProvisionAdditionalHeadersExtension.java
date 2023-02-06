@@ -108,7 +108,7 @@ public class ProvisionAdditionalHeadersExtension implements ServiceExtension {
 
             var address = HttpDataAddress.Builder.newInstance()
                     .copyFrom(resourceDefinition.getDataAddress())
-                    .addAdditionalHeader("contractId", resourceDefinition.getContractId())
+                    .addAdditionalHeader("Edc-Contract-Id", resourceDefinition.getContractId())
                     .build();
 
             var provisioned = AdditionalHeadersProvisionedResource.Builder.newInstance()
@@ -116,7 +116,7 @@ public class ProvisionAdditionalHeadersExtension implements ServiceExtension {
                     .resourceDefinitionId(resourceDefinition.getId())
                     .transferProcessId(resourceDefinition.getTransferProcessId())
                     .dataAddress(address)
-                    .resourceName(UUID.randomUUID().toString()) // TODO: why this is mandatory?
+                    .resourceName(UUID.randomUUID().toString()) // TODO: why is this mandatory?
                     .hasToken(false)
                     .build();
 
