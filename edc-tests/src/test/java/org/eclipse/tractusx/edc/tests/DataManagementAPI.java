@@ -42,6 +42,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.tractusx.edc.tests.data.*;
 
 @Slf4j
@@ -197,18 +198,15 @@ public class DataManagementAPI {
     post(CONTRACT_DEFINITIONS_PATH, mapContractDefinition(contractDefinition));
   }
 
-  public Endpoint getEdcEndpoint(
-      String assetId, String consumerConnectorUrl, String receivingConnectorUrl)
+  public EndpointDataReference getEdcEndpoint(String assetId, String receivingConnectorUrl)
       throws IOException {
-    final String encodedUrl = URLEncoder.encode(receivingConnectorUrl, StandardCharsets.UTF_8);
+    final String encodedUrl = ADAPTER_PATH + assetId + "?providerUrl=" + receivingConnectorUrl;
 
-    final Endpoint endpoint =
-        get(
-            consumerConnectorUrl + ADAPTER_PATH + assetId,
-            "providerUrl=" + encodedUrl,
-            new TypeToken<ManagementApiContractOfferCatalog>() {});
+    final EndpointDataReference endpoint =
+        get(encodedUrl, new TypeToken<EndpointDataReference>() {});
 
-    log.debug("Received " + endpoint.getEndpoint() + " endpoint with " + endpoint.getId() + " id");
+    log.info("Endpoint in CreateContractDefinition" + endpoint.getEndpoint());
+
     return endpoint;
   }
 

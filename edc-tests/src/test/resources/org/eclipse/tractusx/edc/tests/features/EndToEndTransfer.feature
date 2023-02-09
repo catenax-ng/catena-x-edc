@@ -37,4 +37,4 @@ Feature: API-Wrapper Extension
     When 'Sokrates' gets a request Endpoint from 'Plato'
       | asset id |
       | asset-1  |
-    Then 'Sokrates' has received the endpoint connector
+    Then 'Sokrates' has sent the correct endpoint connector

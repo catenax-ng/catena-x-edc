@@ -27,13 +27,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.tractusx.edc.tests.data.Endpoint;
+import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 public class ControlPlaneAdapterSteps {
 
-  private Endpoint endpoint;
+  private EndpointDataReference endpointDataReference;
 
   Map<String, String> propertiesMap =
       new HashMap<>() {
@@ -41,8 +41,14 @@ public class ControlPlaneAdapterSteps {
           put("cid", "1:b2367617-5f51-48c5-9f25-e30a7299235c");
         }
       };
-  private final Endpoint comparingEndpoint =
-      new Endpoint("id", "endpoint", "key", "code", propertiesMap);
+  private final EndpointDataReference comparingEndpoint =
+      EndpointDataReference.Builder.newInstance()
+          .id("ab9420a4-f05a-49eb-8a1f-e6004b593aff")
+          .endpoint("endpoint")
+          .authKey("key")
+          .authCode("code")
+          .properties(propertiesMap)
+          .build();
 
   @When("'{connector}' gets a request Endpoint from '{connector}'")
   public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table)
@@ -50,24 +56,35 @@ public class ControlPlaneAdapterSteps {
 
     final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
     final String receiverIdsUrl = receiver.getEnvironment().getIdsUrl() + "/data";
-    final String ConsumersUrl = consumer.getEnvironment().getIdsUrl() + "/data";
 
     for (Map<String, String> map : table.asMaps()) {
       final String assetId = map.get("asset id");
-      endpoint = dataManagementAPI.getEdcEndpoint(assetId, ConsumersUrl, receiverIdsUrl);
 
-      System.out.println("id" + endpoint.getId() + "" + endpoint.getEndpoint());
+      endpointDataReference = dataManagementAPI.getEdcEndpoint(assetId, receiverIdsUrl);
+
+      log.debug("endpointDataReference in controlplane" + endpointDataReference.toString());
     }
   }
 
-  @Then("'{connector}' has received the endpoint connector")
-  public void receiveEndpointConnector(Connector consumer) {
+  @Then("'{connector}' has sent the correct endpoint connector")
+  public void receiveEndpoint(Connector provider) {
 
-    Assertions.assertEquals(endpoint.getId(), comparingEndpoint.getId());
-    Assertions.assertEquals(endpoint.getEndpoint(), comparingEndpoint.getEndpoint());
-    Assertions.assertEquals(endpoint.getAuthCode(), comparingEndpoint.getAuthCode());
-    Assertions.assertEquals(endpoint.getAuthKey(), comparingEndpoint.getAuthKey());
+    log.info(
+        "Id: "
+            + endpointDataReference.getId()
+            + "\nEndpoint: "
+            + endpointDataReference.getEndpoint()
+            + "\nAuthCode: "
+            + endpointDataReference.getAuthCode()
+            + " \nAuthKey: "
+            + endpointDataReference.getAuthKey());
+
+    Assertions.assertEquals(endpointDataReference.getId(), comparingEndpoint.getId());
+    Assertions.assertEquals(endpointDataReference.getEndpoint(), comparingEndpoint.getEndpoint());
+    Assertions.assertEquals(endpointDataReference.getAuthCode(), comparingEndpoint.getAuthCode());
+    Assertions.assertEquals(endpointDataReference.getAuthKey(), comparingEndpoint.getAuthKey());
     Assertions.assertEquals(
-        endpoint.getProperties().get("cid"), comparingEndpoint.getProperties().get("cid"));
+        endpointDataReference.getProperties().get("cid"),
+        comparingEndpoint.getProperties().get("cid"));
   }
 }
