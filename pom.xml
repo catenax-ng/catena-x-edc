@@ -365,6 +365,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>provision-additional-headers</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
                 <artifactId>transferprocess-sftp-client</artifactId>
                 <version>${project.version}</version>
             </dependency>

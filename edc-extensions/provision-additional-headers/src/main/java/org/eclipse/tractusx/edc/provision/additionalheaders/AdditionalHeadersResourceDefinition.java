@@ -21,11 +21,12 @@
 package org.eclipse.tractusx.edc.provision.additionalheaders;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 
-@JsonPOJOBuilder(withPrefix = "")
+@JsonDeserialize(builder = AdditionalHeadersResourceDefinition.Builder.class)
 class AdditionalHeadersResourceDefinition extends ResourceDefinition {
 
   private String contractId;
@@ -44,6 +45,7 @@ class AdditionalHeadersResourceDefinition extends ResourceDefinition {
     return contractId;
   }
 
+  @JsonPOJOBuilder(withPrefix = "")
   public static class Builder
       extends ResourceDefinition.Builder<AdditionalHeadersResourceDefinition, Builder> {
 

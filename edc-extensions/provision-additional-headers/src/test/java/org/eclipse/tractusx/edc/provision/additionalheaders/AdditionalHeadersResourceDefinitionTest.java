@@ -20,28 +20,29 @@
 
 package org.eclipse.tractusx.edc.provision.additionalheaders;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import java.util.UUID;
-import org.eclipse.edc.connector.transfer.spi.provision.ProviderResourceDefinitionGenerator;
-import org.eclipse.edc.connector.transfer.spi.types.DataRequest;
-import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
-import org.eclipse.edc.policy.model.Policy;
+import org.eclipse.edc.spi.types.TypeManager;
 import org.eclipse.edc.spi.types.domain.DataAddress;
-import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.Test;
 
-class AdditionalHeadersResourceDefinitionGenerator implements ProviderResourceDefinitionGenerator {
+class AdditionalHeadersResourceDefinitionTest {
 
-  @Override
-  public boolean canGenerate(DataRequest dataRequest, DataAddress dataAddress, Policy policy) {
-    return "HttpData".equals(dataAddress.getType());
-  }
+  @Test
+  void serdes() {
+    var typeManager = new TypeManager();
+    var definition =
+        AdditionalHeadersResourceDefinition.Builder.newInstance()
+            .id(UUID.randomUUID().toString())
+            .transferProcessId(UUID.randomUUID().toString())
+            .dataAddress(DataAddress.Builder.newInstance().type("type").build())
+            .contractId(UUID.randomUUID().toString())
+            .build();
 
-  @Override
-  public @Nullable ResourceDefinition generate(
-      DataRequest dataRequest, DataAddress dataAddress, Policy policy) {
-    return AdditionalHeadersResourceDefinition.Builder.newInstance()
-        .id(UUID.randomUUID().toString())
-        .dataAddress(dataAddress)
-        .contractId(dataRequest.getContractId())
-        .build();
+    var json = typeManager.writeValueAsString(definition);
+    var deserialized = typeManager.readValue(json, AdditionalHeadersResourceDefinition.class);
+
+    assertThat(deserialized).usingRecursiveComparison().isEqualTo(definition);
   }
 }

@@ -61,7 +61,7 @@ public class AdditionalHeadersProvisioner
             .resourceDefinitionId(resourceDefinition.getId())
             .transferProcessId(resourceDefinition.getTransferProcessId())
             .dataAddress(address)
-            .resourceName(UUID.randomUUID().toString()) // TODO: why is this mandatory?
+            .resourceName(UUID.randomUUID().toString())
             .hasToken(false)
             .build();
 
