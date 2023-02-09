@@ -77,6 +77,10 @@
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
             <artifactId>control-plane-adapter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+            <artifactId>provision-additional-headers</artifactId>
+        </dependency>
 
         <!-- Core -->
         <dependency>
