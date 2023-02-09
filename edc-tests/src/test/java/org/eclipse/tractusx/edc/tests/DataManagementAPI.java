@@ -205,7 +205,7 @@ public class DataManagementAPI {
     final EndpointDataReference endpoint =
         get(encodedUrl, new TypeToken<EndpointDataReference>() {});
 
-    log.info("Endpoint in CreateContractDefinition" + endpoint.getEndpoint());
+    log.info("EndpointDataReference in CreateContractDefinition" + endpoint.getEndpoint());
 
     return endpoint;
   }

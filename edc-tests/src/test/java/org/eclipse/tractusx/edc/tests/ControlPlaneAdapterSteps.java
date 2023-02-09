@@ -24,7 +24,6 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
@@ -35,22 +34,7 @@ public class ControlPlaneAdapterSteps {
 
   private EndpointDataReference endpointDataReference;
 
-  Map<String, String> propertiesMap =
-      new HashMap<>() {
-        {
-          put("cid", "1:b2367617-5f51-48c5-9f25-e30a7299235c");
-        }
-      };
-  private final EndpointDataReference comparingEndpoint =
-      EndpointDataReference.Builder.newInstance()
-          .id("ab9420a4-f05a-49eb-8a1f-e6004b593aff")
-          .endpoint("endpoint")
-          .authKey("key")
-          .authCode("code")
-          .properties(propertiesMap)
-          .build();
-
-  @When("'{connector}' gets a request Endpoint from '{connector}'")
+  @When("'{connector}' gets a request EndpointDataReference from '{connector}'")
   public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table)
       throws IOException {
 
@@ -69,22 +53,35 @@ public class ControlPlaneAdapterSteps {
   @Then("'{connector}' has sent the correct endpoint connector")
   public void receiveEndpoint(Connector provider) {
 
+    String providerAuthKey = provider.getEnvironment().getDataManagementAuthKey();
+    String providerEndpoint = provider.getEnvironment().getIdsUrl();
+    String providerEnvironment = provider.getEnvironment().toString();
+    String providerKey = provider.getEnvironment().getBackendServiceBackendApiUrl();
+
     log.info(
-        "Id: "
-            + endpointDataReference.getId()
-            + "\nEndpoint: "
+        "provider - \n authKey: "
+            + providerAuthKey
+            + "\n idsUrl (Endpoint): "
+            + providerEndpoint
+            + "\nproviderEnvironment: "
+            + providerEnvironment
+            + "\nprovider key: "
+            + providerKey);
+
+    log.info(
+        "consumer Id: "
             + endpointDataReference.getEndpoint()
             + "\nAuthCode: "
             + endpointDataReference.getAuthCode()
             + " \nAuthKey: "
             + endpointDataReference.getAuthKey());
+    Assertions.assertEquals(endpointDataReference.getAuthKey(), providerAuthKey);
+    Assertions.assertEquals(endpointDataReference.getEndpoint(), providerEndpoint);
 
-    Assertions.assertEquals(endpointDataReference.getId(), comparingEndpoint.getId());
-    Assertions.assertEquals(endpointDataReference.getEndpoint(), comparingEndpoint.getEndpoint());
-    Assertions.assertEquals(endpointDataReference.getAuthCode(), comparingEndpoint.getAuthCode());
-    Assertions.assertEquals(endpointDataReference.getAuthKey(), comparingEndpoint.getAuthKey());
-    Assertions.assertEquals(
-        endpointDataReference.getProperties().get("cid"),
-        comparingEndpoint.getProperties().get("cid"));
+    // Assertions.assertEquals(endpointDataReference.getId(), comparingEndpoint.getID());
+    // TransferprocessId
+    // Generiert Assertions.assertEquals(endpointDataReference.getAuthCode(),
+    // comparingEndpoint.getAuthCode());
+
   }
 }
