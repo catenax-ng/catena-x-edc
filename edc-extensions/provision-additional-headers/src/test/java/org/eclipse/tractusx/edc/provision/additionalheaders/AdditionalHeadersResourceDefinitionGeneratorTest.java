@@ -36,7 +36,7 @@ class AdditionalHeadersResourceDefinitionGeneratorTest {
       new AdditionalHeadersResourceDefinitionGenerator();
 
   @Test
-  void shouldIgnoreNotHttpDataAddresses() {
+  void canGenerate_shouldReturnFalseForNotHttpDataAddresses() {
     var dataAddress = DataAddress.Builder.newInstance().type("any").build();
     var dataRequest =
         DataRequest.Builder.newInstance()
@@ -48,6 +48,21 @@ class AdditionalHeadersResourceDefinitionGeneratorTest {
     var result = generator.canGenerate(dataRequest, dataAddress, build);
 
     assertThat(result).isFalse();
+  }
+
+  @Test
+  void canGenerate_shouldReturnTrueForHttpDataAddresses() {
+    var dataAddress = DataAddress.Builder.newInstance().type("HttpData").build();
+    var dataRequest =
+        DataRequest.Builder.newInstance()
+            .id(UUID.randomUUID().toString())
+            .dataDestination(dataAddress)
+            .build();
+    var build = Policy.Builder.newInstance().build();
+
+    var result = generator.canGenerate(dataRequest, dataAddress, build);
+
+    assertThat(result).isTrue();
   }
 
   @Test
