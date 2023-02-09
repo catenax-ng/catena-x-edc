@@ -39,6 +39,7 @@
         <ch.qos.logback.version>1.4.5</ch.qos.logback.version>
         <org.slf4j.api.version>2.0.3</org.slf4j.api.version>
         <software.amazon.awssdk>2.19.33</software.amazon.awssdk>
+        <org.eclipse.dataspaceconnector.version>0.0.1-20221006-SNAPSHOT</org.eclipse.dataspaceconnector.version>
     </properties>
 
     <dependencies>
@@ -112,6 +113,11 @@
             <artifactId>s3</artifactId>
             <version>${software.amazon.awssdk}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>core-spi</artifactId>
+            <version>${org.eclipse.dataspaceconnector.version}</version>
         </dependency>
 
     </dependencies>
