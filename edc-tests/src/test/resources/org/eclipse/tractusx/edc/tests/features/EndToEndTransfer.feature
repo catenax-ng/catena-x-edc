@@ -34,7 +34,7 @@ Feature: API-Wrapper Extension
     And 'Plato' has the following contract definitions
       | id                    | access policy | contract policy | asset   |
       | contract-definition-1 | policy-1      | policy-1        | asset-1 |
-    When 'Sokrates' gets a request Endpoint from 'Plato'
+    When 'Sokrates' gets a request endpoint from 'Plato'
       | asset id |
       | asset-1  |
     Then 'Sokrates' has sent the correct endpoint connector

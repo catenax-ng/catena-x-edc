@@ -34,7 +34,7 @@ public class ControlPlaneAdapterSteps {
 
   private EndpointDataReference endpointDataReference;
 
-  @When("'{connector}' gets a request EndpointDataReference from '{connector}'")
+  @When("'{connector}' gets a request endpoint from '{connector}'")
   public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table)
       throws IOException {
 
