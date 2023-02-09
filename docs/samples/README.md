@@ -4,4 +4,4 @@ In this folder are listed some documents that will help you setting up a connect
 
 - [Local setup](./Local%20TXDC%20Setup.md)
 - [Transfer data](./Transfer%20Data.md)
-- [OAuth2 provisioning](./oauth2-provision.md)
+- [Data Plane HTTP OAuth2](./data-plane-http-oauth2.md)

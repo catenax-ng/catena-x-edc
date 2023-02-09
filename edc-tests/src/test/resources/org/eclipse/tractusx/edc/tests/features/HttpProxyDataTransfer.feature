@@ -44,8 +44,8 @@ Feature: HttpProxy Data Transfer
 
   Scenario: Connector transfers data via HttpProxy, data on provider side requires oauth2 authentication
     Given 'Plato' has a http proxy assets
-      | id      | description               | baseUrl                          | oauth2 token url     | oauth2 client id | oauth2 client secret | oauth2 scope |
-      | asset-1 | http proxy transfer asset | http://localhost:8081/api/health | http://ids-daps:4567 | provision-oauth2 | supersecret          | openid       |
+      | id      | description               | baseUrl                          | oauth2 token url     | oauth2 client id  | oauth2 client secret | oauth2 scope |
+      | asset-1 | http proxy transfer asset | http://localhost:8081/api/health | http://ids-daps:4567 | data-plane-oauth2 | supersecret          | openid       |
     And 'Plato' has the following policies
       | id       | action |
       | policy-1 | USE    |

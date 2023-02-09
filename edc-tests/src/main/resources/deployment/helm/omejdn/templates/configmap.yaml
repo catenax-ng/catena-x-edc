@@ -40,7 +40,7 @@ data:
 
   clients.yml: |-
       ---
-      - client_id: provision-oauth2
+      - client_id: data-plane-oauth2
         client_secret: supersecret
         name: provision oauth2
         grant_types:
