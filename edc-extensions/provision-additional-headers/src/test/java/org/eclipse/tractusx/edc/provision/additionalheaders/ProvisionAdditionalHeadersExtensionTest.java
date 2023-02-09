@@ -75,7 +75,10 @@ class ProvisionAdditionalHeadersExtensionTest {
               verify(dataFlowController)
                   .initiateFlow(
                       any(),
-                      argThat(it -> "aContractId".equals(it.getProperty("header:Edc-Contract-Agreement-Id"))),
+                      argThat(
+                          it ->
+                              "aContractId"
+                                  .equals(it.getProperty("header:Edc-Contract-Agreement-Id"))),
                       any());
             });
   }
