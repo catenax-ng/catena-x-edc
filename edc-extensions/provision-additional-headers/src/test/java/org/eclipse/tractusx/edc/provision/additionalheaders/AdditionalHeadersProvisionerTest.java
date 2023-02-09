@@ -76,6 +76,6 @@ class AdditionalHeadersProvisionerTest {
         .extracting(a -> HttpDataAddress.Builder.newInstance().copyFrom(a).build())
         .extracting(HttpDataAddress::getAdditionalHeaders)
         .asInstanceOf(map(String.class, String.class))
-        .containsEntry("Edc-Contract-Id", "contractId");
+        .containsEntry("Edc-Contract-Agreement-Id", "contractId");
   }
 }

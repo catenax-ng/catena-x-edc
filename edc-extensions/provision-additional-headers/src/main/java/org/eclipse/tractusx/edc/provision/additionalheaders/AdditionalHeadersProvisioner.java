@@ -52,7 +52,7 @@ public class AdditionalHeadersProvisioner
     var address =
         HttpDataAddress.Builder.newInstance()
             .copyFrom(resourceDefinition.getDataAddress())
-            .addAdditionalHeader("Edc-Contract-Id", resourceDefinition.getContractId())
+            .addAdditionalHeader("Edc-Contract-Agreement-Id", resourceDefinition.getContractId())
             .build();
 
     var provisioned =

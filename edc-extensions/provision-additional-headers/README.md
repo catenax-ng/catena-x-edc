@@ -6,4 +6,4 @@ in order to retrieve the data that will be given to the consumer.
 This gives for example the provider backend service the possibility to audit the data requests.
 
 The following headers are added to the `HttpDataAddress`:
-- `Edc-Contract-Id`: the id of the contract agreement
+- `Edc-Contract-Agreement-Id`: the id of the contract agreement
