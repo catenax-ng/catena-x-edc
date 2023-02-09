@@ -24,7 +24,7 @@
     <parent>
         <artifactId>edc-extensions</artifactId>
         <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-        <version>0.2.0</version>
+        <version>0.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -56,11 +56,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>core-spi</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>data-plane-selector-spi</artifactId>
         </dependency>
 
@@ -84,12 +84,12 @@
 
         <!-- TEST DEPENDENCIES -->
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>junit</artifactId>
             <classifier>test-fixtures</classifier>
             <scope>test</scope>

@@ -23,7 +23,7 @@
     <parent>
         <artifactId>edc-controlplane</artifactId>
         <groupId>org.eclipse.tractusx.edc</groupId>
-        <version>0.2.0</version>
+        <version>0.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -62,7 +62,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.eclipse.dataspaceconnector.boot.system.runtime.BaseRuntime</mainClass>
+                            <mainClass>org.eclipse.edc.boot.system.runtime.BaseRuntime</mainClass>
                             <useUniqueVersions>false</useUniqueVersions>
                         </manifest>
                     </archive>
@@ -94,7 +94,7 @@
             <artifactId>edc-controlplane-base</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <groupId>org.eclipse.edc</groupId>
             <artifactId>control-plane-core</artifactId>
         </dependency>
 
@@ -105,8 +105,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.dataspaceconnector</groupId>
-            <artifactId>data-plane-transfer-client</artifactId>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>transfer-data-plane</artifactId>
         </dependency>
     </dependencies>
 

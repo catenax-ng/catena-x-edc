@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.eclipse.tractusx.edc</groupId>
         <artifactId>product-edc-parent</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,8 +42,10 @@
         <module>dataplane-selector-configuration</module>
         <module>data-encryption</module>
         <module>control-plane-adapter</module>
-        <module>custom-jsonld</module>
         <module>cx-oauth2</module>
+        <module>transferprocess-sftp-common</module>
+        <module>transferprocess-sftp-client</module>
+        <module>transferprocess-sftp-provisioner</module>
     </modules>
 
 </project>

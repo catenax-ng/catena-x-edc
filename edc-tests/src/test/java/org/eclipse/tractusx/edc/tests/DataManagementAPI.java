@@ -21,11 +21,13 @@
 package org.eclipse.tractusx.edc.tests;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,7 +78,7 @@ public class DataManagementAPI {
     return catalog.contractOffers.stream().map(this::mapOffer).collect(Collectors.toList());
   }
 
-  public String initiateNegotiation(
+  public Negotiation initiateNegotiation(
       String receivingConnectorUrl, String definitionId, String assetId, Policy policy)
       throws IOException {
     final ManagementApiOffer offer = new ManagementApiOffer();
@@ -100,12 +102,13 @@ public class DataManagementAPI {
       throw new RuntimeException(
           "Initiated negotiation. Connector did not answer with negotiation ID.");
 
-    log.debug("Initiated negotiation ( id= " + response.getId() + " )");
+    log.info(String.format("Initiated negotiation (id=%s)", response.getId()));
 
-    return response.getId();
+    final String negotiationId = response.getId();
+    return new Negotiation(negotiationId);
   }
 
-  public String initiateTransferProcess(
+  public Transfer initiateTransferProcess(
       String receivingConnectorUrl,
       String contractAgreementId,
       String assetId,
@@ -121,6 +124,31 @@ public class DataManagementAPI {
     transfer.dataDestination = mapDataAddress(dataAddress);
     transfer.protocol = "ids-multipart";
 
+    return initiateTransferProcess(transfer);
+  }
+
+  public Transfer initiateTransferProcess(
+      String receivingConnectorUrl,
+      String contractAgreementId,
+      String assetId,
+      DataAddress dataAddress,
+      String receiverEndpoint)
+      throws IOException {
+    final ManagementApiTransfer transfer = new ManagementApiTransfer();
+
+    transfer.connectorAddress = receivingConnectorUrl;
+    transfer.contractId = contractAgreementId;
+    transfer.assetId = assetId;
+    transfer.transferType = new ManagementApiTransferType();
+    transfer.managedResources = false;
+    transfer.dataDestination = mapDataAddress(dataAddress);
+    transfer.protocol = "ids-multipart";
+    transfer.properties = new ManagementApiProperties(receiverEndpoint);
+
+    return initiateTransferProcess(transfer);
+  }
+
+  private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
     final ManagementApiTransferResponse response =
         post(TRANSFER_PATH, transfer, new TypeToken<ManagementApiTransferResponse>() {});
 
@@ -128,9 +156,10 @@ public class DataManagementAPI {
       throw new RuntimeException(
           "Initiated transfer process. Connector did not answer with transfer process ID.");
 
-    log.info("Initiated transfer process ( id= " + response.getId() + " )");
+    log.info(String.format("Initiated transfer process (id=%s)", response.getId()));
 
-    return response.getId();
+    final String transferId = response.getId();
+    return new Transfer(transferId);
   }
 
   public TransferProcess getTransferProcess(String id) throws IOException {
@@ -145,26 +174,17 @@ public class DataManagementAPI {
     return mapNegotiation(negotiation);
   }
 
-  public void createAsset(Asset asset) throws IOException {
-    final ManagementApiDataAddress dataAddress = new ManagementApiDataAddress();
-    final ManagementApiAssetCreate assetCreate = new ManagementApiAssetCreate();
-    dataAddress.properties =
-        Map.of(
-            ManagementApiDataAddress.TYPE,
-            "HttpData",
-            "baseUrl",
-            "https://jsonplaceholder.typicode.com/todos/1");
-
-    assetCreate.asset = mapAsset(asset);
-    assetCreate.dataAddress = dataAddress;
-
-    post(ASSET_PATH, assetCreate);
+  public List<ContractNegotiation> getNegotiations() throws IOException {
+    final List<ManagementApiNegotiation> negotiations =
+        get(NEGOTIATIONS_PATH + "/", new TypeToken<List<ManagementApiNegotiation>>() {});
+    return negotiations.stream().map(this::mapNegotiation).collect(Collectors.toList());
   }
 
-  public void createAsset(AssetWithDataAddress assetWithDataAddress) throws IOException {
+  public void createAsset(Asset asset) throws IOException {
     final ManagementApiAssetCreate assetCreate = new ManagementApiAssetCreate();
-    assetCreate.asset = mapAsset(assetWithDataAddress.getAsset());
-    assetCreate.dataAddress = mapDataAddress(assetWithDataAddress.getDataAddress());
+
+    assetCreate.asset = mapAsset(asset);
+    assetCreate.dataAddress = mapDataAddress(asset.getDataAddress());
 
     post(ASSET_PATH, assetCreate);
   }
@@ -282,6 +302,9 @@ public class DataManagementAPI {
       case "COMPLETED":
         state = TransferProcessState.COMPLETED;
         break;
+      case "ERROR":
+        state = TransferProcessState.ERROR;
+        break;
       default:
         state = TransferProcessState.UNKNOWN;
     }
@@ -291,7 +314,43 @@ public class DataManagementAPI {
 
   private ManagementApiDataAddress mapDataAddress(@NonNull DataAddress dataAddress) {
     final ManagementApiDataAddress apiObject = new ManagementApiDataAddress();
-    apiObject.setProperties(dataAddress.getProperties());
+
+    if (dataAddress instanceof HttpProxySourceDataAddress) {
+      final var address = (HttpProxySourceDataAddress) dataAddress;
+      var properties = new HashMap<String, Object>();
+      properties.put("type", "HttpData");
+      properties.put("baseUrl", address.getBaseUrl());
+      var oauth2Provision = address.getOauth2Provision();
+      if (oauth2Provision != null) {
+        properties.put("oauth2:tokenUrl", oauth2Provision.getTokenUrl());
+        properties.put("oauth2:clientId", oauth2Provision.getClientId());
+        properties.put("oauth2:clientSecret", oauth2Provision.getClientSecret());
+        properties.put("oauth2:scope", oauth2Provision.getScope());
+      }
+      apiObject.setProperties(properties);
+    } else if (dataAddress instanceof HttpProxySinkDataAddress) {
+      apiObject.setProperties(Map.of("type", "HttpProxy"));
+    } else if (dataAddress instanceof S3DataAddress) {
+      final S3DataAddress a = (S3DataAddress) dataAddress;
+      apiObject.setProperties(
+          Map.of(
+              "type",
+              "AmazonS3",
+              "bucketName",
+              a.getBucketName(),
+              "region",
+              a.getRegion(),
+              "keyName",
+              a.getKeyName()));
+    } else if (dataAddress instanceof NullDataAddress) {
+      // set something that passes validation
+      apiObject.setProperties(Map.of("type", "HttpData", "baseUrl", "http://localhost"));
+    } else {
+      throw new UnsupportedOperationException(
+          String.format(
+              "Cannot map data address of type %s to EDC domain", dataAddress.getClass()));
+    }
+
     return apiObject;
   }
 
@@ -480,6 +539,7 @@ public class DataManagementAPI {
     private ManagementApiDataAddress dataDestination;
     private boolean managedResources;
     private ManagementApiTransferType transferType;
+    private ManagementApiProperties properties;
   }
 
   @Data
@@ -511,6 +571,12 @@ public class DataManagementAPI {
   private static class ManagementApiDataAddress {
     public static final String TYPE = "type";
     private Map<String, Object> properties;
+  }
+
+  @Data
+  private static class ManagementApiProperties {
+    @SerializedName(value = "receiver.http.endpoint")
+    private final String receiverHttpEndpoint;
   }
 
   @Data

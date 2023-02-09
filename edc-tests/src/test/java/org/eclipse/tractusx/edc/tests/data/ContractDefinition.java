@@ -32,4 +32,5 @@ public class ContractDefinition {
   @NonNull String acccessPolicyId;
 
   List<String> assetIds;
+  Long validity;
 }

@@ -10,13 +10,14 @@ Additional requirements, that affects the architecture of the extension:
 
 <b>Configuration:</b>
 
-| Key                                              | Description                                                                                                                                                                      | Mandatory | Default |
-|:-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|----|
-| edc.cp.adapter.default.message.retry.number      | Number of retries of a message, in case of an error, within the internal process of retrieving DataReference                                                                     | no   | 3  |
-| edc.cp.adapter.default.sync.request.timeout      | Timeout for synchronous request (in seconds), after witch 'timeout' error will be returned to the requesting client                                                              | no   | 20 | 
-| edc.cp.adapter.messagebus.inmemory.thread.number | Number of threads running within the in-memory implementation of MessageBus                                                                                          _ _         | no   | 10 |
-| edc.cp.adapter.cache.contract.agreement          | Turn on/off contract agreement cache for the specific asset. Once the contract is agreed, the second request for the same asset will reuse the agreement. Value 1 = on, 0 = off. | no   | 1  |
-| edc.cp.adapter.cache.catalog.expire.after        | Number of seconds, after witch prevoiusly requested catalog will not be reused, and will be removed from catalog cache                                                           | no   | 3600 |
+| Key                                              | Description                                                                                                                                                                                     | Mandatory | Default |
+|:-------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|---------|
+| edc.cp.adapter.default.message.retry.number      | Number of retries of a message, in case of an error, within the internal process of retrieving DataReference                                                                                    | no   | 3       |
+| edc.cp.adapter.default.sync.request.timeout      | Timeout for synchronous request (in seconds), after witch 'timeout' error will be returned to the requesting client                                                                             | no   | 20      | 
+| edc.cp.adapter.messagebus.inmemory.thread.number | Number of threads running within the in-memory implementation of MessageBus                                                                                          _ _                        | no   | 10      |
+| edc.cp.adapter.reuse.contract.agreement          | Turn on/off reusing of existing contract agreements for the specific asset. Once the contract is agreed, the second request for the same asset will reuse the agreement. Value 1 = on, 0 = off. | no   | 1       |
+| edc.cp.adapter.cache.catalog.expire.after        | Number of seconds, after witch prevoiusly requested catalog will not be reused, and will be removed from catalog cache                                                                          | no   | 300     |
+| edc.cp.adapter.catalog.request.limit             | Maximum number of items taken from Catalog within single request. Requests are repeated until all offers of the query are retrieved                                                             | no   | 100     |
 
 
 <b>How to use it:</b>
@@ -31,8 +32,15 @@ Additional requirements, that affects the architecture of the extension:
    ```
    http://localhost:9193/api/v1/data/adapter/asset/sync/123?providerUrl=http://localhost:8182/api/v1/ids/data
    ```
+   
+   Optional request parameters:
 
-   The controller is registered under the context alias of DataManagment API. The authentication depends on the DataManagement configuration.
+   | Name                | Description                                                                                                                                                                                                             |
+   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+   | contractAgreementId | Defines the ID of existing contract agreement, that should be reused for retrieving the asset. If parameter is specified, but contract is not found, 404 error will be returned.                                        |
+   | contractAgreementReuse | Similar to <i>edc.cp.adapter.reuse.contract.agreement</i> option allows to turn off reusing of existing contracts, but on a request level. Set the parameter value to '0' and new contract agrement will be negotiated. |
+
+   The controller is registered under the context alias of DataManagement API. The authentication depends on the DataManagement configuration.
    To find out more please visit:
 
    [api-configuration](../../edc/extensions/control-plane/api/data-management/api-configuration/README.md)

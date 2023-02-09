@@ -14,6 +14,8 @@ on:
   pull_request:
     paths-ignore:
       - 'charts/**'
+      - 'docs/**'
+      - '**/*.md'
     branches:
       - '*'
   workflow_dispatch:
@@ -38,12 +40,12 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
         with:
           fetch-depth: 0
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v3.9.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -61,12 +63,12 @@ jobs:
       # Set-Up
       -
         name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
         with:
           fetch-depth: 0
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v3.9.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -100,10 +102,10 @@ jobs:
       # Set-Up
       -
         name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v3.9.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -132,7 +134,7 @@ jobs:
       # Set-Up
       -
         name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
       -
         name: Login to GitHub Container Registry
         if: |
@@ -144,7 +146,7 @@ jobs:
           password: ${{ secrets.CXNG_GHCR_PAT }}
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v3.9.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -172,7 +174,7 @@ jobs:
             type=sha
       -
         name: Build Docker Image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: edc-controlplane/${{ matrix.name }}/src/main/docker/Dockerfile
@@ -197,7 +199,7 @@ jobs:
       # Set-Up
       -
         name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3.3.0
       -
         name: Login to GitHub Container Registry
         if: |
@@ -209,7 +211,7 @@ jobs:
           password: ${{ secrets.CXNG_GHCR_PAT }}
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v3.9.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -237,7 +239,7 @@ jobs:
             type=sha
       -
         name: Build Docker Image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: edc-dataplane/${{ matrix.name }}/src/main/docker/Dockerfile

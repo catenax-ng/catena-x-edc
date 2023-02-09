@@ -4,7 +4,7 @@ Using the Business Partner Validation Extension it's possible to add configurabl
 Catena-X `Participants` in the `ContractDefinition.AccessPolicy`. Using a BPN in `ContractDefinition.ContractPolicy` is possible, too, but once the contract is complete there is no policy enforcement in place from the EDC.
 
 It is recommended to have a basic understanding of the EDC contract/policy domain before using this extension. The
-corresponding documentation can be found in the [EDC GitHub Repository](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector).
+corresponding documentation can be found in the [EDC GitHub Repository](https://github.com/eclipse-edc/Connector).
 
 The business partner number of another connector is part of its DAPS token. Once a BPN constraint is used in an access
 policy the connector checks the token before sending out contract offers.
