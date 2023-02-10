@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
+import org.eclipse.tractusx.edc.tests.data.Asset;
 import org.junit.jupiter.api.Assertions;
 
 @Slf4j
@@ -50,38 +51,19 @@ public class ControlPlaneAdapterSteps {
     }
   }
 
-  @Then("'{connector}' has sent the correct endpoint connector")
-  public void receiveEndpoint(Connector provider) {
+  @Then("'{connector}' can call the asset with the request Endpoint")
+  public void receiveEndpoint(Connector consumer) throws IOException {
 
-    String providerAuthKey = provider.getEnvironment().getDataManagementAuthKey();
-    String providerEndpoint = provider.getEnvironment().getIdsUrl();
-    String providerEnvironment = provider.getEnvironment().toString();
-    String providerKey = provider.getEnvironment().getBackendServiceBackendApiUrl();
+    final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
 
-    log.info(
-        "provider - \n authKey: "
-            + providerAuthKey
-            + "\n idsUrl (Endpoint): "
-            + providerEndpoint
-            + "\nproviderEnvironment: "
-            + providerEnvironment
-            + "\nprovider key: "
-            + providerKey);
+    Asset asset =
+        dataManagementAPI.initiateTransferProcessWithEndpoint(
+            endpointDataReference.getEndpoint(),
+            endpointDataReference.getAuthKey(),
+            endpointDataReference.getAuthCode());
 
-    log.info(
-        "consumer Id: "
-            + endpointDataReference.getEndpoint()
-            + "\nAuthCode: "
-            + endpointDataReference.getAuthCode()
-            + " \nAuthKey: "
-            + endpointDataReference.getAuthKey());
-    Assertions.assertEquals(endpointDataReference.getAuthKey(), providerAuthKey);
-    Assertions.assertEquals(endpointDataReference.getEndpoint(), providerEndpoint);
-
-    // Assertions.assertEquals(endpointDataReference.getId(), comparingEndpoint.getID());
-    // TransferprocessId
-    // Generiert Assertions.assertEquals(endpointDataReference.getAuthCode(),
-    // comparingEndpoint.getAuthCode());
-
+    Assertions.assertNotEquals(null, asset.getId());
+    Assertions.assertNotEquals(null, asset.getDescription());
+    Assertions.assertNotEquals(null, asset.getDataAddress());
   }
 }

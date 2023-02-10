@@ -149,6 +149,14 @@ public class DataManagementAPI {
     return initiateTransferProcess(transfer);
   }
 
+  public Asset initiateTransferProcessWithEndpoint(String url, String authKey, String authCode)
+      throws IOException {
+
+    String urlTransfer = url + authKey + ":" + authCode;
+    log.info("urlTransfer: " + urlTransfer);
+    return get(urlTransfer, new TypeToken<Asset>() {});
+  }
+
   private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
     final ManagementApiTransferResponse response =
         post(TRANSFER_PATH, transfer, new TypeToken<ManagementApiTransferResponse>() {});
