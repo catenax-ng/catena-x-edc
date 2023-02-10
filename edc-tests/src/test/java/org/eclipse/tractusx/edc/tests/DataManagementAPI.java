@@ -152,7 +152,7 @@ public class DataManagementAPI {
   public Asset initiateTransferProcessWithEndpoint(String url, String authKey, String authCode)
       throws IOException {
 
-    String urlTransfer = url + authKey + ":" + authCode;
+    String urlTransfer = url + "/?" + authKey + ":" + authCode;
     log.info("urlTransfer: " + urlTransfer);
     return get(urlTransfer, new TypeToken<Asset>() {});
   }
