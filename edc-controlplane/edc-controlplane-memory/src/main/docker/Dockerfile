@@ -18,7 +18,7 @@
 #
 #  SPDX-License-Identifier: Apache-2.0
 #
-FROM alpine:3.17.1 as otel
+FROM alpine:3.17.2 as otel
 
 ENV OTEL_AGENT_LOCATION "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.12.1/opentelemetry-javaagent.jar"
 
@@ -26,7 +26,7 @@ HEALTHCHECK NONE
 
 RUN wget ${OTEL_AGENT_LOCATION} -O /tmp/opentelemetry-javaagent.jar
 
-FROM alpine:3.17.1
+FROM alpine:3.17.2
 
 ARG JAR
 ARG LIB
