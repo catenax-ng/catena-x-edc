@@ -21,12 +21,14 @@
 package org.eclipse.tractusx.edc.provision.additionalheaders;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.eclipse.edc.connector.transfer.spi.types.ResourceDefinition;
 import org.eclipse.edc.spi.types.domain.DataAddress;
 
 @JsonDeserialize(builder = AdditionalHeadersResourceDefinition.Builder.class)
+@JsonTypeName("dataspaceconnector:additionalheadersresourcedefinition")
 class AdditionalHeadersResourceDefinition extends ResourceDefinition {
 
   private String contractId;
