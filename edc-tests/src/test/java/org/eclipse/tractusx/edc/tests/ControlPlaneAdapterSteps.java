@@ -51,18 +51,20 @@ public class ControlPlaneAdapterSteps {
     }
   }
 
-  @Then("'{connector}' can call the asset with the request Endpoint")
-  public void receiveEndpoint(Connector consumer) throws IOException {
+  @Then("'{connector}' can send '{connector}' the asset")
+  public void receiveEndpoint(Connector provider, Connector consumer) throws IOException {
+
+    String providerUrl = provider.getEnvironment().getIdsUrl();
+    String requestUrl =
+        endpointDataReference.getEndpoint() + "?provider-connector-url=" + providerUrl;
 
     final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
 
-    log.info("Endpoint: " + endpointDataReference.getEndpoint());
+    log.info("url: " + requestUrl);
 
     Asset asset =
         dataManagementAPI.initiateTransferProcess(
-            endpointDataReference.getEndpoint(),
-            endpointDataReference.getAuthKey(),
-            endpointDataReference.getAuthCode());
+            requestUrl, endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode());
 
     Assertions.assertNotEquals(null, asset.getId());
     Assertions.assertNotEquals(null, asset.getDescription());
