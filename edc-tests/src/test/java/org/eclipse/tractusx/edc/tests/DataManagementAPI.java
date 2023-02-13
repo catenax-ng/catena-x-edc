@@ -234,7 +234,9 @@ public class DataManagementAPI {
 
   private <T> T get(String path, Header header, TypeToken<?> typeToken) throws IOException {
 
-    final HttpGet get = new HttpGet(dataMgmtUrl + path);
+    log.info("path to ask for Asset" + path);
+
+    final HttpGet get = new HttpGet(path);
     get.addHeader(header);
     final HttpResponse response = sendRequest(get);
     final byte[] json = response.getEntity().getContent().readAllBytes();
