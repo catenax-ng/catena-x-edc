@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
  * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
