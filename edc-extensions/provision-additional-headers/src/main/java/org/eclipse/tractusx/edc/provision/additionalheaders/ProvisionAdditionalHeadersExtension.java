@@ -25,6 +25,7 @@ import org.eclipse.edc.connector.transfer.spi.provision.ResourceManifestGenerato
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
 import org.eclipse.edc.spi.system.ServiceExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
+import org.eclipse.edc.spi.types.TypeManager;
 
 public class ProvisionAdditionalHeadersExtension implements ServiceExtension {
 
@@ -32,8 +33,12 @@ public class ProvisionAdditionalHeadersExtension implements ServiceExtension {
 
   @Inject private ProvisionManager provisionManager;
 
+  @Inject private TypeManager typeManager;
+
   @Override
   public void initialize(ServiceExtensionContext context) {
+    typeManager.registerTypes(
+        AdditionalHeadersResourceDefinition.class, AdditionalHeadersProvisionedResource.class);
     resourceManifestGenerator.registerGenerator(new AdditionalHeadersResourceDefinitionGenerator());
     provisionManager.register(new AdditionalHeadersProvisioner());
   }
