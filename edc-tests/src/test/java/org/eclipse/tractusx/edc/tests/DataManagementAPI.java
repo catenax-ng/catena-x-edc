@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -42,6 +43,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.tractusx.edc.tests.data.*;
 
@@ -149,12 +151,10 @@ public class DataManagementAPI {
     return initiateTransferProcess(transfer);
   }
 
-  public Asset initiateTransferProcessWithEndpoint(String url, String authKey, String authCode)
-      throws IOException {
-
-    String urlTransfer = url + "/?" + authKey + ":" + authCode;
-    log.info("urlTransfer: " + urlTransfer);
-    return get(urlTransfer, new TypeToken<Asset>() {});
+  public Asset initiateTransferProcess(
+      String endpointUrl, String endpointAuthKey, String endpointAuthCode) throws IOException {
+    Header header = new BasicHeader(endpointAuthKey, endpointAuthCode);
+    return get(endpointUrl, header, new TypeToken<Asset>() {});
   }
 
   private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
@@ -225,6 +225,17 @@ public class DataManagementAPI {
   private <T> T get(String path, TypeToken<?> typeToken) throws IOException {
 
     final HttpGet get = new HttpGet(dataMgmtUrl + path);
+    final HttpResponse response = sendRequest(get);
+    final byte[] json = response.getEntity().getContent().readAllBytes();
+
+    log.debug("Received response: {}", new String(json, StandardCharsets.UTF_8));
+    return new Gson().fromJson(new String(json, StandardCharsets.UTF_8), typeToken.getType());
+  }
+
+  private <T> T get(String path, Header header, TypeToken<?> typeToken) throws IOException {
+
+    final HttpGet get = new HttpGet(dataMgmtUrl + path);
+    get.addHeader(header);
     final HttpResponse response = sendRequest(get);
     final byte[] json = response.getEntity().getContent().readAllBytes();
 

@@ -57,7 +57,7 @@ public class ControlPlaneAdapterSteps {
     final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
 
     Asset asset =
-        dataManagementAPI.initiateTransferProcessWithEndpoint(
+        dataManagementAPI.initiateTransferProcess(
             endpointDataReference.getEndpoint(),
             endpointDataReference.getAuthKey(),
             endpointDataReference.getAuthCode());
