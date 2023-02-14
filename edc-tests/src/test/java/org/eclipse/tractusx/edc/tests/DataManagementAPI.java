@@ -230,6 +230,7 @@ public class DataManagementAPI {
 
   private <T> T get(String path, TypeToken<?> typeToken) throws IOException {
 
+    log.info("only dataMgmtUrl: " + dataMgmtUrl);
     log.info("dataMgmtUrl + path: " + dataMgmtUrl + path);
 
     final HttpGet get = new HttpGet(dataMgmtUrl + path);
