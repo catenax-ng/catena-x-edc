@@ -303,6 +303,14 @@ spec:
             - name: "EDC_DATA_ENCRYPTION_ALGORITHM"
               value: "AES"
 
+            ###########################
+            ## AAS WRAPPER EXTENSION ##
+            ###########################
+            - name: "EDC_CP_ADAPTER_CACHE_CATALOG_EXPIRE_AFTER"
+              value: "0"
+            - name: "EDC_CP_ADAPTER_REUSE_CONTRACT_AGREEMENT"
+              value: "0"
+
             ######################################
             ## Additional environment variables ##
             ######################################
