@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
-  Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
+  Copyright (c) 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+  Copyright (c) 2021-2023 Contributors to the Eclipse Foundation
 
   See the NOTICE file(s) distributed with this work for additional
   information regarding copyright ownership.
@@ -18,16 +18,17 @@
 
   SPDX-License-Identifier: Apache-2.0
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.eclipse.tractusx.edc.extensions</groupId>
         <artifactId>edc-extensions</artifactId>
+        <groupId>org.eclipse.tractusx.edc.extensions</groupId>
         <version>0.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hashicorp-vault</artifactId>
+    <artifactId>provision-additional-headers</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -38,25 +39,6 @@
     </properties>
 
     <build>
-        <sourceDirectory>${sourceDirectory}</sourceDirectory>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>../../</directory>
-                <targetPath>META-INF</targetPath>
-                <includes>
-                    <include>NOTICE.md</include>
-                    <include>LICENSE</include>
-                </includes>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -113,21 +95,14 @@
     </build>
 
     <dependencies>
-        <!-- EDC Depencencies -->
+        <!-- SPI -->
         <dependency>
             <groupId>org.eclipse.edc</groupId>
             <artifactId>core-spi</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.edc</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.edc</groupId>
-            <artifactId>junit</artifactId>
-            <classifier>test-fixtures</classifier>
-            <scope>test</scope>
+            <artifactId>transfer-spi</artifactId>
         </dependency>
 
         <!-- External Dependencies -->
@@ -136,15 +111,21 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>control-plane-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.edc</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -161,44 +142,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>vault</artifactId>
-            <version>${org.testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>delombok</id>
-            <properties>
-                <sourceDir>${delombokSourceDirectory}</sourceDir>
-            </properties>
-        </profile>
-    </profiles>
 </project>

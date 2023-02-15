@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
  * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
@@ -19,6 +20,7 @@
  */
 package org.eclipse.tractusx.edc.data.encryption.algorithms.aes;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,7 +36,8 @@ class AesInitializationVectorIteratorTest {
   @SneakyThrows
   void testDistinctVectors() {
     final int vectorCount = 100;
-    AesInitializationVectorIterator iterator = new AesInitializationVectorIterator();
+    final SecureRandom secureRandom = new SecureRandom();
+    AesInitializationVectorIterator iterator = new AesInitializationVectorIterator(secureRandom);
 
     List<byte[]> vectors = new ArrayList<>();
     for (var i = 0; i < vectorCount; i++) {
