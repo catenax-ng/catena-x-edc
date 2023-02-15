@@ -151,12 +151,6 @@ public class DataManagementAPI {
     return initiateTransferProcess(transfer);
   }
 
-  public Asset initiateTransferProcess(
-      String endpointUrl, String endpointAuthKey, String endpointAuthCode) throws IOException {
-    Header header = new BasicHeader(endpointAuthKey, endpointAuthCode);
-    return get(endpointUrl, header, new TypeToken<Asset>() {});
-  }
-
   private Transfer initiateTransferProcess(ManagementApiTransfer transfer) throws IOException {
     final ManagementApiTransferResponse response =
         post(TRANSFER_PATH, transfer, new TypeToken<ManagementApiTransferResponse>() {});
@@ -169,6 +163,12 @@ public class DataManagementAPI {
 
     final String transferId = response.getId();
     return new Transfer(transferId);
+  }
+
+  public Asset initiateTransferProcess(
+      String endpointUrl, String endpointAuthKey, String endpointAuthCode) throws IOException {
+    Header header = new BasicHeader(endpointAuthKey, endpointAuthCode);
+    return get(endpointUrl, header, new TypeToken<Asset>() {});
   }
 
   public TransferProcess getTransferProcess(String id) throws IOException {
@@ -229,9 +229,6 @@ public class DataManagementAPI {
   }
 
   private <T> T get(String path, TypeToken<?> typeToken) throws IOException {
-
-    log.info("only dataMgmtUrl: " + dataMgmtUrl);
-    log.info("dataMgmtUrl + path: " + dataMgmtUrl + path);
 
     final HttpGet get = new HttpGet(dataMgmtUrl + path);
     final HttpResponse response = sendRequest(get);
