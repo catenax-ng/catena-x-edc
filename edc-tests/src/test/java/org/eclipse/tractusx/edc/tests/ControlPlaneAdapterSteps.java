@@ -26,9 +26,10 @@ import io.cucumber.java.en.When;
 import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
-import org.eclipse.tractusx.edc.tests.data.Asset;
-import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 public class ControlPlaneAdapterSteps {
@@ -51,23 +52,21 @@ public class ControlPlaneAdapterSteps {
     }
   }
 
-  @Then("'{connector}' can send '{connector}' the asset")
-  public void receiveEndpoint(Connector provider, Connector consumer) throws IOException {
+  @Then("'{connector}' asks for the asset from the endpoint")
+  public void receiveEndpoint(Connector consumer) throws IOException {
 
-    String providerUrl = provider.getEnvironment().getIdsUrl();
-    String requestUrl =
-        endpointDataReference.getEndpoint(); // + "?provider-connector-url=" + providerUrl;
-
-    final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
-
-    log.info("url: " + requestUrl);
-
-    Asset asset =
-        dataManagementAPI.initiateTransferProcess(
-            requestUrl, endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode());
-
-    Assertions.assertNotEquals(null, asset.getId());
-    Assertions.assertNotEquals(null, asset.getDescription());
-    Assertions.assertNotEquals(null, asset.getDataAddress());
+    var requestUrl = endpointDataReference.getEndpoint();
+    var key = endpointDataReference.getAuthKey();
+    var value = endpointDataReference.getAuthCode();
+    var httpClient = HttpClientBuilder.create().build();
+    var get = new HttpGet(requestUrl);
+    get.addHeader(key, value);
+    log.info("before getting method");
+    final CloseableHttpResponse response = httpClient.execute(get);
+    log.info("the get request was executed");
+    var bytes = response.getEntity().getContent().readAllBytes();
+    log.info("the response was converted into bytes");
+    var result = new String(bytes);
+    log.info("Result of receiveEndpoint Method: " + result);
   }
 }

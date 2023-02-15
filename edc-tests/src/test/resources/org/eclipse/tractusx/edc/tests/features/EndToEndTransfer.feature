@@ -27,7 +27,7 @@ Feature: API-Wrapper Extension
   Scenario: Connector asks for an endpoint connector from another one
     Given 'Plato' has the following assets
       | id      | description               | baseUrl                          |
-      | asset-1 | http proxy transfer asset | https://jsonplaceholder.typicode.com/todos/11 |
+      | asset-1 | http proxy transfer asset | http://localhost:8081/api/health |
     And 'Plato' has the following policies
       | id       | action |
       | policy-1 | USE    |
@@ -37,4 +37,4 @@ Feature: API-Wrapper Extension
     When 'Sokrates' gets a request endpoint from 'Plato'
       | asset id |
       | asset-1  |
-    Then 'Plato' can send 'Sokrates' the asset
+    Then 'Sokrates' asks for the asset from the endpoint
