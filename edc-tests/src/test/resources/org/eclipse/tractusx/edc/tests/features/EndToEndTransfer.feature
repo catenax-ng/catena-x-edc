@@ -25,9 +25,9 @@ Feature: API-Wrapper Extension
     Given 'Sokrates' has an empty database
 
   Scenario: Connector asks for an endpoint connector from another one
-    Given 'Plato' has the following assets
+    Given 'Plato' has a http proxy assets
       | id      | description               | baseUrl                          |
-      | asset-1 | http proxy transfer asset | https://jsonplaceholder.typicode.com/todos/11 |
+      | asset-1 | http proxy transfer asset | http://localhost:8080/api/check/liveness |
     And 'Plato' has the following policies
       | id       | action |
       | policy-1 | USE    |
