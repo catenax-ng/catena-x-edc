@@ -56,7 +56,7 @@ public class ControlPlaneAdapterSteps {
 
     String providerUrl = provider.getEnvironment().getIdsUrl();
     String requestUrl =
-        endpointDataReference.getEndpoint() + "?provider-connector-url=" + providerUrl;
+        endpointDataReference.getEndpoint(); // + "?provider-connector-url=" + providerUrl;
 
     final DataManagementAPI dataManagementAPI = consumer.getDataManagementAPI();
 
