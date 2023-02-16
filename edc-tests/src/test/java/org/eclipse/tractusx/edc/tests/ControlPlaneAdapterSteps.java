@@ -20,6 +20,7 @@
 
 package org.eclipse.tractusx.edc.tests;
 
+import com.google.gson.Gson;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -29,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.eclipse.dataspaceconnector.spi.system.health.HealthStatus;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
+import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 public class ControlPlaneAdapterSteps {
@@ -68,5 +71,9 @@ public class ControlPlaneAdapterSteps {
     log.info("the response was converted into bytes " + bytes.toString());
     var result = new String(bytes);
     log.info("Result of receiveEndpoint Method: " + result);
+    var resultTransformed = new Gson().fromJson(result, HealthStatus.class);
+
+    Assertions.assertTrue(resultTransformed.isHealthy());
+    Assertions.assertFalse(resultTransformed.getComponentResults().isEmpty());
   }
 }
