@@ -64,13 +64,9 @@ public class ControlPlaneAdapterSteps {
     var httpClient = HttpClientBuilder.create().build();
     var get = new HttpGet(requestUrl);
     get.addHeader(key, value);
-    log.info("before getting method");
     final CloseableHttpResponse response = httpClient.execute(get);
-    log.info("the get request was executed " + response.toString());
     var bytes = response.getEntity().getContent().readAllBytes();
-    log.info("the response was converted into bytes " + bytes.toString());
     var result = new String(bytes);
-    log.info("Result of receiveEndpoint Method: " + result);
     var resultTransformed = new Gson().fromJson(result, HealthStatus.class);
 
     Assertions.assertTrue(resultTransformed.isHealthy());

@@ -26,8 +26,8 @@ Feature: HttpProxy Data Transfer
 
   Scenario: Connector transfers data via HttpProxy
     Given 'Plato' has a http proxy assets
-      | id      | description               | baseUrl                          |
-      | asset-1 | http proxy transfer asset | http://localhost:8080/api/check/liveness |
+      | id      | description               | baseUrl                                  |
+      | asset-1 | http proxy transfer asset | http://localhost:8081/api/check/liveness |
     And 'Plato' has the following policies
       | id       | action |
       | policy-1 | USE    |
@@ -45,7 +45,7 @@ Feature: HttpProxy Data Transfer
   Scenario: Connector transfers data via HttpProxy, data on provider side requires oauth2 authentication
     Given 'Plato' has a http proxy assets
       | id      | description               | baseUrl                                  | oauth2 token url     | oauth2 client id  | oauth2 client secret | oauth2 scope |
-      | asset-1 | http proxy transfer asset | http://localhost:8080/api/check/liveness | http://ids-daps:4567 | data-plane-oauth2 | supersecret          | openid       |
+      | asset-1 | http proxy transfer asset | http://localhost:8081/api/check/liveness | http://ids-daps:4567 | data-plane-oauth2 | supersecret          | openid       |
     And 'Plato' has the following policies
       | id       | action |
       | policy-1 | USE    |
