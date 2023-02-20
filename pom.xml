@@ -72,7 +72,7 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.edc.version>0.0.1-20230213-SNAPSHOT</org.eclipse.edc.version>
+        <org.eclipse.edc.version>0.0.1-20230220-SNAPSHOT</org.eclipse.edc.version>
         <com.azure.sdk.bom.version>1.2.9</com.azure.sdk.bom.version>
         <org.postgresql.version>42.5.3</org.postgresql.version>
         <org.flywaydb.version>9.14.1</org.flywaydb.version>
