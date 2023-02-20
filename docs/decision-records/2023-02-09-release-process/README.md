@@ -5,7 +5,8 @@
 To improve stability, reproducibility and maintainability of releases, product-edc will undergo the following changes:
 
 - use EDC `SNAPSHOT` builds during development
-- use release versions of EDC in releases. Release branches must not change upstream dependency versions, unless there is a clear
+- use release versions of EDC in releases. Release branches must not change upstream dependency versions, unless there
+  is a clear
   and concise reason to do so.
 - slightly update branching model
 - if possible, bugs/defects should be fixed on `develop` and be backported to the respective `hotfix/` branch
@@ -43,7 +44,7 @@ in `develop` that are not scoped for a particular release.
 Second, the dependency onto EDC is updated to the most recent build. For example, if a release is
 created on March 27th 2023, the most recent nightly would be `0.0.1-20230326`.
 
-_Updating Gradle files or Maven POMs, creating branches and tags in Git should be automated through Github Actions as
+_Updating Gradle files or Maven POMs, creating branches and tags in Git should be automated through GitHub Actions as
 part of the release process. For reference_:
 
 - Modifying and committing files: https://github.com/orgs/community/discussions/26842#discussioncomment-3253612
@@ -51,6 +52,10 @@ part of the release process. For reference_:
 - Creating tags using GitHub's
   API: https://github.com/eclipse-edc/Connector/blob/b24a5cacbc9fcabdfd8020d779399b3e56856661/.github/workflows/release-edc.yml#L21 (
   example)
+
+Once a release is created, the EDC upstream version must not change anymore, unless there is good reason to do so, for
+example, a defect, that needs to be fixed upstream. At that point a decision can also be made to employ a cherry-pick model, in case the
+upstream's development has progressed to the point of breaking changes.
 
 ### Changes to the branching model
 
