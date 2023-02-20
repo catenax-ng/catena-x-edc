@@ -27,7 +27,7 @@ public class VerifiableCredentialDeserializationTest {
         Assertions.assertTrue(result.getExpirationDate() != null);
         Assertions.assertTrue(result.getCredentialStatus().getId() != null);
         Assertions.assertTrue(result.getCredentialStatus().getType() != null);
-        Assertions.assertTrue(result.getProof().getProofValueMultiBase() != null);
+        Assertions.assertTrue(result.getProof().getProofValue() != null);
         Assertions.assertNotNull(result.credentialSubject);
     }
 

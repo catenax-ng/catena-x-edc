@@ -11,7 +11,7 @@ import java.util.List;
 public class DanubCredentialFactory {
 
     @SneakyThrows
-    public static com.danubetech.verifiablecredentials.VerifiablePresentation getTestDanubVP(){
+    public static com.danubetech.verifiablecredentials.VerifiablePresentation getTestDanubVP() {
         com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<? extends com.danubetech.verifiablecredentials.VerifiablePresentation.Builder<?>>
                 builder = com.danubetech.verifiablecredentials.VerifiablePresentation
                 .builder();
@@ -40,6 +40,7 @@ public class DanubCredentialFactory {
                 .types(List.of("TestCredential"))
                 .issuer(new URI("https://example.edu/issuers/565049"))
                 .issuanceDate(new Date())
+                .expirationDate(new Date(2035, 1, 1))
                 .credentialSubject(getSubject())
                 .ldProof(null) // set to null, as presentation will be used within JWT
                 .build();
@@ -47,7 +48,7 @@ public class DanubCredentialFactory {
 
 
     @SneakyThrows
-    private static CredentialSubject getSubject(){
+    private static CredentialSubject getSubject() {
         CredentialSubject subject = CredentialSubject
                 .builder()
                 .id(new URI("did:example:c276e12ec21ebfeb1f712ebc6f1"))

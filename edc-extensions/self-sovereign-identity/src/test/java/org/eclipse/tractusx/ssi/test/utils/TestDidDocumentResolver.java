@@ -32,7 +32,7 @@ public class TestDidDocumentResolver implements DidDocumentResolver {
 
     public DidDocumentResolverRegistry withRegistry() {
         final DidDocumentResolverRegistry registry = new DidDocumentResolverRegistryImpl();
-        registry.register(new TestDidDocumentResolver());
+        registry.register(this);
         return registry;
     }
 

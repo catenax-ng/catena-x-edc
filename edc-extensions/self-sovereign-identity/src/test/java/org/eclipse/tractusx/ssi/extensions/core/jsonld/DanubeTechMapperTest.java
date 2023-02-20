@@ -15,7 +15,7 @@ public class DanubeTechMapperTest {
      * DanubTech Verifiable Presentation to Verifiable Credential and vice versa
      */
     @Test
-    public void mapVerifiableCredentialDtPresSuccess(){
+    public void mapVerifiableCredentialDtPresSuccess() {
         // given
         com.danubetech.verifiablecredentials.VerifiablePresentation dtVp;
         dtVp = DanubCredentialFactory.getTestDanubVP();
@@ -32,18 +32,13 @@ public class DanubeTechMapperTest {
     }
 
     @Test
-    public void mapVerifiableCredentialToDtPresFail(){
-        // given
-        String expectedMessage = "java.lang.NullPointerException";
-        // when
-        NullPointerException exception = Assertions.assertThrows(NullPointerException.class,
+    public void mapVerifiableCredentialToDtPresFail() {
+        Assertions.assertThrows(NullPointerException.class,
                 () -> mapper.map((VerifiablePresentation) null));
-        // then
-        Assertions.assertTrue(exception.toString().equals(expectedMessage));
     }
 
     @Test
-    public void mapDtPresToVerifiablePresentationSuccess(){
+    public void mapDtPresToVerifiablePresentationSuccess() {
         // given
         com.danubetech.verifiablecredentials.VerifiablePresentation toTest;
         toTest = DanubCredentialFactory.getTestDanubVP();
@@ -58,7 +53,7 @@ public class DanubeTechMapperTest {
     }
 
     @Test
-    public void mapDtPresToVerifiableCredentialFail(){
+    public void mapDtPresToVerifiableCredentialFail() {
         // given
         com.danubetech.verifiablecredentials.VerifiablePresentation toTest;
         toTest = DanubCredentialFactory.getInvalidTestDanubVP();
@@ -74,7 +69,7 @@ public class DanubeTechMapperTest {
      * DanubTech to Verifiable Credential and vice versa
      */
     @Test
-    public void mapDtCredToVerifiableCredentialSuccess(){
+    public void mapDtCredToVerifiableCredentialSuccess() {
         // given
         com.danubetech.verifiablecredentials.VerifiableCredential toTest;
         toTest = DanubCredentialFactory.getTestDanubVC();
@@ -84,25 +79,21 @@ public class DanubeTechMapperTest {
         Assertions.assertEquals(result.getId(), toTest.getId());
         Assertions.assertEquals(result.getTypes(), toTest.getTypes());
         Assertions.assertEquals(result.getProof(), toTest.getLdProof());
-        Assertions.assertEquals(result.getExpirationDate(), toTest.getExpirationDate());
+        Assertions.assertEquals(result.getExpirationDate(), toTest.getExpirationDate().toInstant());
         //Assertions.assertEquals(result.getClaims(), toTest.getCredentialSubject().getClaims()); // TODO Check subject
     }
 
     @Test
-    public void mapDtCredToVerifiableCredentialFail(){
+    public void mapDtCredToVerifiableCredentialFail() {
         // given
         com.danubetech.verifiablecredentials.VerifiableCredential toTest;
         toTest = DanubCredentialFactory.getInvalidTestDanubVC();
-        String expectedMessage = "SsiException";
         // when
-        SsiException exception = Assertions.assertThrows(SsiException.class,
-                () -> mapper.map(toTest));
-        // then
-        Assertions.assertTrue(exception.toString().contains(expectedMessage));
+        Assertions.assertThrows(SsiException.class, () -> mapper.map(toTest));
     }
 
     @Test
-    public void mapVerifiableCredentialToDtCredSuccess(){
+    public void mapVerifiableCredentialToDtCredSuccess() {
         // given
         com.danubetech.verifiablecredentials.VerifiableCredential dtVc;
         dtVc = DanubCredentialFactory.getTestDanubVC();
@@ -113,18 +104,13 @@ public class DanubeTechMapperTest {
         Assertions.assertEquals(toTest.getId(), result.getId());
         Assertions.assertEquals(toTest.getTypes(), result.getTypes());
         Assertions.assertEquals(toTest.getProof(), result.getLdProof());
-        Assertions.assertEquals(toTest.getExpirationDate(), result.getExpirationDate());
+        Assertions.assertEquals(toTest.getExpirationDate(), result.getExpirationDate().toInstant());
     }
 
     @Test
-    public void mapVerifiableCredentialDtCredFail(){
+    public void mapVerifiableCredentialDtCredFail() {
         // given
         VerifiableCredential toTest = null;
-        String expectedMessage = "NullPointer";
-        // when
-        NullPointerException exception = Assertions.assertThrows(NullPointerException.class,
-                () -> mapper.map(toTest));
-        // then
-        Assertions.assertTrue(exception.toString().contains(expectedMessage));
+        Assertions.assertThrows(NullPointerException.class, () -> mapper.map(toTest));
     }
 }

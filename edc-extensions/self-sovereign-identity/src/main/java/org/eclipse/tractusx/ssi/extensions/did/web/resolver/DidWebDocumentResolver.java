@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.eclipse.tractusx.ssi.extensions.core.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.extensions.core.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.did.web.exception.DidWebException;
 import org.eclipse.tractusx.ssi.extensions.did.web.util.Constants;
@@ -77,7 +76,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
     return Ed25519VerificationKey2020.builder()
         .id(key.getId())
         .controller(key.getController())
-        .publicKeyMultibase(key.getPublicKeyMultibase())
+        .multibase(key.getMultibase())
         .build();
   }
 }

@@ -77,7 +77,7 @@
         <com.azure.sdk.bom.version>1.2.8</com.azure.sdk.bom.version>
         <org.postgresql.version>42.5.1</org.postgresql.version>
         <org.flywaydb.version>9.10.2</org.flywaydb.version>
-        <com.nimbus.jose.jwt.version>9.9</com.nimbus.jose.jwt.version>
+        <com.nimbus.jose.jwt.version>9.30.2</com.nimbus.jose.jwt.version>
         <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
         <com.github.multiformats.java-multibase>v1.1.0</com.github.multiformats.java-multibase>
 

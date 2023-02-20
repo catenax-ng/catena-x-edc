@@ -5,7 +5,7 @@ import lombok.*;
 import org.eclipse.tractusx.ssi.spi.verifiable.Ed25519Proof;
 
 import java.net.URI;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Value
@@ -24,10 +24,10 @@ public class VerifiableCredential {
     URI issuer;
 
     @NonNull
-    Date issuanceDate;
+    Instant issuanceDate;
 
     @NonNull
-    Date expirationDate;
+    Instant expirationDate;
 
     @NonNull
     @Builder.Default

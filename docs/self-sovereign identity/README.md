@@ -31,3 +31,7 @@ openssl ec -in ssi-private-key.pem -pubout -out ssi-public-key.pem
 # Upgrade to newest version needed https://github.com/auth0/java-jwt/issues/270
 openssl pkcs8 -topk8 -inform pem -in ssi-private-key.pem -outform pem -nocrypt -out file.pem
 ```
+
+
+
+openssl pkey -in ed25519key.pem -pubout

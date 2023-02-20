@@ -25,7 +25,7 @@ public class Base64WithPadding implements MultibaseString {
     return new Base64WithPadding(base64, encoded);
   }
 
-  byte @NonNull [] decoded;
+  byte @NonNull [] encoded;
   @NonNull
-  String encoded;
+  String decoded;
 }

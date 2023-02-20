@@ -1,13 +1,14 @@
 package org.eclipse.tractusx.ssi.extensions.core.proof.verify;
 
-import lombok.NonNull;
-import org.bouncycastle.math.ec.rfc8032.Ed25519;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.exception.DidDocumentResolverNotFoundException;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.HashedLinkedData;
-import org.eclipse.tractusx.ssi.spi.did.DidParser;
 import org.eclipse.tractusx.ssi.spi.did.Did;
 import org.eclipse.tractusx.ssi.spi.did.DidDocument;
+import org.eclipse.tractusx.ssi.spi.did.DidParser;
 import org.eclipse.tractusx.ssi.spi.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
@@ -26,9 +27,9 @@ public class LinkedDataVerifier {
         this.monitor = monitor;
     }
 
-    public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential) {
+    public boolean verify(HashedLinkedData message, VerifiableCredential credential) {
 
-        final @NonNull URI issuer = credential.getIssuer();
+        final URI issuer = credential.getIssuer();
         final Did issuerDid = DidParser.parse(issuer);
 
         final DidDocumentResolver didDocumentResolver;
@@ -48,16 +49,14 @@ public class LinkedDataVerifier {
                 .findFirst()
                 .orElseThrow();
 
-        final MultibaseString publicKey = key.getMultibaseString();
-        final MultibaseString signature = credential.getProof().getProofValueMultiBase();
+        final MultibaseString publicKey = key.getMultibase();
+        final MultibaseString signature = credential.getProof().getProofValue();
 
-        return Ed25519.verify(
-                signature.getDecoded(),
-                0,
-                publicKey.getDecoded(),
-                0,
-                hashedLinkedData.getValue(),
-                0,
-                hashedLinkedData.getValue().length);
+        final Signer verifier = new Ed25519Signer();
+        final Ed25519PublicKeyParameters ed25519PublicKeyParameters = new Ed25519PublicKeyParameters(publicKey.getEncoded(), 0);
+        verifier.init(false, ed25519PublicKeyParameters);
+        verifier.update(message.getValue(), 0, message.getValue().length);
+        System.out.println("SIGNATURE " + signature.getDecoded());
+        return verifier.verifySignature(signature.getEncoded());
     }
 }

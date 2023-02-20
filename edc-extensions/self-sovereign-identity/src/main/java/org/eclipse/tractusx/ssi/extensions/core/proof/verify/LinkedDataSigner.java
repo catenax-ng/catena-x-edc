@@ -1,23 +1,27 @@
 package org.eclipse.tractusx.ssi.extensions.core.proof.verify;
 
-import org.bouncycastle.math.ec.rfc8032.Ed25519;
+import lombok.SneakyThrows;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.HashedLinkedData;
+
+import java.security.PrivateKey;
 
 public class LinkedDataSigner {
 
-  public byte[] sign(HashedLinkedData hashedLinkedData, byte[] signingKey) {
+    @SneakyThrows
+    public byte[] sign(HashedLinkedData message, byte[] privateKey) {
+        final Signer verifier = new Ed25519Signer();
 
-    final byte[] signature = new byte[64];
+        final Ed25519PrivateKeyParameters ed25519PrivateKeyParameters = new Ed25519PrivateKeyParameters(privateKey, 0);
+        verifier.init(true, ed25519PrivateKeyParameters);
+        verifier.update(message.getValue(), 0, message.getValue().length);
 
-    Ed25519.sign(
-        signingKey,
-        0,
-        hashedLinkedData.getValue(),
-        0,
-        hashedLinkedData.getValue().length,
-        signature,
-        0);
+        var sig = verifier.generateSignature();
+        System.out.println("SIGNATURE " +  sig);
 
-    return signature;
-  }
+        return sig;
+    }
 }

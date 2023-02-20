@@ -1,15 +1,14 @@
 package org.eclipse.tractusx.ssi.spi.verifiable;
 
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 
 public interface MultibaseString {
   @NonNull
-  byte[] getDecoded();
+  byte[] getEncoded();
 
   @NonNull
-  String getEncoded();
+  String getDecoded();
 
   default MultibaseString getInstance(String instance){
     return MultibaseFactory.create(instance);

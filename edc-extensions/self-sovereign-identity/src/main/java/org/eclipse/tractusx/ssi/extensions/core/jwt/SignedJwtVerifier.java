@@ -63,7 +63,7 @@ public class SignedJwtVerifier {
         // verify JWT signature
         try {
             for (org.eclipse.tractusx.ssi.spi.did.PublicKey pk : publicKeys) {
-                boolean verified = jwt.verify(new ECDSAVerifier((ECPublicKey) pk.getKey()));
+                boolean verified = jwt.verify(new ECDSAVerifier((ECPublicKey) pk.getMultibase()));
                 monitor.debug("Successfully validated JWT signature for DID " + issuerDid);
                 if (verified) {
                     return true;

@@ -32,7 +32,7 @@ public class Base58Bitcoin implements MultibaseString {
     return new Base58Bitcoin(base58, encoded);
   }
 
-  byte @NonNull [] decoded;
+  byte @NonNull [] encoded;
   @NonNull
-  String encoded;
+  String decoded;
 }

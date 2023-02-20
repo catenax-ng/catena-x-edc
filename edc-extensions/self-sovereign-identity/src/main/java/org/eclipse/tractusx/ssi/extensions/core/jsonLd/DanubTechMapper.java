@@ -10,10 +10,14 @@ import lombok.SneakyThrows;
 import lombok.experimental.PackagePrivate;
 import org.eclipse.tractusx.ssi.extensions.core.exception.SsiException;
 import org.eclipse.tractusx.ssi.spi.verifiable.Ed25519Proof;
+import org.eclipse.tractusx.ssi.spi.verifiable.MultibaseFactory;
+import org.eclipse.tractusx.ssi.spi.verifiable.MultibaseString;
 import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialStatus;
+import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.spi.verifiable.presentation.VerifiablePresentation;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -80,14 +84,15 @@ public class DanubTechMapper {
     public static com.danubetech.verifiablecredentials.VerifiableCredential map(
             VerifiableCredential credential) {
 
-        if (!credential.getTypes().stream().anyMatch(x -> x.equals("VerifiableCredential"))) {
+        if (!credential.getTypes().stream().anyMatch(x -> x.equals(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))) {
             throw new SsiException("Type: VerifiableCredential missing");
         }
         // Verifiable Credential Type is automatically added in Builder
-        List<String> types = new ArrayList<>(credential.getTypes());
-        types.remove(0);
+        final List<String> types = credential.getTypes().stream()
+                .filter(t -> !t.equals(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+                .collect(Collectors.toList());
 
-        CredentialSubject subject = CredentialSubject.builder().properties(credential.getCredentialSubject()).build();
+        final CredentialSubject subject = CredentialSubject.builder().properties(credential.getCredentialSubject()).build();
 
         return com.danubetech.verifiablecredentials.VerifiableCredential.builder()
                 .defaultContexts(true)
@@ -96,8 +101,8 @@ public class DanubTechMapper {
                 .id(credential.getId())
                 .types(types)
                 .issuer(credential.getIssuer())
-                .issuanceDate(credential.getIssuanceDate())
-                .expirationDate(credential.getExpirationDate())
+                .issuanceDate(Date.from(credential.getIssuanceDate()))
+                .expirationDate(Date.from(credential.getExpirationDate()))
                 .credentialSubject(subject)
                 .build();
         // .credentialStatus(credential.getStatus())
@@ -112,8 +117,8 @@ public class DanubTechMapper {
                     .id(dtCredential.getId())
                     .types(dtCredential.getTypes())
                     .issuer(dtCredential.getIssuer())
-                    .issuanceDate(dtCredential.getIssuanceDate())
-                    .expirationDate(dtCredential.getExpirationDate())
+                    .issuanceDate(dtCredential.getIssuanceDate().toInstant())
+                    .expirationDate(dtCredential.getExpirationDate().toInstant())
                     .proof(map(dtCredential.getLdProof()))
                     .build();
             return vc;
@@ -134,10 +139,10 @@ public class DanubTechMapper {
         }
 
         return Ed25519Proof.builder()
-                .created(dtProof.getCreated())
+                .created(dtProof.getCreated().toInstant())
                 .type(dtProof.getType())
                 .proofPurpose(dtProof.getProofPurpose())
-                .proofValue(dtProof.getProofValue())
+                .proofValue(MultibaseFactory.create(dtProof.getProofValue()))
                 .verificationMethod(dtProof.getVerificationMethod())
                 .build();
     }

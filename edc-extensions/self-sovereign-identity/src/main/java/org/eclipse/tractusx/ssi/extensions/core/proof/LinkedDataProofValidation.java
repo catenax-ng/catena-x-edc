@@ -2,8 +2,10 @@ package org.eclipse.tractusx.ssi.extensions.core.proof;
 
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.extensions.core.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.extensions.core.proof.transform.LinkedDataTransformer;
+import org.eclipse.tractusx.ssi.extensions.core.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.extensions.core.proof.verify.LinkedDataSigner;
 import org.eclipse.tractusx.ssi.extensions.core.proof.verify.LinkedDataVerifier;
 import org.eclipse.tractusx.ssi.spi.did.Did;
@@ -12,7 +14,9 @@ import org.eclipse.tractusx.ssi.spi.verifiable.Ed25519Proof;
 import org.eclipse.tractusx.ssi.spi.verifiable.MultibaseString;
 import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
 
-import java.util.Date;
+import java.net.URI;
+import java.security.PrivateKey;
+import java.time.Instant;
 
 public class LinkedDataProofValidation {
 
@@ -46,9 +50,9 @@ public class LinkedDataProofValidation {
 
     public boolean checkProof(VerifiableCredential verifiableCredential) {
         // TODO Asser proof is linked data proof
-        var transformedData = transformer.transform(verifiableCredential);
-        var hashedData = hasher.hash(transformedData);
-        var isProofed = verifier.verify(hashedData, verifiableCredential);
+        final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
+        final HashedLinkedData hashedData = hasher.hash(transformedData);
+        final boolean isProofed = verifier.verify(hashedData, verifiableCredential);
 
         if (isProofed) {
             monitor.debug(String.format("Successfully verified signature of verifiable credential proof (id=%s, issuer=%s)", verifiableCredential.getId(), verifiableCredential.getIssuer()));
@@ -60,17 +64,16 @@ public class LinkedDataProofValidation {
     }
 
     public Ed25519Proof createProof(
-            VerifiableCredential verifiableCredential, Did verificationMethodId, byte[] signingKey) {
-        var transformedData = transformer.transform(verifiableCredential);
-        var hashedData = hasher.hash(transformedData);
-        var signature = signer.sign(hashedData, signingKey);
-        MultibaseString multibaseString = MultibaseFactory.create(signature);
+            VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] privateKey) {
+        final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
+        final HashedLinkedData hashedData = hasher.hash(transformedData);
+        final byte[] signature = signer.sign(hashedData, privateKey);
+        final MultibaseString signatureMultibase = MultibaseFactory.create(signature);
 
         return Ed25519Proof.builder()
-                .created(new Date())
-                .verificationMethod(verificationMethodId.toUri())
-                .proofValue(multibaseString.getEncoded())
-                .proofValueMultiBase(multibaseString)
+                .created(Instant.now())
+                .verificationMethod(verificationMethodId)
+                .proofValue(signatureMultibase)
                 .build();
     }
 }

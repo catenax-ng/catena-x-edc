@@ -17,7 +17,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.security.KeyFactory;
+import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,7 +29,7 @@ public class SignedJwtVerifierTest {
     private SignedJwtVerifier signedJwtVerifier;
     private JsonLdSerializer jsonLdSerializer;
     private TestDidDocumentResolver didDocumentResolver;
-    private TestIdentity testIdentity;
+    private TestIdentity credentialIssuer;
 
     // mocks
     private Monitor monitor;
@@ -34,10 +37,10 @@ public class SignedJwtVerifierTest {
     @BeforeEach
     public void setup() {
         monitor = Mockito.mock(Monitor.class);
-        testIdentity = TestIdentityFactory.newIdentity();
+        credentialIssuer = TestIdentityFactory.newIdentity();
 
         didDocumentResolver = new TestDidDocumentResolver();
-        didDocumentResolver.register(testIdentity);
+        didDocumentResolver.register(credentialIssuer);
 
         signedJwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry(), monitor);
         jsonLdSerializer = new JsonLdSerializerImpl();
@@ -46,13 +49,21 @@ public class SignedJwtVerifierTest {
     @Test
     @SneakyThrows
     public void verifyJwtSuccess() {
+        didDocumentResolver.register(credentialIssuer);
         // given
+        var test = new ECPrivateKey();
+
+        KeyFactory kf = KeyFactory.getInstance("DSA", "BC");
+//for private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
+        PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(credentialIssuer.getPrivateKey().getEncoded());
+        PrivateKey pk = kf.generatePrivate(ks);
+
         SignedJWT toTest = SignedJwtFactory.createTestJwt(
-                "someIssuer",
+                credentialIssuer.getDid().toString(),
                 "",
                 "someAudience",
                 getTestPresentation(),
-                (ECPrivateKey) testIdentity.getKeyPair().getPrivate()
+                credentialIssuer.getKeyPair().getPrivate()
         );
 
         // when
