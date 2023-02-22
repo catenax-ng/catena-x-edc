@@ -25,6 +25,7 @@ txdc:
           secretName: tls-secret
   daps:
     clientId: E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65:keyid:E7:07:2D:74:56:66:31:F0:7B:10:EA:B6:03:06:4C:23:7F:ED:A6:65
+    url: "https://txdc-daps.int.demo.catena-x.net"
   backendService:
     httpProxyTokenReceiverUrl: "http://pen-test-sokrates-txdc-backend"
   postgresql:

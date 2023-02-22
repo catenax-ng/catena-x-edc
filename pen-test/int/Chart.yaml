@@ -8,7 +8,7 @@ appVersion: "0.0.1"
 dependencies:
   - name: tractusx-connector
     alias: txdc
-    version: "0.2.0"
+    version: "0.3.0"
     repository: https://catenax-ng.github.io/product-edc
   - name: backend-service
     alias: backend
