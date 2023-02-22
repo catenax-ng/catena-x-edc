@@ -1,7 +1,6 @@
-# Domain Model
-
-:::info possible content
-* was gibt es alles im EDC
-* protokollbeschriebung
-* (in mehreren .md files)
-:::
+---
+id: Domain Model
+title: Domain Model
+description: 'Connector Kit'
+sidebar_position: 2
+---
