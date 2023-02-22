@@ -5,6 +5,7 @@ on:
   pull_request:
     branches:
       - main
+      - support/*
     types:
       - closed
 
@@ -67,7 +68,7 @@ jobs:
         uses: actions/checkout@v3.3.0
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.9.0
+        uses: actions/setup-java@v3.10.0
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -172,13 +173,14 @@ jobs:
           prerelease: false
       -
         name: Set up JDK 11
-        uses: actions/setup-java@v3.9.0
+        uses: actions/setup-java@v3.10.0
         with:
           java-version: '11'
           distribution: 'adopt'
           cache: 'maven'
       -
         name: Merge main back into develop and set new snapshot version
+        if: github.event.pull_request.base.ref == 'main'
         run: |
           # Prepare git env
           git config user.name "GitHub actions"

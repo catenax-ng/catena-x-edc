@@ -18,6 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * When CP-Adapter works in InMemory mode, LockMap is used to prevent race condition of two events.
+ * This implementation will not work if both events will be handled by two separate EDC instances
+ * (persistent mode), but edc.cp.adapter.service.objectstore.ObjectStoreServiceSql#put(...) method
+ * will not allow to save both events in the table as PRIMARY_KE collision would appear.
+ */
 public class LockMap {
   private final Map<String, ReentrantLock> lock = new HashMap<>();
 

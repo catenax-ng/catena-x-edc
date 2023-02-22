@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
  * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
@@ -29,12 +30,14 @@ public class AesInitializationVectorIterator implements Iterator<byte[]> {
 
   public static final int RANDOM_SIZE = 12;
   public static final int COUNTER_SIZE = 4;
-  public static final int VECTOR_SIZE = RANDOM_SIZE + COUNTER_SIZE;
 
   private final ByteCounter counter;
 
-  public AesInitializationVectorIterator() {
-    counter = new ByteCounter(COUNTER_SIZE);
+  private SecureRandom secureRandom;
+
+  public AesInitializationVectorIterator(SecureRandom secureRandom) {
+    this.counter = new ByteCounter(COUNTER_SIZE);
+    this.secureRandom = secureRandom;
   }
 
   public AesInitializationVectorIterator(ByteCounter byteCounter) {
@@ -60,9 +63,8 @@ public class AesInitializationVectorIterator implements Iterator<byte[]> {
 
   @SneakyThrows
   public byte[] getNextRandom() {
-    SecureRandom random = SecureRandom.getInstanceStrong();
     byte[] newVector = new byte[RANDOM_SIZE];
-    random.nextBytes(newVector);
+    secureRandom.nextBytes(newVector);
     return newVector;
   }
 }

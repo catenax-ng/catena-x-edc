@@ -2,7 +2,7 @@
 
 > **:exclamation: This Helm Chart is deprecated!**
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
 
 EDC Control-Plane - The Eclipse DataSpaceConnector administration layer with responsibility of resource management and govern contracts and data transfers
 
@@ -11,7 +11,7 @@ EDC Control-Plane - The Eclipse DataSpaceConnector administration layer with res
 ## TL;DR
 ```shell
 $ helm repo add catenax-ng-product-edc https://catenax-ng.github.io/product-edc
-$ helm install my-release catenax-ng-product-edc/edc-controlplane --version 0.2.0
+$ helm install my-release catenax-ng-product-edc/edc-controlplane --version 0.3.0
 ```
 
 ## Values

@@ -20,8 +20,10 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.edc.util.string.StringUtils;
 import org.eclipse.tractusx.edc.cp.adapter.dto.DataReferenceRetrievalDto;
 import org.eclipse.tractusx.edc.cp.adapter.dto.ProcessData;
 import org.eclipse.tractusx.edc.cp.adapter.messaging.Channel;
@@ -45,7 +47,8 @@ public class HttpController {
       @PathParam("assetId") String assetId,
       @QueryParam("providerUrl") String providerUrl,
       @QueryParam("contractAgreementId") String contractAgreementId,
-      @QueryParam("contractAgreementReuse") String contractAgreementReuse) {
+      @QueryParam("contractAgreementReuse") @DefaultValue("true") boolean contractAgreementReuse,
+      @QueryParam("timeout") String timeout) {
 
     if (invalidParams(assetId, providerUrl)) {
       return badRequestResponse();
@@ -55,7 +58,10 @@ public class HttpController {
         initiateProcess(assetId, providerUrl, contractAgreementId, contractAgreementReuse);
 
     try {
-      ProcessData processData = resultService.pull(traceId);
+      ProcessData processData =
+          StringUtils.isNullOrEmpty(timeout) || !isNumeric(timeout)
+              ? resultService.pull(traceId)
+              : resultService.pull(traceId, Long.parseLong(timeout), TimeUnit.SECONDS);
 
       if (Objects.isNull(processData)) {
         return notFoundResponse();
@@ -87,7 +93,7 @@ public class HttpController {
       String assetId,
       String providerUrl,
       String contractAgreementId,
-      String contractAgreementReuse) {
+      boolean contractAgreementReuse) {
     ProcessData processData =
         ProcessData.builder()
             .assetId(assetId)
@@ -103,8 +109,8 @@ public class HttpController {
     return message.getTraceId();
   }
 
-  private boolean isContractAgreementReuseOn(String contractAgreementReuse) {
-    return !"0".equals(contractAgreementReuse) && config.isContractAgreementReuseOn();
+  private boolean isContractAgreementReuseOn(boolean contractAgreementReuse) {
+    return contractAgreementReuse && config.isContractAgreementReuseOn();
   }
 
   private Response notFoundResponse() {
@@ -129,5 +135,9 @@ public class HttpController {
     return Response.status(Response.Status.REQUEST_TIMEOUT)
         .entity(Response.Status.REQUEST_TIMEOUT.getReasonPhrase())
         .build();
+  }
+
+  private boolean isNumeric(String str) {
+    return str != null && str.matches("[0-9]+");
   }
 }

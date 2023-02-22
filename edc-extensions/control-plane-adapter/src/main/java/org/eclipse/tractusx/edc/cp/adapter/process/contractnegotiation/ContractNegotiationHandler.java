@@ -49,7 +49,7 @@ public class ContractNegotiationHandler implements Listener<DataReferenceRetriev
 
     ContractAgreement contractAgreement = getContractAgreementById(dto);
     if (Objects.nonNull(dto.getPayload().getContractAgreementId()) && contractAgreement == null) {
-      sendNotFoundErrorResult(dto);
+      sendNotFoundErrorResult(dto, getAgreementNotFoundMessage(dto));
       return;
     }
 
@@ -72,6 +72,11 @@ public class ContractNegotiationHandler implements Listener<DataReferenceRetriev
             processData.getAssetId(),
             processData.getProvider(),
             processData.getCatalogExpiryTime());
+
+    if (Objects.isNull(contractOffer)) {
+      sendNotFoundErrorResult(dto, getContractNotFoundMessage(dto));
+      return;
+    }
 
     String contractNegotiationId =
         initializeContractNegotiation(
@@ -100,9 +105,7 @@ public class ContractNegotiationHandler implements Listener<DataReferenceRetriev
     return Optional.ofNullable(catalog.getContractOffers()).orElse(Collections.emptyList()).stream()
         .filter(it -> it.getAsset().getId().equals(assetId))
         .findFirst()
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException("Could not find Contract Offer for given Asset Id"));
+        .orElse(null);
   }
 
   private String initializeContractNegotiation(
@@ -125,12 +128,17 @@ public class ContractNegotiationHandler implements Listener<DataReferenceRetriev
         .orElseThrow(() -> new ResourceNotFoundException("Could not find Contract NegotiationId"));
   }
 
-  private void sendNotFoundErrorResult(DataReferenceRetrievalDto dto) {
-    dto.getPayload()
-        .setErrorMessage(
-            "Not found the contract agreement with ID: "
-                + dto.getPayload().getContractAgreementId());
+  private void sendNotFoundErrorResult(DataReferenceRetrievalDto dto, String message) {
+    dto.getPayload().setErrorMessage(message);
     dto.getPayload().setErrorStatus(Response.Status.NOT_FOUND);
     messageBus.send(Channel.RESULT, dto);
+  }
+
+  private String getAgreementNotFoundMessage(DataReferenceRetrievalDto dto) {
+    return "Not found the contract agreement with ID: " + dto.getPayload().getContractAgreementId();
+  }
+
+  private String getContractNotFoundMessage(DataReferenceRetrievalDto dto) {
+    return "Could not find Contract Offer for given Asset Id";
   }
 }

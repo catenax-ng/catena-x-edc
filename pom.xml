@@ -25,7 +25,7 @@
 
     <groupId>org.eclipse.tractusx.edc</groupId>
     <artifactId>product-edc-parent</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>product-edc</name>
@@ -54,12 +54,12 @@
         <!-- plugins -->
         <org.apache.maven.plugins.maven.dependency.plugin.version>3.5.0</org.apache.maven.plugins.maven.dependency.plugin.version>
         <org.apache.maven.plugins.maven.jar.plugin.version>3.3.0</org.apache.maven.plugins.maven.jar.plugin.version>
-        <com.diffplug.spotless.maven.plugin.version>2.30.0</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.32.0</com.diffplug.spotless.maven.plugin.version>
         <org.codehaus.mojo.exec.maven.plugin.version>3.1.0</org.codehaus.mojo.exec.maven.plugin.version>
         <org.apache.maven.plugins.javadoc.version>3.4.1</org.apache.maven.plugins.javadoc.version>
         <org.codehaus.mojo.license.maven.plugin>2.0.0</org.codehaus.mojo.license.maven.plugin>
         <org.apache.maven.plugins.failsafe.version>2.22.2</org.apache.maven.plugins.failsafe.version>
-        <org.apache.maven.plugins.deploy.version>3.0.0</org.apache.maven.plugins.deploy.version>
+        <org.apache.maven.plugins.deploy.version>3.1.0</org.apache.maven.plugins.deploy.version>
         <org.apache.maven.plugins.source.version>3.2.1</org.apache.maven.plugins.source.version>
         <org.apache.maven.plugins.surefire.version>3.0.0-M8</org.apache.maven.plugins.surefire.version>
         <org.apache.maven.plugins.compiler.version>3.10.1</org.apache.maven.plugins.compiler.version>
@@ -72,21 +72,20 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.edc.version>0.0.1-20230115-SNAPSHOT</org.eclipse.edc.version>
-        <com.azure.sdk.bom.version>1.2.8</com.azure.sdk.bom.version>
-        <org.postgresql.version>42.5.1</org.postgresql.version>
-        <org.flywaydb.version>9.11.0</org.flywaydb.version>
-        <com.nimbus.jose.jwt.version>9.28</com.nimbus.jose.jwt.version>
-        <com.fasterxml.jackson.version>2.14.0-rc2</com.fasterxml.jackson.version>
+        <org.eclipse.edc.version>0.0.1-20230220-SNAPSHOT</org.eclipse.edc.version>
+        <com.azure.sdk.bom.version>1.2.9</com.azure.sdk.bom.version>
+        <org.postgresql.version>42.5.3</org.postgresql.version>
+        <org.flywaydb.version>9.14.1</org.flywaydb.version>
+        <com.nimbus.jose.jwt.version>9.30.1</com.nimbus.jose.jwt.version>
 
         <!-- test dependency version -->
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
-        <cucumber.version>7.11.0</cucumber.version>
+        <cucumber.version>7.11.1</cucumber.version>
         <io.rest.assured.version>5.3.0</io.rest.assured.version>
         <org.junit.platform.surefire.provider.version>1.1.0</org.junit.platform.surefire.provider.version>
-        <mockito.version>4.11.0</mockito.version>
-        <org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
+        <mockito.version>5.1.1</mockito.version>
+        <org.projectlombok.lombok.version>1.18.26</org.projectlombok.lombok.version>
         <org.bouncycastle.bcpkix-jdk15on.version>1.70</org.bouncycastle.bcpkix-jdk15on.version>
         <com.squareup.okhttp3.okhttp.version>4.9.3</com.squareup.okhttp3.okhttp.version>
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
@@ -365,6 +364,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.tractusx.edc.extensions</groupId>
+                <artifactId>provision-additional-headers</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.tractusx.edc.extensions</groupId>
                 <artifactId>transferprocess-sftp-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -512,24 +516,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>asset-index-sql</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -540,24 +526,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>auth-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -593,24 +561,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>vault-azure</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -656,24 +606,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>sql-core</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -739,24 +671,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>control-plane-core</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -792,24 +706,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>core-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -863,6 +759,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
+                <artifactId>data-plane-http-oauth2</artifactId>
+                <version>${org.eclipse.edc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.edc</groupId>
                 <artifactId>data-plane-aws-s3</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
@@ -885,24 +786,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>data-plane-selector-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -913,24 +796,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>transfer-data-plane-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -961,24 +826,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>configuration-filesystem</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1129,47 +976,11 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>oauth2-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>jwt-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1195,24 +1006,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>policy-engine-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1223,24 +1016,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>policy-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1250,11 +1025,6 @@
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>policy-definition-store-sql</artifactId>
-                <version>${org.eclipse.edc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.edc</groupId>
-                <artifactId>provision-oauth2</artifactId>
                 <version>${org.eclipse.edc.version}</version>
             </dependency>
             <dependency>
@@ -1316,24 +1086,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>transaction-datasource-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1344,24 +1096,6 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>transaction-spi</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
@@ -1412,48 +1146,12 @@
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>junit</artifactId>
                 <version>${org.eclipse.edc.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.edc</groupId>
                 <artifactId>junit</artifactId>
                 <version>${org.eclipse.edc.version}</version>
                 <classifier>test-fixtures</classifier>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-jsr310</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!-- BOMs -->
@@ -1475,13 +1173,6 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-bom</artifactId>
                 <version>${mockito.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${com.fasterxml.jackson.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -1578,7 +1269,7 @@
                             <dependency>
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
-                                <version>4.0.1</version>
+                                <version>4.0.2</version>
                             </dependency>
                         </dependencies>
                         <configuration>

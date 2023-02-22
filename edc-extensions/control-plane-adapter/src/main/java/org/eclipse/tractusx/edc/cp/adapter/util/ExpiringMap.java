@@ -22,7 +22,7 @@ import java.util.Objects;
 public class ExpiringMap<K, V> {
   private final Map<K, V> map = new HashMap<>();
   private final Map<K, Long> entryTimeMap = new HashMap<>();
-  private long expireAfter = 5 * 60;
+  private long expireAfter = 2 * 60;
 
   public ExpiringMap() {}
 

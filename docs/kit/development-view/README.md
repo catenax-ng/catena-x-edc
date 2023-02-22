@@ -1,68 +1,22 @@
-# Software Development View
+# Development View
 
-:::info possible content
-contributing.md
-API dokumentation?
-https://app.swaggerhub.com/apis/eclipse-edc-bot/control-api/0.0.1-SNAPSHOT
-https://app.swaggerhub.com/apis/eclipse-edc-bot/management-api/0.0.1-SNAPSHOT
+## Project Overview
+
+TractusX is an initiative of companies under the umbrella of the Eclipse Foundation.
+It is a pilot for the larger initiative of CatenaX.
+A broader overview of the project can be found on the initiative's [Github page](https://github.com/catenax/tractusx/blob/main/README.md)
+or the homepage of the [Eclipse Foundation](https://projects.eclipse.org/projects/automotive.tractusx).
+
+## The EDC
+
+The Eclipse Dataspace Connector is one of the core components facilitating TractusX.
+
+::: TractusX EDC or Core EDC?
+
+This documentation is for TractusX EDC.
+It includes the Core EDC with all of its functionality.
+However, this core is supplemented by extensions that allow for the use of additional backends and connection types.
+Furthermore, the provided Helm charts, build configuration and tests allow for a smoother deployment.
 :::
 
-:::info
-We need to make our API context more clear and well-defined.
-We will have 4 API contexts:
-:::
-
-:::caution
-This information is taken from https://eclipse-edc.github.io/docs/#/submodule/Connector/docs/developer/decision-records/2022-11-09-api-refactoring/renaming
-:::
-
-## Management API
-
-All APIs that are intended to handle runtime objects, such as `Assets`, `Policies`, but also operations that are meant
-to be done by a third-party client, as backend services or UIs.
-This context will expose the controllers defined by the following modules:
-
-- `data-management-api`
-- `data-plane-selector`
-- `federated-catalog`
-- `http-provisioner`
-- `observability-api`
-
-Network context: intra-organization
-
-*Default path*: `/api/v1/management`
-
-## Control API
-
-Refers to APIs that are used by the connector internally facilitate communication between various components.
-This context will expose the controllers defined by modules as `data-plane-api`, `control-plane-api` and `validation`.
-
-Network context: private
-
-*Default path*: `/api/v1/control`
-
-## Protocol API
-
-This API is used to enable the dataspace protocol communication between connectors of different participants.
-
-Network context: public
-
-*Default path*: `/api/v1/ids`
-
-_Note that at the time of this writing ((Nov 2022) IDS requires the path to end with `/data`. That will be added by the
-multipart controller, so the resulting path will be `/api/v1/ids/data`._
-
-## Public API
-
-This refers to endpoints that are used to facilitate data transfers between the data planes of different participant.
-
-Network context: public
-
-:::info
-Some APIs are named in a confusing way, e.g. the "Data Management API" has nothing to do with data, but it's (default)
-path is `/api/v1/data`.
-Similarly, there are APIs such as the control APIs for data plane and control plane, that are named inconsistently, and
-their (default) paths are also inconsistent.
-It's also difficult to configure the endpoints from a network perspective because they are many and the scope is not
-clear. With the new definition, it will become clear which contexts need to be exposed on which network level.
-:::
+You can find the repository for the TractusX EDC [here](https://github.com/eclipse-tractusx/tractusx-edc).

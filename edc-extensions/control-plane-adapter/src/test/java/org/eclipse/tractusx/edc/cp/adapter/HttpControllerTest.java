@@ -42,7 +42,7 @@ public class HttpControllerTest {
     HttpController httpController = new HttpController(monitor, resultService, messageBus, config);
 
     // when
-    Response response = httpController.getAssetSynchronous(null, "providerUrl", null, null);
+    Response response = httpController.getAssetSynchronous(null, "providerUrl", null, false, null);
 
     // then
     assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -59,10 +59,35 @@ public class HttpControllerTest {
     HttpController httpController = new HttpController(monitor, resultService, messageBus, config);
 
     // when
-    Response response = httpController.getAssetSynchronous("assetId", null, null, null);
+    Response response = httpController.getAssetSynchronous("assetId", null, null, false, null);
 
     // then
     assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+  }
+
+  @Test
+  public void getAssetSynchronous_shouldReturnErrorStatusIfOccurred() throws InterruptedException {
+    // given
+    Monitor monitor = Mockito.mock(Monitor.class);
+    ResultService resultService = Mockito.mock(ResultService.class);
+    MessageBus messageBus = Mockito.mock(MessageBus.class);
+    ApiAdapterConfig config = Mockito.mock(ApiAdapterConfig.class);
+    when(config.getDefaultMessageRetryNumber()).thenReturn(RETRY_NUMBER);
+    HttpController httpController = new HttpController(monitor, resultService, messageBus, config);
+
+    when(resultService.pull(anyString()))
+        .thenReturn(
+            ProcessData.builder()
+                .errorStatus(Response.Status.BAD_GATEWAY)
+                .endpointDataReference(getEndpointDataReference())
+                .build());
+
+    // when
+    Response response =
+        httpController.getAssetSynchronous("assetId", "providerUrl", null, false, null);
+
+    // then
+    assertEquals(Response.Status.BAD_GATEWAY.getStatusCode(), response.getStatus());
   }
 
   @Test
@@ -79,7 +104,8 @@ public class HttpControllerTest {
             ProcessData.builder().endpointDataReference(getEndpointDataReference()).build());
 
     // when
-    Response response = httpController.getAssetSynchronous("assetId", "providerUrl", null, null);
+    Response response =
+        httpController.getAssetSynchronous("assetId", "providerUrl", null, false, null);
 
     // then
     assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());

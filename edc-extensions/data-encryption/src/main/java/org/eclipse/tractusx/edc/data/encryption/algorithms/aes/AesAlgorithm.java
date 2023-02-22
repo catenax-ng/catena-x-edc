@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
  * Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
  *
@@ -22,6 +23,7 @@ package org.eclipse.tractusx.edc.data.encryption.algorithms.aes;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -29,6 +31,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.eclipse.tractusx.edc.data.encryption.algorithms.CryptoAlgorithm;
 import org.eclipse.tractusx.edc.data.encryption.data.CryptoDataFactory;
@@ -36,6 +39,7 @@ import org.eclipse.tractusx.edc.data.encryption.data.DecryptedData;
 import org.eclipse.tractusx.edc.data.encryption.data.EncryptedData;
 import org.eclipse.tractusx.edc.data.encryption.key.AesKey;
 import org.eclipse.tractusx.edc.data.encryption.util.ArrayUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
 
@@ -43,12 +47,21 @@ public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
   private static final String AES = "AES";
   private static final Object MONITOR = new Object();
 
+  private final SecureRandom secureRandom;
+
   @NonNull private final CryptoDataFactory cryptoDataFactory;
   private AesInitializationVectorIterator initializationVectorIterator;
 
-  public AesAlgorithm(CryptoDataFactory cryptoDataFactory) {
+  @SneakyThrows
+  public AesAlgorithm(@NotNull CryptoDataFactory cryptoDataFactory) {
     this.cryptoDataFactory = cryptoDataFactory;
-    this.initializationVectorIterator = new AesInitializationVectorIterator();
+
+    // We use new SecureRandom() and not SecureRandom.getInstanceStrong(), as the second one
+    // would use a blocking algorithm, which leads to an increased encryption time of up to 3
+    // minutes. Since we have already used /dev/urandom, which only provides pseudo-randomness and
+    // is also non-blocking, switching to a non-blocking algorithm should not matter here either.
+    this.secureRandom = new SecureRandom();
+    this.initializationVectorIterator = new AesInitializationVectorIterator(this.secureRandom);
   }
 
   @Override
@@ -59,7 +72,7 @@ public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
     final byte[] initializationVector;
     synchronized (MONITOR) {
       if (!initializationVectorIterator.hasNext()) {
-        initializationVectorIterator = new AesInitializationVectorIterator();
+        initializationVectorIterator = new AesInitializationVectorIterator(this.secureRandom);
       }
 
       initializationVector = initializationVectorIterator.next();
@@ -91,5 +104,9 @@ public class AesAlgorithm implements CryptoAlgorithm<AesKey> {
     cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmParameterSpec);
     byte[] decryptedData = cipher.doFinal(encrypted);
     return cryptoDataFactory.decryptedFromBytes(decryptedData);
+  }
+
+  public String getAlgorithm() {
+    return this.secureRandom.getAlgorithm();
   }
 }
