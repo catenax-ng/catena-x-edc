@@ -5,7 +5,7 @@ description: 'Connector Kit'
 sidebar_position: 1
 ---
 
-:::TBD
+:::info TBD
 * add links
 * check spelling and content
 * adapt banner
