@@ -9,6 +9,8 @@ public class LinkedDataSigner {
 
     final byte[] signature = new byte[64];
 
+    System.out.println("PRIVATE KEY " + signingKey);
+
     Ed25519.sign(
         signingKey,
         0,

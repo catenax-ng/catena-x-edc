@@ -27,9 +27,9 @@ public class Base58Bitcoin implements MultibaseString {
       throw new IllegalArgumentException("Encoded base58 String not in Base58BTC format");
     }
 
-    final byte[] base58 = Multibase.decode(encoded);
+    final byte[] decoded = Multibase.decode(encoded);
 
-    return new Base58Bitcoin(base58, encoded);
+    return new Base58Bitcoin(decoded, encoded);
   }
 
   byte @NonNull [] decoded;

@@ -51,6 +51,7 @@ public class LinkedDataVerifier {
         final MultibaseString publicKey = key.getMultibaseString();
         final MultibaseString signature = credential.getProof().getProofValueMultiBase();
 
+        System.out.println("PUBLIC KEY " + publicKey.getDecoded());
         return Ed25519.verify(
                 signature.getDecoded(),
                 0,

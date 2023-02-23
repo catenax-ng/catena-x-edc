@@ -2,6 +2,7 @@ package org.eclipse.tractusx.ssi.extensions.core.proof;
 
 import lombok.SneakyThrows;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.tractusx.ssi.extensions.core.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.extensions.core.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.extensions.core.proof.verify.LinkedDataSigner;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +73,27 @@ public class LinkedDataProofValidationComponentTest {
         var isOk = linkedDataProofValidation.checkProof(credential);
 
         Assertions.assertTrue(isOk);
+    }
+
+    @Test
+    public void testDataSigning() {
+
+        var linkedData = new HashedLinkedData("Hello World".getBytes(StandardCharsets.UTF_8));
+
+        var linkedDataSigner = new LinkedDataSigner();
+        var linkedDataVerifier = new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor);
+
+        var privateKey = testIdentity.getKeyPair().getPrivate().getEncoded();
+        var signedLinkedData = new HashedLinkedData(linkedDataSigner.sign(linkedData, privateKey));
+
+        final VerifiableCredential credential = createCredential(null);
+        final URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
+        final Ed25519Proof proof =
+                linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
+        final VerifiableCredential credentialWithProof = createCredential(proof);
+        var signatureOk = linkedDataVerifier.verify(signedLinkedData, credentialWithProof);
+
+        Assertions.assertTrue(signatureOk);
     }
 
     @SneakyThrows
