@@ -6,6 +6,7 @@ import org.eclipse.tractusx.ssi.extensions.core.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.extensions.core.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.extensions.core.proof.verify.LinkedDataSigner;
 import org.eclipse.tractusx.ssi.extensions.core.proof.verify.LinkedDataVerifier;
+import org.eclipse.tractusx.ssi.spi.did.DidParser;
 import org.eclipse.tractusx.ssi.test.utils.TestIdentity;
 import org.eclipse.tractusx.ssi.test.utils.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.spi.did.Did;
@@ -57,8 +58,8 @@ public class LinkedDataProofValidationComponentTest {
     public void testLinkedDataProofCheck() {
 
         // prepare key
-        Did verificationMethod = new Did(new DidMethod("test"), new DidMethodIdentifier("myKey"));
-        byte[] privateKey =testIdentity.getKeyPair().getPrivate().getEncoded();
+        URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
+        byte[] privateKey = testIdentity.getKeyPair().getPrivate().getEncoded();
 
         VerifiableCredential credential = createCredential(null);
 

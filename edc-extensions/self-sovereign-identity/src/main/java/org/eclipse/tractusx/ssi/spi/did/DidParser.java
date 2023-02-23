@@ -3,6 +3,7 @@ package org.eclipse.tractusx.ssi.spi.did;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eclipse.tractusx.ssi.extensions.core.exception.DidParseException;
 import org.eclipse.tractusx.ssi.spi.did.Did;
@@ -12,6 +13,8 @@ import org.eclipse.tractusx.ssi.spi.did.DidMethodIdentifier;
 public class DidParser {
 
   public static Did parse(URI uri) {
+    Objects.requireNonNull(uri);
+
     if (!uri.getScheme().equals("did"))
       throw new DidParseException("URI is not a DID. URI: '" + uri + "'");
 
@@ -28,6 +31,8 @@ public class DidParser {
   }
 
   public static Did parse(String did) {
+    Objects.requireNonNull(did);
+
     final URI uri;
     try {
       uri = URI.create(did);

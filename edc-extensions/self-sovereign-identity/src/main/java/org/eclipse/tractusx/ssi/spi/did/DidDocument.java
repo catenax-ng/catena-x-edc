@@ -12,5 +12,5 @@ import java.util.List;
 public class DidDocument {
   @NonNull URI id;
 
-  @NonNull List<PublicKey> publicKeys;
+  @NonNull List<Ed25519VerificationKey2020> verificationMethods;
 }

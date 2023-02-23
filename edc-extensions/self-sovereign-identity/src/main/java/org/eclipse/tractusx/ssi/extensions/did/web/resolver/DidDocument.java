@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import org.eclipse.tractusx.ssi.spi.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.spi.did.PublicKey;
 
 import java.net.URI;
 import java.util.List;
@@ -15,12 +14,12 @@ import java.util.List;
 @Builder
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
+/**
+ * Context https://www.w3.org/ns/did/v1
+ */
 class DidDocument {
 
   @JsonProperty URI id;
-
-  @JsonProperty("publicKey")
-  List<PublicKey> publicKeys;
 
   @JsonProperty("verificationMethod")
   List<Ed25519VerificationKey2020> verificationMethods;

@@ -46,8 +46,8 @@ public class DidWebDocumentResolverTest {
     DidDocument result = resolver.resolve(toTest);
     // then
     Assertions.assertTrue(result.getId() != null);
-    Assertions.assertTrue(result.getPublicKeys() != null);
-    Assertions.assertTrue(result.getPublicKeys().size() == 1);
+    Assertions.assertTrue(result.getVerificationMethods() != null);
+    Assertions.assertTrue(result.getVerificationMethods().size() == 1);
   }
 
   @SneakyThrows

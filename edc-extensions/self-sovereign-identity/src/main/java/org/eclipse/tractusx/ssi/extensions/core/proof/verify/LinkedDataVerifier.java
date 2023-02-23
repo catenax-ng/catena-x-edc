@@ -42,7 +42,7 @@ public class LinkedDataVerifier {
         final DidDocument document = didDocumentResolver.resolve(issuerDid);
 
         final URI verificationMethodId = credential.getProof().getVerificationMethod();
-        final Ed25519VerificationKey2020 key = document.getPublicKeys().stream()
+        final Ed25519VerificationKey2020 key = document.getVerificationMethods().stream()
                 .filter(v -> v.getId().equals(verificationMethodId))
                 .map(Ed25519VerificationKey2020.class::cast)
                 .findFirst()

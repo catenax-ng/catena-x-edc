@@ -48,7 +48,7 @@ public class SignedJwtVerifierTest {
     public void verifyJwtSuccess() {
         // given
         SignedJWT toTest = SignedJwtFactory.createTestJwt(
-                "someIssuer",
+                testIdentity.getDid().toString(),
                 "",
                 "someAudience",
                 getTestPresentation(),

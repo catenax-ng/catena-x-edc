@@ -8,6 +8,7 @@ import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TestDidDocumentResolver implements DidDocumentResolver {
     private final Map<Did, DidDocument> documents = new HashMap<>();
@@ -21,7 +22,10 @@ public class TestDidDocumentResolver implements DidDocumentResolver {
     public DidDocument resolve(Did did) {
 
         if (!documents.containsKey(did))
-            throw new NotFoundException(did.toString());
+            throw new NotFoundException(String.format("Did not found: %s. Got [%s]",
+                    did.toString(),
+                    documents.values().stream().map(DidDocument::toString)
+                            .collect(Collectors.joining(", "))));
 
         return documents.get(did);
     }
@@ -32,7 +36,7 @@ public class TestDidDocumentResolver implements DidDocumentResolver {
 
     public DidDocumentResolverRegistry withRegistry() {
         final DidDocumentResolverRegistry registry = new DidDocumentResolverRegistryImpl();
-        registry.register(new TestDidDocumentResolver());
+        registry.register(this);
         return registry;
     }
 

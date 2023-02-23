@@ -12,6 +12,7 @@ import org.eclipse.tractusx.ssi.spi.verifiable.Ed25519Proof;
 import org.eclipse.tractusx.ssi.spi.verifiable.MultibaseString;
 import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
 
+import java.net.URI;
 import java.util.Date;
 
 public class LinkedDataProofValidation {
@@ -60,7 +61,7 @@ public class LinkedDataProofValidation {
     }
 
     public Ed25519Proof createProof(
-            VerifiableCredential verifiableCredential, Did verificationMethodId, byte[] signingKey) {
+            VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
         var transformedData = transformer.transform(verifiableCredential);
         var hashedData = hasher.hash(transformedData);
         var signature = signer.sign(hashedData, signingKey);
@@ -68,7 +69,7 @@ public class LinkedDataProofValidation {
 
         return Ed25519Proof.builder()
                 .created(new Date())
-                .verificationMethod(verificationMethodId.toUri())
+                .verificationMethod(verificationMethodId)
                 .proofValue(multibaseString.getEncoded())
                 .proofValueMultiBase(multibaseString)
                 .build();
