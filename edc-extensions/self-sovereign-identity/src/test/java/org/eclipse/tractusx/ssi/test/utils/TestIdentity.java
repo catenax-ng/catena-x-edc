@@ -10,5 +10,7 @@ import java.security.KeyPair;
 public class TestIdentity {
     Did did;
     DidDocument didDocument;
-    KeyPair keyPair;
+    byte[] publicKey;
+    byte[] privateKey;
+
 }

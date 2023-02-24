@@ -1,6 +1,10 @@
 package org.eclipse.tractusx.ssi.extensions.core.proof.verify;
 
 import lombok.NonNull;
+import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
 import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.exception.DidDocumentResolverNotFoundException;
@@ -51,14 +55,13 @@ public class LinkedDataVerifier {
         final MultibaseString publicKey = key.getMultibaseString();
         final MultibaseString signature = credential.getProof().getProofValueMultiBase();
 
-        System.out.println("PUBLIC KEY " + publicKey.getDecoded());
-        return Ed25519.verify(
-                signature.getDecoded(),
-                0,
-                publicKey.getDecoded(),
-                0,
-                hashedLinkedData.getValue(),
-                0,
-                hashedLinkedData.getValue().length);
+        var message = hashedLinkedData.getValue();
+        AsymmetricKeyParameter publicKeyParameters = OpenSSHPublicKeyUtil.parsePublicKey(publicKey.getDecoded());
+        Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(message, 0, message.length);
+        boolean verified = verifier.verifySignature(signature.getDecoded());
+
+        return verified;
     }
 }

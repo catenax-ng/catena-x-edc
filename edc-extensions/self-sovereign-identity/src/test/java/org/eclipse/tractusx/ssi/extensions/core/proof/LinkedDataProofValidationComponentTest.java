@@ -37,6 +37,9 @@ public class LinkedDataProofValidationComponentTest {
     private TestIdentity testIdentity;
 
     // mocks
+
+
+
     private Monitor monitor;
 
     @BeforeEach
@@ -61,7 +64,7 @@ public class LinkedDataProofValidationComponentTest {
 
         // prepare key
         URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
-        byte[] privateKey = testIdentity.getKeyPair().getPrivate().getEncoded();
+        byte[] privateKey = testIdentity.getPrivateKey();
 
         VerifiableCredential credential = createCredential(null);
 
@@ -83,7 +86,29 @@ public class LinkedDataProofValidationComponentTest {
         var linkedDataSigner = new LinkedDataSigner();
         var linkedDataVerifier = new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor);
 
-        var privateKey = testIdentity.getKeyPair().getPrivate().getEncoded();
+        var privateKey = testIdentity.getPrivateKey();
+        var signedLinkedData = new HashedLinkedData(linkedDataSigner.sign(linkedData, privateKey));
+
+        final VerifiableCredential credential = createCredential(null);
+        final URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
+        final Ed25519Proof proof =
+                linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
+        final VerifiableCredential credentialWithProof = createCredential(proof);
+        var signatureOk = linkedDataVerifier.verify(signedLinkedData, credentialWithProof);
+
+        Assertions.assertTrue(signatureOk);
+    }
+
+
+    @Test
+    public void testDataSigningCont() {
+
+        var linkedData = new HashedLinkedData("Hello World".getBytes(StandardCharsets.UTF_8));
+
+        var linkedDataSigner = new LinkedDataSigner();
+        var linkedDataVerifier = new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor);
+
+        var privateKey = testIdentity.getPrivateKey();
         var signedLinkedData = new HashedLinkedData(linkedDataSigner.sign(linkedData, privateKey));
 
         final VerifiableCredential credential = createCredential(null);
