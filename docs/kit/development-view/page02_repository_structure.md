@@ -15,8 +15,9 @@ These extensions and their documentation are available
 Builds of TractusX EDC are performed via Maven.
 To allow for different configurations, different builds are provided.
 For example separate secrets backends are supported, but require separate builds of EDC.
-The different builds and their documentations are available 
-[here](TODO: Link not yet available because TractusX repo is extremely outdated).
+Therefor, different buildsare available for both
+[data plane](https://github.com/eclipse-tractusx/tractusx-edc/blob/main/edc-dataplane/README.md) 
+and [control plane](https://github.com/eclipse-tractusx/tractusx-edc/blob/main/edc-controlplane/README.md),
 
 ## Helm Charts for EDC Deployment
 
