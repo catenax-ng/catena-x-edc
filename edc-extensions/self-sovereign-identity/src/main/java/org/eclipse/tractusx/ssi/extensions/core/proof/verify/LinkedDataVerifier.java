@@ -1,8 +1,9 @@
 package org.eclipse.tractusx.ssi.extensions.core.proof.verify;
 
 import org.bouncycastle.crypto.Signer;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.exception.DidDocumentResolverNotFoundException;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.HashedLinkedData;
@@ -27,7 +28,7 @@ public class LinkedDataVerifier {
         this.monitor = monitor;
     }
 
-    public boolean verify(HashedLinkedData message, VerifiableCredential credential) {
+    public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential) {
 
         final URI issuer = credential.getIssuer();
         final Did issuerDid = DidParser.parse(issuer);
@@ -43,7 +44,7 @@ public class LinkedDataVerifier {
         final DidDocument document = didDocumentResolver.resolve(issuerDid);
 
         final URI verificationMethodId = credential.getProof().getVerificationMethod();
-        final Ed25519VerificationKey2020 key = document.getPublicKeys().stream()
+        final Ed25519VerificationKey2020 key = document.getVerificationMethods().stream()
                 .filter(v -> v.getId().equals(verificationMethodId))
                 .map(Ed25519VerificationKey2020.class::cast)
                 .findFirst()
@@ -52,11 +53,13 @@ public class LinkedDataVerifier {
         final MultibaseString publicKey = key.getMultibase();
         final MultibaseString signature = credential.getProof().getProofValue();
 
-        final Signer verifier = new Ed25519Signer();
-        final Ed25519PublicKeyParameters ed25519PublicKeyParameters = new Ed25519PublicKeyParameters(publicKey.getEncoded(), 0);
-        verifier.init(false, ed25519PublicKeyParameters);
-        verifier.update(message.getValue(), 0, message.getValue().length);
-        System.out.println("SIGNATURE " + signature.getDecoded());
-        return verifier.verifySignature(signature.getEncoded());
+        var message = hashedLinkedData.getValue();
+        AsymmetricKeyParameter publicKeyParameters = OpenSSHPublicKeyUtil.parsePublicKey(publicKey.getDecoded());
+        Signer verifier = new Ed25519Signer();
+        verifier.init(false, publicKeyParameters);
+        verifier.update(message, 0, message.length);
+        boolean verified = verifier.verifySignature(signature.getDecoded());
+
+        return verified;
     }
 }

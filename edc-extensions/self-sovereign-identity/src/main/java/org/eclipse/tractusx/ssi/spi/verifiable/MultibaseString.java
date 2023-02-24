@@ -4,11 +4,10 @@ import lombok.NonNull;
 
 
 public interface MultibaseString {
-  @NonNull
-  byte[] getEncoded();
+  byte[] getDecoded();
 
   @NonNull
-  String getDecoded();
+  String getEncoded();
 
   default MultibaseString getInstance(String instance){
     return MultibaseFactory.create(instance);

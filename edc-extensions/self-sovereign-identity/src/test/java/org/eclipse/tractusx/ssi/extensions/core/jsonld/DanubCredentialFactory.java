@@ -40,7 +40,7 @@ public class DanubCredentialFactory {
                 .types(List.of("TestCredential"))
                 .issuer(new URI("https://example.edu/issuers/565049"))
                 .issuanceDate(new Date())
-                .expirationDate(new Date(2035, 1, 1))
+                .expirationDate(new Date(2500, 1, 1))
                 .credentialSubject(getSubject())
                 .ldProof(null) // set to null, as presentation will be used within JWT
                 .build();

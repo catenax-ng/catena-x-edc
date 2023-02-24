@@ -13,8 +13,8 @@ import org.bouncycastle.util.io.pem.PemReader;
 
 public class KeyResourceLoader {
 
-  private static final String PRIVATE_KEY = "ssi.key";
-  private static final String PUBLIC_KEY = "ssi.key.pub";
+  private static final String PRIVATE_KEY = "ed25519.pem";
+  private static final String PUBLIC_KEY = "ed25519.pub.pem";
 
   private KeyResourceLoader() {}
 

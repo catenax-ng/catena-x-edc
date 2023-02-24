@@ -9,7 +9,7 @@ import org.eclipse.tractusx.ssi.extensions.core.exception.DidDocumentResolverNot
 import org.eclipse.tractusx.ssi.spi.did.DidParser;
 import org.eclipse.tractusx.ssi.spi.did.Did;
 import org.eclipse.tractusx.ssi.spi.did.DidDocument;
-import org.eclipse.tractusx.ssi.spi.did.PublicKey;
+import org.eclipse.tractusx.ssi.spi.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
 
@@ -58,12 +58,12 @@ public class SignedJwtVerifier {
         }
 
         final DidDocument issuerDidDocument = didDocumentResolver.resolve(issuerDid);
-        final List<PublicKey> publicKeys = issuerDidDocument.getPublicKeys();
+        final List<Ed25519VerificationKey2020> verificationMethods = issuerDidDocument.getVerificationMethods();
 
         // verify JWT signature
         try {
-            for (org.eclipse.tractusx.ssi.spi.did.PublicKey pk : publicKeys) {
-                boolean verified = jwt.verify(new ECDSAVerifier((ECPublicKey) pk.getMultibase()));
+            for (Ed25519VerificationKey2020 method : verificationMethods) {
+                boolean verified = jwt.verify(new ECDSAVerifier((ECPublicKey) method.getKey()));
                 monitor.debug("Successfully validated JWT signature for DID " + issuerDid);
                 if (verified) {
                     return true;

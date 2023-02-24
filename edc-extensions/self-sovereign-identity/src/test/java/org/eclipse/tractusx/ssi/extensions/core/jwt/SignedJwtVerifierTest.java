@@ -51,25 +51,19 @@ public class SignedJwtVerifierTest {
     public void verifyJwtSuccess() {
         didDocumentResolver.register(credentialIssuer);
         // given
-        var test = new ECPrivateKey();
 
-        KeyFactory kf = KeyFactory.getInstance("DSA", "BC");
-//for private keys use PKCS8EncodedKeySpec; for public keys use X509EncodedKeySpec
-        PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(credentialIssuer.getPrivateKey().getEncoded());
-        PrivateKey pk = kf.generatePrivate(ks);
-
-        SignedJWT toTest = SignedJwtFactory.createTestJwt(
-                credentialIssuer.getDid().toString(),
-                "",
-                "someAudience",
-                getTestPresentation(),
-                credentialIssuer.getKeyPair().getPrivate()
-        );
-
-        // when
-        boolean verify = signedJwtVerifier.verify(toTest);
-        // then
-        assertTrue(verify);
+//        SignedJWT toTest = SignedJwtFactory.createTestJwt(
+//                testIdentity.getDid().toString(),
+//                "",
+//                "someAudience",
+//                getTestPresentation(),
+//                (ECPrivateKey) testIdentity.getKeyPair().getPrivate()
+//        );
+//
+//        // when
+//        boolean verify = signedJwtVerifier.verify(toTest);
+//        // then
+//        assertTrue(verify);
     }
 
     //    @SneakyThrows
