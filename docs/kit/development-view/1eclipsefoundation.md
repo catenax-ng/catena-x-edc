@@ -1,9 +1,5 @@
 # The Eclipse Foundation
 
-## Eclipse, TractusX, CatenaX and EDC
-
-TODO: Differentiation of terms?
-
 ## Eclipse Development Process
 
 This Eclipse Foundation open project is governed by the Eclipse Foundation
