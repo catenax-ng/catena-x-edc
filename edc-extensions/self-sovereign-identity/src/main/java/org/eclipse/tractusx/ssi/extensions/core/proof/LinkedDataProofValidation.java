@@ -60,6 +60,7 @@ public class LinkedDataProofValidation {
         return isProofed;
     }
 
+    // TODO move this into other class
     public Ed25519Proof createProof(
             VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
         var transformedData = transformer.transform(verifiableCredential);

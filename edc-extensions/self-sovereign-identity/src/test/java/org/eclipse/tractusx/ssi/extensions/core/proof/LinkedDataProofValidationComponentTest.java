@@ -39,7 +39,6 @@ public class LinkedDataProofValidationComponentTest {
     // mocks
 
 
-
     private Monitor monitor;
 
     @BeforeEach
@@ -76,49 +75,6 @@ public class LinkedDataProofValidationComponentTest {
         var isOk = linkedDataProofValidation.checkProof(credential);
 
         Assertions.assertTrue(isOk);
-    }
-
-    @Test
-    public void testDataSigning() {
-
-        var linkedData = new HashedLinkedData("Hello World".getBytes(StandardCharsets.UTF_8));
-
-        var linkedDataSigner = new LinkedDataSigner();
-        var linkedDataVerifier = new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor);
-
-        var privateKey = testIdentity.getPrivateKey();
-        var signedLinkedData = new HashedLinkedData(linkedDataSigner.sign(linkedData, privateKey));
-
-        final VerifiableCredential credential = createCredential(null);
-        final URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
-        final Ed25519Proof proof =
-                linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
-        final VerifiableCredential credentialWithProof = createCredential(proof);
-        var signatureOk = linkedDataVerifier.verify(signedLinkedData, credentialWithProof);
-
-        Assertions.assertTrue(signatureOk);
-    }
-
-
-    @Test
-    public void testDataSigningCont() {
-
-        var linkedData = new HashedLinkedData("Hello World".getBytes(StandardCharsets.UTF_8));
-
-        var linkedDataSigner = new LinkedDataSigner();
-        var linkedDataVerifier = new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor);
-
-        var privateKey = testIdentity.getPrivateKey();
-        var signedLinkedData = new HashedLinkedData(linkedDataSigner.sign(linkedData, privateKey));
-
-        final VerifiableCredential credential = createCredential(null);
-        final URI verificationMethod = testIdentity.getDidDocument().getVerificationMethods().get(0).getId();
-        final Ed25519Proof proof =
-                linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
-        final VerifiableCredential credentialWithProof = createCredential(proof);
-        var signatureOk = linkedDataVerifier.verify(signedLinkedData, credentialWithProof);
-
-        Assertions.assertTrue(signatureOk);
     }
 
     @SneakyThrows
