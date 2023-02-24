@@ -1,15 +1,20 @@
 package org.eclipse.tractusx.ssi.extensions.did.web.resolver;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import jakarta.json.JsonObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.eclipse.tractusx.ssi.extensions.core.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.extensions.core.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.did.web.exception.DidWebException;
 import org.eclipse.tractusx.ssi.extensions.did.web.util.Constants;
@@ -54,6 +59,31 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
 
             final byte[] body = response.body().bytes();
 
+            // TODO Fix this
+            final ObjectMapper mapper = new ObjectMapper();
+            final JsonNode didNode = mapper.readTree(body);
+
+            final String id = didNode.get("id").asText();
+            final JsonNode verificationMethodNode = didNode.get("verificationMethod");
+            // TODO Handle method array and single object
+
+            if (verificationMethodNode.isArray()) {
+                throw new RuntimeException("TODO");
+            } else {
+
+                final String verificationMethodType = verificationMethodNode.get("type").asText();
+                final String verificationMethodId = verificationMethodNode.get("id").asText();
+                final String verificationMethodController = verificationMethodNode.get("controller").asText();
+                final String verificationMethodKey = verificationMethodNode.get("publicKeyMultibase").asText();
+
+
+                if (!Objects.equals(verificationMethodType, "Ed25519VerificationKey2020")) {
+                    throw new RuntimeException("TODO");
+                }
+
+            }
+
+
             final org.eclipse.tractusx.ssi.extensions.did.web.resolver.DidDocument resolvedDocument =
                     new ObjectMapper()
                             .readValue(
@@ -71,11 +101,16 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
         }
     }
 
-    private Ed25519VerificationKey2020 mapKey(Ed25519VerificationKey2020 key) {
+    private Ed25519VerificationKey2020 mapKey(JsonNode verificationMethodNode) {
+
+        final String verificationMethodId = verificationMethodNode.get("id").asText();
+        final String verificationMethodController = verificationMethodNode.get("controller").asText();
+        final String verificationMethodKey = verificationMethodNode.get("publicKeyMultibase").asText();
+
         return Ed25519VerificationKey2020.builder()
-                .id(key.getId())
-                .controller(key.getController())
-                .multibase(key.getMultibase())
+                .id(URI.create(verificationMethodId))
+                .controller(URI.create(verificationMethodController))
+                .multibase(MultibaseFactory.create(verificationMethodKey))
                 .build();
     }
 }
