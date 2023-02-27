@@ -57,9 +57,9 @@ To run CP-Adapter in "PERSISTENT" mode, You need to create a proper tables with 
    The controller is registered under the context alias of DataManagement API. The authentication depends on the DataManagement configuration.
    To find out more please visit:
 
-   [api-configuration](../../edc/extensions/control-plane/api/data-management/api-configuration/README.md)
+   [api-configuration](https://github.com/eclipse-edc/Connector/tree/main/extensions/control-plane/api/data-management/api-configuration/README.md)
 
-   [data-management](../../edc/extensions/control-plane/api/data-management/README.md)
+   [data-management](https://github.com/eclipse-edc/Connector/tree/main/extensions/control-plane/api/data-management/README.md)
 
                 
 2. EndpointDataReference object is returned. Example of the EndpointDataReference response:

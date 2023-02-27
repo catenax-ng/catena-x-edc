@@ -48,7 +48,7 @@ The four supported setups are.
 - [Application: Control Plane](../edc-controlplane)
 - [Application: Data Plane](../edc-dataplane)
 - [Extension: Business Partner Numbers](../edc-extensions/business-partner-validation/README.md)
-- [Example: Connector Configuration (Helm)](../edc-tests/src/main/resources/deployment/helm/all-in-one/README.md)
+- [Example: Connector Configuration (Helm)](../edc-tests/src/main/resources/deployment/helm/supporting-infrastructure/README.md)
 - [Example: Local TXDC Setup](samples/Local%20TXDC%20Setup.md)
 - [Example: Data Transfer](samples/Transfer%20Data.md)
 

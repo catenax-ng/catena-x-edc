@@ -2,7 +2,8 @@
 
 ---
 
-**Please note:**<br>
+**Please note:**
+
 Using the HashiCorp vault it is possible to define multiple data entries per secret. Other vaults might allow only one
 entry per secret (e.g. Azure Key Vault).
 
