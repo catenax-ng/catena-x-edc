@@ -1,9 +1,9 @@
-# The EDC API
+# EDC API Examples
 
 ## API Spec
 
 The API spec of the EDC is constantly evolving.
-The full API documentation for each release can be viewed on [SwaggerHub](https://app.swaggerhub.com/apis/eclipse-edc-bot/management-api/0.0.1-SNAPSHOT).
+The full API documentation for each release can be viewed on [management-api](../../kit/development-view/openAPI/management-api/management-api.info.mdx).
 The following are some example API calls for common use cases.
 They assume the default parameters from the previous local setup. 
 

@@ -5,16 +5,6 @@ description: 'Connector Kit'
 sidebar_position: 1
 ---
 
-:::info TBD
-* add links
-* check spelling and content
-* adapt banner
-* Where should the images be saved
-:::
-
-![Connector kit banner](../../../../../../static/img/doc-business_partner_header-minified.png)
-
-
 The ConnectorKit provides a connector framework, based on the Eclipse Dataspace Connector (EDC) for sovereign, cross-enterprise data exchange.
 
 
