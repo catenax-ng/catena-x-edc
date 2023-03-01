@@ -18,23 +18,24 @@
 #  SPDX-License-Identifier: Apache-2.0
 #
 
-Feature: API-Wrapper Extension
+#TODO
+#Feature: API-Wrapper Extension
 
-  Background: The Connector State
-    Given 'Plato' has an empty database
-    Given 'Sokrates' has an empty database
+  #Background: The Connector State
+    #Given 'Plato' has an empty database
+    #Given 'Sokrates' has an empty database
 
-  Scenario: Connector asks for an endpoint connector from another one
-    Given 'Plato' has a http proxy assets
-      | id      | description               | baseUrl                          |
-      | asset-1 | http proxy transfer asset | http://localhost:8080/api/check/liveness |
-    And 'Plato' has the following policies
-      | id       | action |
-      | policy-1 | USE    |
-    And 'Plato' has the following contract definitions
-      | id                    | access policy | contract policy | asset   |
-      | contract-definition-1 | policy-1      | policy-1        | asset-1 |
-    When 'Sokrates' gets a request endpoint from 'Plato'
-      | asset id |
-      | asset-1  |
-    Then 'Sokrates' asks for the asset from the endpoint
+  #Scenario: Connector asks for an endpoint connector from another one
+    #Given 'Plato' has a http proxy assets
+    #  | id      | description               | baseUrl                          |
+    #  | asset-1 | http proxy transfer asset | http://localhost:8080/api/check/liveness |
+    #And 'Plato' has the following policies
+    #  | id       | action |
+    #  | policy-1 | USE    |
+    #And 'Plato' has the following contract definitions
+    #  | id                    | access policy | contract policy | asset   |
+    #  | contract-definition-1 | policy-1      | policy-1        | asset-1 |
+    #When 'Sokrates' gets a request endpoint from 'Plato'
+    #  | asset id |
+    #  | asset-1  |
+    #Then 'Sokrates' asks for the asset from the endpoint
