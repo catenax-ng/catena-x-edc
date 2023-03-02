@@ -64,7 +64,7 @@ The project provides pre-built control- and data-plane [docker](https://www.dock
 
 ## Inventory
 
-The eclipse data space connector is split up into Control-Plane and Data-Plane, whereas the Control-Plane functions as administration layer and has responsibility of resource management, contract negotiation and administer data transfer. 
+The Eclipse EDC Connector is split up into Control-Plane and Data-Plane, whereas the Control-Plane functions as administration layer and has responsibility of resource management, contract negotiation and administer data transfer. 
 The Data-Plane does the heavy lifting of transferring and receiving data streams.
 
 Depending on your environment there are different derivatives of the control-plane prepared:
