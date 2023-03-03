@@ -39,8 +39,6 @@ txdc:
       healthCheck:
         enabled: true
         standbyOk: true
-  daps:
-    url: "https://daps1.int.demo.catena-x.net/"
   backendService:
     httpProxyTokenReceiverUrl: "http://txdc-backend"
   serviceAccount:
