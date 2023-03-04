@@ -2,15 +2,6 @@ package org.eclipse.tractusx.ssi.extensions.did.web.resolver;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import jakarta.json.JsonObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -24,6 +15,13 @@ import org.eclipse.tractusx.ssi.spi.did.DidDocument;
 import org.eclipse.tractusx.ssi.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.spi.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolver;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
@@ -67,6 +65,7 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
             final JsonNode verificationMethodNode = didNode.get("verificationMethod");
             // TODO Handle method array and single object
 
+            final List<Ed25519VerificationKey2020> keys = new ArrayList<>();
             if (verificationMethodNode.isArray()) {
                 throw new RuntimeException("TODO");
             } else {
@@ -81,36 +80,19 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
                     throw new RuntimeException("TODO");
                 }
 
+                var key = Ed25519VerificationKey2020.builder()
+                        .id(URI.create(verificationMethodId))
+                        .controller(URI.create(verificationMethodController))
+                        .multibase(MultibaseFactory.create(verificationMethodKey))
+                        .build();
+                keys.add(key);
             }
 
-
-            final org.eclipse.tractusx.ssi.extensions.did.web.resolver.DidDocument resolvedDocument =
-                    new ObjectMapper()
-                            .readValue(
-                                    body, org.eclipse.tractusx.ssi.extensions.did.web.resolver.DidDocument.class);
-
-            final List<Ed25519VerificationKey2020> keys =
-                    resolvedDocument.getVerificationMethods().stream()
-                            .filter(k -> k.getDidVerificationMethodType().equals(Ed25519VerificationKey2020.TYPE))
-                            .map(this::mapKey)
-                            .collect(Collectors.toList());
-
-            return DidDocument.builder().id(resolvedDocument.getId()).verificationMethods(keys).build();
+            return DidDocument.builder().id(URI.create(id)).verificationMethods(keys).build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Ed25519VerificationKey2020 mapKey(JsonNode verificationMethodNode) {
 
-        final String verificationMethodId = verificationMethodNode.get("id").asText();
-        final String verificationMethodController = verificationMethodNode.get("controller").asText();
-        final String verificationMethodKey = verificationMethodNode.get("publicKeyMultibase").asText();
-
-        return Ed25519VerificationKey2020.builder()
-                .id(URI.create(verificationMethodId))
-                .controller(URI.create(verificationMethodController))
-                .multibase(MultibaseFactory.create(verificationMethodKey))
-                .build();
-    }
 }
