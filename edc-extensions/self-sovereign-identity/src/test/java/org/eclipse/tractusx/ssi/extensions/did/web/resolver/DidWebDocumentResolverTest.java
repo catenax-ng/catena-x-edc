@@ -2,10 +2,13 @@ package org.eclipse.tractusx.ssi.extensions.did.web.resolver;
 
 import lombok.SneakyThrows;
 import okhttp3.*;
+import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.spi.did.Did;
 import org.eclipse.tractusx.ssi.spi.did.DidDocument;
 import org.eclipse.tractusx.ssi.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.spi.did.DidMethodIdentifier;
+import org.eclipse.tractusx.ssi.test.utils.TestIdentity;
+import org.eclipse.tractusx.ssi.test.utils.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,42 +21,55 @@ import static org.mockito.Mockito.doReturn;
 
 public class DidWebDocumentResolverTest {
 
-  private DidWebDocumentResolver resolver;
-  private OkHttpClient clientMock;
+    private static String DID_JSON = "{" +
+            "   \"@context\": \"https://www.w3.org/ns/did/v1\"," +
+            "   \"id\": \"did:web:example.com\"," +
+            "   \"verificationMethod\": [" +
+            "       {" +
+            "           \"id\": \"did:web:example.com\"," +
+            "           \"type\": \"Ed25519VerificationKey2020\"," +
+            "           \"controller\": \"did:web:example.com\"," +
+            "           \"publicKeyMultibase\": \"zEYJrMxWigf9boyeJMTRN4Ern8DJMoCXaLK77pzQmxVjf\"" +
+            "       }" +
+            "   ]," +
+            "   \"authentication\": [" +
+            "       \"did:web:example.com\"" +
+            "   ]" +
+            "}";
 
-  @BeforeEach
-  public void setUp(){
-    clientMock = Mockito.mock(OkHttpClient.class);
-    resolver = new DidWebDocumentResolver(clientMock);
-  }
+    private DidWebDocumentResolver resolver;
 
+    // mocks
+    private OkHttpClient httpClient;
+    private Monitor monitor;
 
-  @Test
-  @SneakyThrows
-  public void resolveDidWebDocumentSuccess(){
-    // given
-    Did toTest = new Did(new DidMethod("web"), new DidMethodIdentifier("someurl.com"));
-    String testDidDocument = getTestDidDocument();
-    Response responseMock = Mockito.mock(Response.class);
-    Call callMock = Mockito.mock(Call.class);
-    ResponseBody responseBodyMock = Mockito.mock(ResponseBody.class);
-    doReturn(callMock).when(clientMock).newCall(any(Request.class));
-    doReturn(responseMock).when(callMock).execute();
-    doReturn(true).when(responseMock).isSuccessful();
-    doReturn(responseBodyMock).when(responseMock).body();
-    doReturn(testDidDocument.getBytes()).when(responseBodyMock).bytes();
-    // when
-    DidDocument result = resolver.resolve(toTest);
-    // then
-    Assertions.assertTrue(result.getId() != null);
-    Assertions.assertTrue(result.getVerificationMethods() != null);
-    Assertions.assertTrue(result.getVerificationMethods().size() == 1);
-  }
+    @BeforeEach
+    public void setUp() {
+        httpClient = Mockito.mock(OkHttpClient.class);
+        monitor = Mockito.mock(Monitor.class);
+        resolver = new DidWebDocumentResolver(httpClient, monitor);
+    }
 
-  @SneakyThrows
-  private String getTestDidDocument(){
-    InputStream in = DidWebDocumentResolverTest.class.getClassLoader().getResourceAsStream("did/webdid.json");
-    String didDocumentString = new String(in.readAllBytes());
-    return didDocumentString;
-  }
+    @Test
+    @SneakyThrows
+    public void resolveDidWebDocumentSuccess() {
+        // given
+        Response responseMock = Mockito.mock(Response.class);
+        Call callMock = Mockito.mock(Call.class);
+        ResponseBody responseBodyMock = Mockito.mock(ResponseBody.class);
+        doReturn(callMock).when(httpClient).newCall(any(Request.class));
+        doReturn(responseMock).when(callMock).execute();
+        doReturn(true).when(responseMock).isSuccessful();
+        doReturn(responseBodyMock).when(responseMock).body();
+        doReturn(DID_JSON.getBytes()).when(responseBodyMock).bytes();
+
+        // when
+        Did randomDid = new Did(new DidMethod("web"), new DidMethodIdentifier("someurl.com"));
+        DidDocument result = resolver.resolve(randomDid);
+
+        // then
+        Assertions.assertTrue(result.getId() != null);
+        Assertions.assertTrue(result.getVerificationMethods() != null);
+        Assertions.assertTrue(result.getVerificationMethods().size() == 1);
+    }
 }

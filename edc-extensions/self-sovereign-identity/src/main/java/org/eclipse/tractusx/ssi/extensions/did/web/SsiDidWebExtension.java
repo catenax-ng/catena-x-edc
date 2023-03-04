@@ -7,9 +7,6 @@ import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.system.ServiceExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
 import org.eclipse.edc.web.spi.WebService;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettings;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettingsFactory;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettingsFactoryImpl;
 import org.eclipse.tractusx.ssi.extensions.did.web.controller.DidWebDocumentController;
 import org.eclipse.tractusx.ssi.extensions.did.web.resolver.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.extensions.did.web.settings.DidWebSettings;
@@ -48,7 +45,7 @@ public class SsiDidWebExtension implements ServiceExtension {
     webService.registerResource(API_DID_WEB_CONTEXT, didWebDocumentController);
 
     final OkHttpClient client = new OkHttpClient();
-    final DidDocumentResolver didWebDocumentResolver = new DidWebDocumentResolver(client);
+    final DidDocumentResolver didWebDocumentResolver = new DidWebDocumentResolver(client, monitor);
     final DidDocumentResolverRegistry didDocumentResolverRegistry =
         context.getService(DidDocumentResolverRegistry.class);
     didDocumentResolverRegistry.register(didWebDocumentResolver);

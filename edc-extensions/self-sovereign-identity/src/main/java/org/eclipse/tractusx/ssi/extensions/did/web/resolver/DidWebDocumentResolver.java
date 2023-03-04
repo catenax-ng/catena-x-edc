@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.extensions.core.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.did.web.exception.DidWebException;
@@ -26,9 +27,11 @@ import java.util.Objects;
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
     private final OkHttpClient client;
+    private final Monitor monitor;
 
-    public DidWebDocumentResolver(OkHttpClient client) {
+    public DidWebDocumentResolver(OkHttpClient client, Monitor monitor) {
         this.client = client;
+        this.monitor = monitor;
     }
 
     @Override
@@ -63,28 +66,15 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
 
             final String id = didNode.get("id").asText();
             final JsonNode verificationMethodNode = didNode.get("verificationMethod");
-            // TODO Handle method array and single object
 
             final List<Ed25519VerificationKey2020> keys = new ArrayList<>();
             if (verificationMethodNode.isArray()) {
-                throw new RuntimeException("TODO");
+                verificationMethodNode.elements().forEachRemaining(jsonNode -> {
+                    var key = parseKeyNode(did, jsonNode);
+                    keys.add(key);
+                });
             } else {
-
-                final String verificationMethodType = verificationMethodNode.get("type").asText();
-                final String verificationMethodId = verificationMethodNode.get("id").asText();
-                final String verificationMethodController = verificationMethodNode.get("controller").asText();
-                final String verificationMethodKey = verificationMethodNode.get("publicKeyMultibase").asText();
-
-
-                if (!Objects.equals(verificationMethodType, "Ed25519VerificationKey2020")) {
-                    throw new RuntimeException("TODO");
-                }
-
-                var key = Ed25519VerificationKey2020.builder()
-                        .id(URI.create(verificationMethodId))
-                        .controller(URI.create(verificationMethodController))
-                        .multibase(MultibaseFactory.create(verificationMethodKey))
-                        .build();
+                Ed25519VerificationKey2020 key = parseKeyNode(did, verificationMethodNode);
                 keys.add(key);
             }
 
@@ -92,6 +82,25 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Ed25519VerificationKey2020 parseKeyNode(Did did, JsonNode verificationMethodNode) {
+        final String verificationMethodType = verificationMethodNode.get("type").asText();
+        final String verificationMethodId = verificationMethodNode.get("id").asText();
+        final String verificationMethodController = verificationMethodNode.get("controller").asText();
+        final String verificationMethodKey = verificationMethodNode.get("publicKeyMultibase").asText();
+
+
+        if (!Objects.equals(verificationMethodType, Ed25519VerificationKey2020.TYPE)) {
+            monitor.warning(String.format("Skipped unsupported verification key type in DID '%s'. Supported Types: [%s]", did, Ed25519VerificationKey2020.TYPE));
+        }
+
+        var key = Ed25519VerificationKey2020.builder()
+                .id(URI.create(verificationMethodId))
+                .controller(URI.create(verificationMethodController))
+                .multibase(MultibaseFactory.create(verificationMethodKey))
+                .build();
+        return key;
     }
 
 

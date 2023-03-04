@@ -1,6 +1,7 @@
 package org.eclipse.tractusx.ssi.extensions.core.resolver.did;
 
 import lombok.SneakyThrows;
+import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.did.web.resolver.DidWebDocumentResolver;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolver;
@@ -8,13 +9,18 @@ import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class DidResolverRegistryTest {
 
     private DidDocumentResolverRegistry didDocumentResolverRegistry;
 
+    // mocks
+    private Monitor monitor;
+
     @BeforeEach
     public void setUp() {
+        monitor = Mockito.mock(Monitor.class);
         didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
     }
 
@@ -22,7 +28,7 @@ public class DidResolverRegistryTest {
     @SneakyThrows
     public void registerTestSuccess() {
         // given
-        DidDocumentResolver resolver = new DidWebDocumentResolver(null);
+        DidDocumentResolver resolver = new DidWebDocumentResolver(null, monitor);
         // when
         didDocumentResolverRegistry.register(resolver);
         var res = didDocumentResolverRegistry.get(resolver.getSupportedMethod());
@@ -33,7 +39,7 @@ public class DidResolverRegistryTest {
     @Test
     public void registerTestMultipleDidFail() {
         // given
-        DidDocumentResolver resolver = new DidWebDocumentResolver(null);
+        DidDocumentResolver resolver = new DidWebDocumentResolver(null, monitor);
         String expectedText = "Resolver for method 'web' is already registered";
         // when
         didDocumentResolverRegistry.register(resolver);
@@ -47,7 +53,7 @@ public class DidResolverRegistryTest {
     @SneakyThrows
     public void unregisterTestSuccess() {
         // given
-        DidDocumentResolver resolver = new DidWebDocumentResolver(null);
+        DidDocumentResolver resolver = new DidWebDocumentResolver(null, monitor);
         String expectedText = "Resolver for method 'web' not registered";
         // when
         didDocumentResolverRegistry.register(resolver);
@@ -64,7 +70,7 @@ public class DidResolverRegistryTest {
     @Test
     public void unregisterTestMultipleDidFail() {
         // given
-        DidDocumentResolver resolver = new DidWebDocumentResolver(null);
+        DidDocumentResolver resolver = new DidWebDocumentResolver(null, monitor);
         String expectedText = "Resolver for method 'web' not registered";
         // when
         SsiException exception = Assertions.assertThrows(SsiException.class,
