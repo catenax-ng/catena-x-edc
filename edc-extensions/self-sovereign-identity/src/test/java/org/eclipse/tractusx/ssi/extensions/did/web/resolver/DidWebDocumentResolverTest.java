@@ -21,7 +21,7 @@ import static org.mockito.Mockito.doReturn;
 
 public class DidWebDocumentResolverTest {
 
-    private static String DID_JSON = "{" +
+    private static final String DID_JSON = "{" +
             "   \"@context\": \"https://www.w3.org/ns/did/v1\"," +
             "   \"id\": \"did:web:example.com\"," +
             "   \"verificationMethod\": [" +
