@@ -213,14 +213,6 @@ public class DataManagementAPI {
     final EndpointDataReference endpoint =
         get(encodedUrl, new TypeToken<EndpointDataReference>() {});
 
-    log.info(
-        "endpoint: "
-            + endpoint.getEndpoint()
-            + " properties: "
-            + endpoint.getProperties().keySet().toArray()[0]);
-
-    log.info("EndpointDataReference in CreateContractDefinition" + endpoint.getEndpoint());
-
     return endpoint;
   }
 
@@ -239,8 +231,6 @@ public class DataManagementAPI {
   }
 
   private <T> T get(String path, Header header, TypeToken<?> typeToken) throws IOException {
-
-    log.info("path to ask for Asset" + path);
 
     final HttpGet get = new HttpGet(path);
     get.addHeader(header);

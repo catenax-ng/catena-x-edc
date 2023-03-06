@@ -18,7 +18,9 @@
 #  SPDX-License-Identifier: Apache-2.0
 #
 
-#TODO
+#TODO: the current Bussinnes test is not running,  because of a possible condition in the CI pipeline
+  # regarding the contract validity: see https://github.com/eclipse-edc/Connector/issues/2514
+
 #Feature: API-Wrapper Extension
 
   #Background: The Connector State
