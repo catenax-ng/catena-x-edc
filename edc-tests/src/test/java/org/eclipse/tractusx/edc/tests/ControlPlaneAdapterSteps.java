@@ -22,8 +22,6 @@ package org.eclipse.tractusx.edc.tests;
 
 import com.google.gson.Gson;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +43,7 @@ public class ControlPlaneAdapterSteps {
    * regarding the contract validity: see https://github.com/eclipse-edc/Connector/issues/2514
    */
 
-  //@When("'{connector}' gets a request endpoint from '{connector}'")
+  // @When("'{connector}' gets a request endpoint from '{connector}'")
   public void getEndPointFromGetRequest(Connector consumer, Connector receiver, DataTable table)
       throws IOException {
 
@@ -62,10 +60,10 @@ public class ControlPlaneAdapterSteps {
   }
 
   /*
-  * TODO: see EndToEndTransfer.feature
-  * the current Bussinnes test is not running,  because of a possible rare condition in the CI pipeline
-  * regarding the contract validity: see https://github.com/eclipse-edc/Connector/issues/2514
-  */
+   * TODO: see EndToEndTransfer.feature
+   * the current Bussinnes test is not running,  because of a possible rare condition in the CI pipeline
+   * regarding the contract validity: see https://github.com/eclipse-edc/Connector/issues/2514
+   */
 
   // @Then("'{connector}' asks for the asset from the endpoint")
   public void receiveEndpoint(Connector consumer) throws IOException {
