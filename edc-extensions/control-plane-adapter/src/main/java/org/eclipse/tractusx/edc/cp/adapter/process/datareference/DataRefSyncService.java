@@ -16,24 +16,26 @@ package org.eclipse.tractusx.edc.cp.adapter.process.datareference;
 
 import static java.util.Objects.isNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.edc.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.tractusx.edc.cp.adapter.dto.DataReferenceRetrievalDto;
+import org.eclipse.tractusx.edc.cp.adapter.service.objectstore.ObjectStoreService;
+import org.eclipse.tractusx.edc.cp.adapter.service.objectstore.ObjectType;
 import org.eclipse.tractusx.edc.cp.adapter.util.LockMap;
 
 @RequiredArgsConstructor
-public class DataRefInMemorySyncService implements DataRefNotificationSyncService {
-  private final Map<String, DataReferenceRetrievalDto> dtoMap = new HashMap<>();
-  private final Map<String, EndpointDataReference> dataReferenceMap = new HashMap<>();
+public class DataRefSyncService implements DataRefNotificationSyncService {
+  private final ObjectStoreService storeService;
   private final LockMap locks;
 
   public EndpointDataReference exchangeDto(DataReferenceRetrievalDto dto, String agreementId) {
     locks.lock(agreementId);
-    EndpointDataReference dataReference = dataReferenceMap.get(agreementId);
+
+    EndpointDataReference dataReference =
+        storeService.get(agreementId, ObjectType.DATA_REFERENCE, EndpointDataReference.class);
+
     if (isNull(dataReference)) {
-      dtoMap.put(agreementId, dto);
+      storeService.put(agreementId, ObjectType.DTO, dto);
     }
     locks.unlock(agreementId);
     return dataReference;
@@ -43,9 +45,12 @@ public class DataRefInMemorySyncService implements DataRefNotificationSyncServic
   public DataReferenceRetrievalDto exchangeDataReference(
       EndpointDataReference dataReference, String agreementId) {
     locks.lock(agreementId);
-    DataReferenceRetrievalDto dto = dtoMap.get(agreementId);
+
+    DataReferenceRetrievalDto dto =
+        storeService.get(agreementId, ObjectType.DTO, DataReferenceRetrievalDto.class);
+
     if (isNull(dto)) {
-      dataReferenceMap.put(agreementId, dataReference);
+      storeService.put(agreementId, ObjectType.DATA_REFERENCE, dataReference);
     }
     locks.unlock(agreementId);
     return dto;
@@ -53,13 +58,13 @@ public class DataRefInMemorySyncService implements DataRefNotificationSyncServic
 
   @Override
   public void removeDataReference(String agreementId) {
-    dataReferenceMap.remove(agreementId);
+    storeService.remove(agreementId, ObjectType.DATA_REFERENCE);
     locks.removeLock(agreementId);
   }
 
   @Override
   public void removeDto(String agreementId) {
-    dtoMap.remove(agreementId);
+    storeService.remove(agreementId, ObjectType.DTO);
     locks.removeLock(agreementId);
   }
 }

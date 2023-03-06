@@ -17,18 +17,28 @@ package org.eclipse.tractusx.edc.cp.adapter.service;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.TimeUnit;
+import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.edc.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.tractusx.edc.cp.adapter.dto.DataReferenceRetrievalDto;
 import org.eclipse.tractusx.edc.cp.adapter.dto.ProcessData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class ResultServiceTest {
+  @Mock Monitor monitor;
+
+  @BeforeEach
+  void init() {
+    MockitoAnnotations.openMocks(this);
+  }
 
   @Test
   public void pull_shouldReturnDataReferenceWhenMessageOccursFirst() throws InterruptedException {
     // given
-    ResultService resultService = new ResultService(20);
+    ResultService resultService = new ResultService(20, monitor);
     String endpointDataRefId = "456";
     DataReferenceRetrievalDto dto = getDto(endpointDataRefId);
     ProcessData processData;
@@ -44,7 +54,7 @@ public class ResultServiceTest {
   @Test
   public void pull_shouldReturnDataReferenceWhenMessageOccursSecond() throws InterruptedException {
     // given
-    ResultService resultService = new ResultService(20);
+    ResultService resultService = new ResultService(20, monitor);
     String endpointDataRefId = "456";
     DataReferenceRetrievalDto dto = getDto(endpointDataRefId);
     ProcessData processData;
@@ -60,7 +70,7 @@ public class ResultServiceTest {
   @Test
   public void pull_shouldReturnNullOnTimeout() throws InterruptedException {
     // given
-    ResultService resultService = new ResultService(20);
+    ResultService resultService = new ResultService(20, monitor);
 
     // when
     ProcessData processData = resultService.pull("123", 500, TimeUnit.MILLISECONDS);
@@ -72,7 +82,7 @@ public class ResultServiceTest {
   @Test
   public void process_shouldThrowIllegalArgumentExceptionIfNoDataPayload() {
     // given
-    ResultService resultService = new ResultService(20);
+    ResultService resultService = new ResultService(20, monitor);
     DataReferenceRetrievalDto dto = new DataReferenceRetrievalDto(null, 3);
 
     // when then

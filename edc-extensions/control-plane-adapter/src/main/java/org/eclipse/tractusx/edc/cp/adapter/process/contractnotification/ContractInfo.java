@@ -14,8 +14,12 @@
 
 package org.eclipse.tractusx.edc.cp.adapter.process.contractnotification;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ContractInfo {
   @Getter private String contractAgreementId;
   private ContractState contractState;

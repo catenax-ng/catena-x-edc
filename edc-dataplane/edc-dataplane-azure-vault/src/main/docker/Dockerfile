@@ -1,7 +1,7 @@
 #
 #  Copyright (c) 2023 ZF Friedrichshafen AG
-#  Copyright (c) 2022 Mercedes-Benz Tech Innovation GmbH
-#  Copyright (c) 2021,2022 Contributors to the Eclipse Foundation
+#  Copyright (c) 2022,2023 Mercedes-Benz Tech Innovation GmbH
+#  Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
 #
 #  See the NOTICE file(s) distributed with this work for additional
 #  information regarding copyright ownership.
@@ -18,7 +18,7 @@
 #
 #  SPDX-License-Identifier: Apache-2.0
 #
-FROM alpine:3.17.1 as otel
+FROM alpine:3.17.2 as otel
 
 ENV OTEL_AGENT_LOCATION "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v1.12.1/opentelemetry-javaagent.jar"
 
@@ -26,7 +26,7 @@ HEALTHCHECK NONE
 
 RUN wget ${OTEL_AGENT_LOCATION} -O /tmp/opentelemetry-javaagent.jar
 
-FROM alpine:3.17.1
+FROM alpine:3.17.2
 
 ARG JAR
 ARG LIB

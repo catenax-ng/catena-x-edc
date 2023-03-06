@@ -23,7 +23,7 @@
     <parent>
         <artifactId>edc-extensions</artifactId>
         <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-        <version>0.2.1-SNAPSHOT</version>
+        <version>0.3.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

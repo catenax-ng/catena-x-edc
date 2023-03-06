@@ -16,17 +16,17 @@ package org.eclipse.tractusx.edc.cp.adapter.process.contractnotification;
 
 import static java.util.Objects.isNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.eclipse.tractusx.edc.cp.adapter.dto.DataReferenceRetrievalDto;
+import org.eclipse.tractusx.edc.cp.adapter.service.objectstore.ObjectStoreService;
+import org.eclipse.tractusx.edc.cp.adapter.service.objectstore.ObjectType;
 import org.eclipse.tractusx.edc.cp.adapter.util.LockMap;
 
-public class ContractInMemorySyncService implements ContractNotificationSyncService {
-  private final Map<String, DataReferenceRetrievalDto> dtoMap = new HashMap<>();
-  private final Map<String, ContractInfo> contractInfoMap = new HashMap<>();
+public class ContractSyncService implements ContractNotificationSyncService {
+  private final ObjectStoreService storeService;
   private final LockMap locks;
 
-  public ContractInMemorySyncService(LockMap locks) {
+  public ContractSyncService(ObjectStoreService storeService, LockMap locks) {
+    this.storeService = storeService;
     this.locks = locks;
   }
 
@@ -34,10 +34,14 @@ public class ContractInMemorySyncService implements ContractNotificationSyncServ
   public DataReferenceRetrievalDto exchangeConfirmedContract(
       String negotiationId, String agreementId) {
     locks.lock(negotiationId);
-    DataReferenceRetrievalDto dto = dtoMap.get(negotiationId);
+
+    DataReferenceRetrievalDto dto =
+        storeService.get(negotiationId, ObjectType.DTO, DataReferenceRetrievalDto.class);
+
     if (isNull(dto)) {
-      contractInfoMap.put(
-          negotiationId, new ContractInfo(agreementId, ContractInfo.ContractState.CONFIRMED));
+      ContractInfo contractInfo =
+          new ContractInfo(agreementId, ContractInfo.ContractState.CONFIRMED);
+      storeService.put(negotiationId, ObjectType.CONTRACT_INFO, contractInfo);
     }
     locks.unlock(negotiationId);
     return dto;
@@ -46,9 +50,13 @@ public class ContractInMemorySyncService implements ContractNotificationSyncServ
   @Override
   public DataReferenceRetrievalDto exchangeDeclinedContract(String negotiationId) {
     locks.lock(negotiationId);
-    DataReferenceRetrievalDto dto = dtoMap.get(negotiationId);
+
+    DataReferenceRetrievalDto dto =
+        storeService.get(negotiationId, ObjectType.DTO, DataReferenceRetrievalDto.class);
+
     if (isNull(dto)) {
-      contractInfoMap.put(negotiationId, new ContractInfo(ContractInfo.ContractState.DECLINED));
+      ContractInfo contractInfo = new ContractInfo(ContractInfo.ContractState.DECLINED);
+      storeService.put(negotiationId, ObjectType.CONTRACT_INFO, contractInfo);
     }
     locks.unlock(negotiationId);
     return dto;
@@ -57,9 +65,13 @@ public class ContractInMemorySyncService implements ContractNotificationSyncServ
   @Override
   public DataReferenceRetrievalDto exchangeErrorContract(String negotiationId) {
     locks.lock(negotiationId);
-    DataReferenceRetrievalDto dto = dtoMap.get(negotiationId);
+
+    DataReferenceRetrievalDto dto =
+        storeService.get(negotiationId, ObjectType.DTO, DataReferenceRetrievalDto.class);
+
     if (isNull(dto)) {
-      contractInfoMap.put(negotiationId, new ContractInfo(ContractInfo.ContractState.ERROR));
+      ContractInfo contractInfo = new ContractInfo(ContractInfo.ContractState.ERROR);
+      storeService.put(negotiationId, ObjectType.CONTRACT_INFO, contractInfo);
     }
 
     locks.unlock(negotiationId);
@@ -69,11 +81,13 @@ public class ContractInMemorySyncService implements ContractNotificationSyncServ
   @Override
   public ContractInfo exchangeDto(DataReferenceRetrievalDto dto) {
     String negotiationId = dto.getPayload().getContractNegotiationId();
-
     locks.lock(negotiationId);
-    ContractInfo contractInfo = contractInfoMap.get(negotiationId);
+
+    ContractInfo contractInfo =
+        storeService.get(negotiationId, ObjectType.CONTRACT_INFO, ContractInfo.class);
+
     if (isNull(contractInfo)) {
-      dtoMap.put(negotiationId, dto);
+      storeService.put(negotiationId, ObjectType.DTO, dto);
     }
 
     locks.unlock(negotiationId);
@@ -82,13 +96,13 @@ public class ContractInMemorySyncService implements ContractNotificationSyncServ
 
   @Override
   public void removeContractInfo(String negotiationId) {
-    contractInfoMap.remove(negotiationId);
+    storeService.remove(negotiationId, ObjectType.CONTRACT_INFO);
     locks.removeLock(negotiationId);
   }
 
   @Override
   public void removeDto(String negotiationId) {
-    dtoMap.remove(negotiationId);
+    storeService.remove(negotiationId, ObjectType.DTO);
     locks.removeLock(negotiationId);
   }
 }

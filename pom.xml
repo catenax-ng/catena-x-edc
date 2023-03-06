@@ -25,7 +25,7 @@
 
     <groupId>org.eclipse.tractusx.edc</groupId>
     <artifactId>product-edc-parent</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>product-edc</name>
@@ -54,15 +54,15 @@
         <!-- plugins -->
         <org.apache.maven.plugins.maven.dependency.plugin.version>3.5.0</org.apache.maven.plugins.maven.dependency.plugin.version>
         <org.apache.maven.plugins.maven.jar.plugin.version>3.3.0</org.apache.maven.plugins.maven.jar.plugin.version>
-        <com.diffplug.spotless.maven.plugin.version>2.32.0</com.diffplug.spotless.maven.plugin.version>
+        <com.diffplug.spotless.maven.plugin.version>2.34.0</com.diffplug.spotless.maven.plugin.version>
         <org.codehaus.mojo.exec.maven.plugin.version>3.1.0</org.codehaus.mojo.exec.maven.plugin.version>
-        <org.apache.maven.plugins.javadoc.version>3.4.1</org.apache.maven.plugins.javadoc.version>
+        <org.apache.maven.plugins.javadoc.version>3.5.0</org.apache.maven.plugins.javadoc.version>
         <org.codehaus.mojo.license.maven.plugin>2.0.0</org.codehaus.mojo.license.maven.plugin>
         <org.apache.maven.plugins.failsafe.version>2.22.2</org.apache.maven.plugins.failsafe.version>
         <org.apache.maven.plugins.deploy.version>3.1.0</org.apache.maven.plugins.deploy.version>
         <org.apache.maven.plugins.source.version>3.2.1</org.apache.maven.plugins.source.version>
-        <org.apache.maven.plugins.surefire.version>3.0.0-M8</org.apache.maven.plugins.surefire.version>
-        <org.apache.maven.plugins.compiler.version>3.10.1</org.apache.maven.plugins.compiler.version>
+        <org.apache.maven.plugins.surefire.version>3.0.0-M9</org.apache.maven.plugins.surefire.version>
+        <org.apache.maven.plugins.compiler.version>3.11.0</org.apache.maven.plugins.compiler.version>
         <org.apache.maven.plugins.resources.version>3.3.0</org.apache.maven.plugins.resources.version>
         <org.projectlombok.lombok.maven.plugin.version>1.18.20.0</org.projectlombok.lombok.maven.plugin.version>
         <org.jacoco.maven.plugin.version>0.8.8</org.jacoco.maven.plugin.version>
@@ -72,10 +72,10 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
 
         <!-- dependency version -->
-        <org.eclipse.edc.version>0.0.1-20230213-SNAPSHOT</org.eclipse.edc.version>
+        <org.eclipse.edc.version>0.0.1-20230220-SNAPSHOT</org.eclipse.edc.version>
         <com.azure.sdk.bom.version>1.2.9</com.azure.sdk.bom.version>
-        <org.postgresql.version>42.5.3</org.postgresql.version>
-        <org.flywaydb.version>9.14.1</org.flywaydb.version>
+        <org.postgresql.version>42.5.4</org.postgresql.version>
+        <org.flywaydb.version>9.15.1</org.flywaydb.version>
         <com.nimbus.jose.jwt.version>9.30.1</com.nimbus.jose.jwt.version>
 
         <!-- test dependency version -->

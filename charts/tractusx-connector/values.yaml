@@ -94,7 +94,7 @@ controlplane:
     # -- metrics api, used for application metrics, must not be internet facing
     metrics:
       # -- port for incoming api calls
-      port: 8085
+      port: 9090
       # -- path for incoming api calls
       path: /metrics
   service:
@@ -314,7 +314,7 @@ dataplane:
       port: 8083
       path: /api/dataplane/control
     metrics:
-      port: 8084
+      port: 9090
       path: /metrics
   aws:
     endpointOverride: ""

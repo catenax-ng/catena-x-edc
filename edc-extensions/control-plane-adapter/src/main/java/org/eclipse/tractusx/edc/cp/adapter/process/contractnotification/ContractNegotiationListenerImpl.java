@@ -74,7 +74,8 @@ public class ContractNegotiationListenerImpl implements ContractNegotiationListe
   }
 
   public void initiateDataTransfer(DataReferenceRetrievalDto dto) {
-    dataTransfer.initiate(dto);
+    String transferProcessId = dataTransfer.initiate(dto);
+    dto.getPayload().setTransferProcessId(transferProcessId);
     dto.getPayload().setContractConfirmed(true);
     messageBus.send(Channel.DATA_REFERENCE, dto);
   }

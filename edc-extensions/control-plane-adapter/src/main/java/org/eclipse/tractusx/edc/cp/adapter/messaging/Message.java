@@ -15,15 +15,20 @@
 package org.eclipse.tractusx.edc.cp.adapter.messaging;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public abstract class Message<T> {
-  @Getter private final String traceId;
-  @Getter private final T payload;
-  private final AtomicInteger errorNumber = new AtomicInteger();
-  private final int retryLimit;
-  @Getter private Exception finalException;
+  private String traceId;
+  private T payload;
+  private int errorNumber;
+  private int retryLimit;
+  private Exception exception;
+  private Exception finalException;
 
   public Message(String traceId, T payload, int retryLimit) {
     this.traceId = traceId;
@@ -38,16 +43,16 @@ public abstract class Message<T> {
   }
 
   protected long unsucceeded() {
-    errorNumber.incrementAndGet();
+    errorNumber++;
     return getDelayTime();
   }
 
   protected void clearErrors() {
-    errorNumber.set(0);
+    errorNumber = 0;
   }
 
   protected boolean canRetry() {
-    return errorNumber.get() < retryLimit;
+    return errorNumber < retryLimit;
   }
 
   protected void setFinalException(Exception e) {
@@ -55,8 +60,6 @@ public abstract class Message<T> {
   }
 
   private int getDelayTime() {
-    return errorNumber.get() < 5
-        ? errorNumber.get() * 750
-        : (int) Math.pow(errorNumber.get(), 2) * 150;
+    return errorNumber < 5 ? errorNumber * 750 : (int) Math.pow(errorNumber, 2) * 150;
   }
 }

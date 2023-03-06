@@ -17,6 +17,7 @@ package org.eclipse.tractusx.edc.cp.adapter.process.contractnegotiation;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.edc.catalog.spi.Catalog;
+import org.eclipse.edc.util.collection.CollectionUtil;
 import org.eclipse.tractusx.edc.cp.adapter.util.ExpiringMap;
 
 @RequiredArgsConstructor
@@ -35,7 +36,11 @@ public class CatalogCachedRetriever {
     }
 
     catalog = catalogRetriever.getEntireCatalog(providerUrl, assetId);
-    catalogCache.put(getKey(providerUrl, assetId), catalog);
+
+    if (Objects.nonNull(catalog) && CollectionUtil.isNotEmpty(catalog.getContractOffers())) {
+      catalogCache.put(getKey(providerUrl, assetId), catalog);
+    }
+
     return catalog;
   }
 
