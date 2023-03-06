@@ -12,7 +12,7 @@ The ConnectorKit provides a connector framework, based on the Eclipse Dataspace 
 
 Trust, interoperability and data sovereignty, these are the objectives and values for secure and sustainable peer-to-peer data exchange between organizations and companies. The claim is data sovereignty: Whoever makes data available retains control and decides individually who is involved in the data exchange, how, when, where and under what conditions.
 
-A corresponding concept was developed in the context of Gaia -X and the International Data Space Association (IDSA). The essential software component is the connector.
+A corresponding concept was developed in the context of Gaia-X and the International Data Space Association (IDSA). The essential software component is the connector.
 
 With the EDC, a new central communication component was created, which implements the following architectural principles:
 
