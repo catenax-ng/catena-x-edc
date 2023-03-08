@@ -31,3 +31,7 @@ https://w3c-ccg.github.io/did-method-web/
 ### File System Wallet
 
 ### Vault Wallet
+
+| Name                             | Description                                  |
+|:---------------------------------|:---------------------------------------------|
+| edc.ssi.did.document.vault.alias | Secret name where the DID document is stored |

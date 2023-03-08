@@ -33,8 +33,8 @@ public class DidWebDocumentController {
     if(this.didDocument != null){
       return this.didDocument;
     }
-    String didDocumentAlias = settings.getDidDocumentAlias();
-    this.didDocument = vault.resolveSecret(didDocumentAlias);
+    String didDocumentVaultAlias = settings.getDidDocumentAlias();
+    this.didDocument = vault.resolveSecret(didDocumentVaultAlias);
     return this.didDocument;
   }
 }

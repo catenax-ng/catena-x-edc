@@ -28,12 +28,12 @@ public class DidWebSettingsFactoryImpl implements DidWebSettingsFactory{
 
     String didDocumentAlias =
             context.getSetting(
-                    SsiDidWebExtension.SETTING_DID_WEB_DOCUMENT_STORAGE_PATH, null);
+                    SsiDidWebExtension.SETTING_DID_DOCUMENT_VAULT_ALAS, null);
     if (didDocumentAlias == null) {
       throw new DidWebException(
               String.format(
                       EXCEPTION_MANDATORY_SETTINGS_MISSING,
-                      SsiDidWebExtension.SETTING_DID_WEB_DOCUMENT_STORAGE_PATH));
+                      SsiDidWebExtension.SETTING_DID_DOCUMENT_VAULT_ALAS));
     }
 
     return new DidWebSettings(didDocumentAlias);

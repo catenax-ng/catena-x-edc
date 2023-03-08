@@ -17,11 +17,8 @@ import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
 
 public class SsiDidWebExtension implements ServiceExtension {
   public static final String EXTENSION_NAME = "SSI DID Web Extension";
-
   public static final String API_DID_WEB_CONTEXT = "didweb";
-  public static final String SETTING_DID_WEB_DOCUMENT_STORAGE_PATH = "edc.ssi.did.web.document.storage.path";
-  public static final String SETTING_DID_WEB_DOCUMENT_STORAGE_TYPE = "edc.ssi.did.web.document.storage.type";
-
+  public static final String SETTING_DID_DOCUMENT_VAULT_ALAS = "edc.ssi.did.document.vault.alias";
   @Inject private WebService webService;
   @Inject private Vault vault;
 
