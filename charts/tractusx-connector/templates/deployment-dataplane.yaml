@@ -104,10 +104,6 @@ spec:
               value: {{ .Values.dataplane.endpoints.validation.port | quote }}
             - name: "WEB_HTTP_VALIDATION_PATH"
               value: {{ .Values.dataplane.endpoints.validation.path | quote }}
-            - name: "WEB_HTTP_METRICS_PORT"
-              value: {{ .Values.dataplane.endpoints.metrics.port | quote }}
-            - name: "WEB_HTTP_METRICS_PATH"
-              value: {{ .Values.dataplane.endpoints.metrics.path | quote }}
             - name: "WEB_HTTP_PUBLIC_PORT"
               value: {{ .Values.dataplane.endpoints.public.port | quote }}
             - name: "WEB_HTTP_PUBLIC_PATH"
