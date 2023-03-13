@@ -53,7 +53,7 @@
 
 ## About The Project
 
-The project provides pre-built control- and data-plane [docker](https://www.docker.com/) images and [helm](https://helm.sh/) charts of the [Eclipse DataSpace Components Project](https://github.com/eclipse-edc/Connector).
+The project provides pre-built control- and data-plane [docker](https://www.docker.com/) images and [helm](https://helm.sh/) charts of the [Eclipse DataSpace Connector Components Project](https://github.com/eclipse-edc/Connector).
 
 **Difference TXDC and EDC** - On the first glance the two repositories might look very similar, but actually this repository does very little. 
 
