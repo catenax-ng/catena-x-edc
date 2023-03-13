@@ -6,8 +6,7 @@ To improve stability, reproducibility and maintainability of releases, product-e
 
 - use EDC `SNAPSHOT` builds during development
 - use release versions of EDC in releases. Release branches must not change upstream dependency versions, unless there
-  is a clear
-  and concise reason to do so.
+  is a clear and concise reason to do so.
 - slightly update branching model
 - if possible, bugs/defects should be fixed on `develop` and be backported to the respective `hotfix/` branch
 - Catena-X/Tractus-X will only provide hotfixes for critical security bugs as defined by the committers for the
@@ -21,7 +20,8 @@ when that dependency has not yet reached a final state and breaking changes are 
 from breaking changes, such as Java SPIs, APIs and changes in service contracts.
 
 Up until now, the only way out was cherry-picking, which is extremely cumbersome and error-prone, and requires a
-parallel build pipeline to publish the cherry-picked artifacts of EDC (and potentially others). With the approach presented here, cherry-picking is still an option, but there are easier alternatives to it. 
+parallel build pipeline to publish the cherry-picked artifacts of EDC (and potentially others). With the approach
+presented here, cherry-picking is still an option, but there are easier alternatives to it. 
 
 Every release version published by product-edc must be reproducible at any time.
 
