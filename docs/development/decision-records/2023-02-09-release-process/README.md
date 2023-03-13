@@ -1,4 +1,4 @@
-# Release process of product-edc
+# Release process of tractusx-edc
 
 ## Decision
 
