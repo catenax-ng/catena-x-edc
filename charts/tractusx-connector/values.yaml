@@ -480,15 +480,6 @@ vault:
     transferProxyTokenSignerPrivateKey: transfer-proxy-token-signer-private-key
     transferProxyTokenSignerPublicKey: transfer-proxy-token-signer-public-key
     transferProxyTokenEncryptionAesKey: transfer-proxy-token-encryption-aes-key
-    dapsPrivateKey: daps-private-key
-    dapsPublicKey: daps-public-key
-
-daps:
-  url: ""
-  clientId: ""
-  paths:
-    jwks: /jwks.json
-    token: /token
 
 backendService:
   httpProxyTokenReceiverUrl: ""

@@ -6,8 +6,8 @@ import org.eclipse.tractusx.ssi.spi.did.DidDocument;
 
 @Value
 public class TestIdentity {
-    Did did;
-    DidDocument didDocument;
-    byte[] publicKey;
-    byte[] privateKey;
+  Did did;
+  DidDocument didDocument;
+  byte[] publicKey;
+  byte[] privateKey;
 }

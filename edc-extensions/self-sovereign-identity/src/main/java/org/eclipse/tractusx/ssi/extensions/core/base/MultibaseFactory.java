@@ -23,6 +23,7 @@ public class MultibaseFactory {
       return Base64.create(encoded);
     }
 
-    throw new IllegalArgumentException("Encoded Multibase String is not supported. Must be Base64, Base64_WithPadding, Base58_Bitcoin or Base58_Flickr.");
+    throw new IllegalArgumentException(
+        "Encoded Multibase String is not supported. Must be Base64, Base64_WithPadding, Base58_Bitcoin or Base58_Flickr.");
   }
 }

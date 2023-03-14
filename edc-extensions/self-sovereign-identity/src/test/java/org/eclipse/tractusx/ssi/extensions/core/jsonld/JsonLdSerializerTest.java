@@ -11,49 +11,51 @@ import org.junit.jupiter.api.Test;
 
 public class JsonLdSerializerTest {
 
-    DanubCredentialFactory credentialFactory;
-    SerializedVerifiablePresentation svp;
-    JsonLdSerializer jsonLdSerializer;
+  DanubCredentialFactory credentialFactory;
+  SerializedVerifiablePresentation svp;
+  JsonLdSerializer jsonLdSerializer;
 
-    @BeforeEach
-    public void setUp() {
-        jsonLdSerializer = new JsonLdSerializerImpl();
-    }
+  @BeforeEach
+  public void setUp() {
+    jsonLdSerializer = new JsonLdSerializerImpl();
+  }
 
-    @Test
-    public void serializePresentationTestSuccess() {
-        //given
-        com.danubetech.verifiablecredentials.VerifiablePresentation vpDt = credentialFactory.getTestDanubVP();
-        svp = new SerializedVerifiablePresentation(vpDt.toJson());
-        //when
-        VerifiablePresentation toTest = jsonLdSerializer.deserializePresentation(svp);
-        SerializedVerifiablePresentation serializePresentation = jsonLdSerializer.serializePresentation(toTest);
-        VerifiablePresentation result = jsonLdSerializer.deserializePresentation(serializePresentation);
-        //then
-        Assertions.assertEquals(toTest, result);
-    }
+  @Test
+  public void serializePresentationTestSuccess() {
+    // given
+    com.danubetech.verifiablecredentials.VerifiablePresentation vpDt =
+        credentialFactory.getTestDanubVP();
+    svp = new SerializedVerifiablePresentation(vpDt.toJson());
+    // when
+    VerifiablePresentation toTest = jsonLdSerializer.deserializePresentation(svp);
+    SerializedVerifiablePresentation serializePresentation =
+        jsonLdSerializer.serializePresentation(toTest);
+    VerifiablePresentation result = jsonLdSerializer.deserializePresentation(serializePresentation);
+    // then
+    Assertions.assertEquals(toTest, result);
+  }
 
-    @Test
-    public void serializePresentationFailTest() {
-        Assertions.assertThrows(NullPointerException.class,
-                () -> jsonLdSerializer.serializePresentation(null));
-    }
+  @Test
+  public void serializePresentationFailTest() {
+    Assertions.assertThrows(
+        NullPointerException.class, () -> jsonLdSerializer.serializePresentation(null));
+  }
 
-    @Test
-    public void deserializePresentationTestSuccess() {
-        //given
-        VerifiablePresentation toTest = DanubTechMapper.map(credentialFactory.getTestDanubVP());
-        //when
-        SerializedVerifiablePresentation serializePresentation = jsonLdSerializer.serializePresentation(toTest);
-        VerifiablePresentation result = jsonLdSerializer.deserializePresentation(serializePresentation);
-        //then
-        Assertions.assertEquals(toTest, result);
-    }
+  @Test
+  public void deserializePresentationTestSuccess() {
+    // given
+    VerifiablePresentation toTest = DanubTechMapper.map(credentialFactory.getTestDanubVP());
+    // when
+    SerializedVerifiablePresentation serializePresentation =
+        jsonLdSerializer.serializePresentation(toTest);
+    VerifiablePresentation result = jsonLdSerializer.deserializePresentation(serializePresentation);
+    // then
+    Assertions.assertEquals(toTest, result);
+  }
 
-    @Test
-    public void deserializePresentationFailTest() {
-        Assertions.assertThrows(NullPointerException.class,
-                () -> jsonLdSerializer.deserializePresentation(null));
-    }
-
+  @Test
+  public void deserializePresentationFailTest() {
+    Assertions.assertThrows(
+        NullPointerException.class, () -> jsonLdSerializer.deserializePresentation(null));
+  }
 }

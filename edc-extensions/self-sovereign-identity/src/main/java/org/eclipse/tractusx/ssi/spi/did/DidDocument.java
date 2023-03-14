@@ -1,11 +1,10 @@
 package org.eclipse.tractusx.ssi.spi.did;
 
+import java.net.URI;
+import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-
-import java.net.URI;
-import java.util.List;
 
 @Value
 @Builder

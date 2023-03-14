@@ -3,12 +3,10 @@ package org.eclipse.tractusx.ssi.spi.did;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
-
 public class DidMethodTest {
 
   @Test
-  public void createDidMethodTestSuccess(){
+  public void createDidMethodTestSuccess() {
     // given
     String methodName = "testMethod";
     // when
@@ -18,25 +16,25 @@ public class DidMethodTest {
   }
 
   @Test
-  public void createDidMethodTestFail(){
+  public void createDidMethodTestFail() {
     // given
     String expectedMsg = "NullPointer";
     String methodName = null;
     // when
-    NullPointerException ex = Assertions.assertThrows(NullPointerException.class,
-            () -> new DidMethod(methodName));
+    NullPointerException ex =
+        Assertions.assertThrows(NullPointerException.class, () -> new DidMethod(methodName));
     // then
     ex.toString().equals(expectedMsg);
   }
 
   @Test
-  public void createDidMethodTestEmptyVal(){
+  public void createDidMethodTestEmptyVal() {
     // given
     String expectedMsg = "Empty value not allowed";
     String methodName = "";
     // when
-    IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class,
-            () -> new DidMethod(methodName));
+    IllegalArgumentException ex =
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new DidMethod(methodName));
     // then
     ex.toString().equals(expectedMsg);
   }

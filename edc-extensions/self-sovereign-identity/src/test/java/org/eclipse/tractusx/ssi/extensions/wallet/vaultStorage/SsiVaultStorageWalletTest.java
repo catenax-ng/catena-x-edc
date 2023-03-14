@@ -16,42 +16,42 @@ import org.mockito.Mockito;
 
 public class SsiVaultStorageWalletTest {
 
-    private SsiVaultStorageWallet ssiVaultStorageWallet;
+  private SsiVaultStorageWallet ssiVaultStorageWallet;
 
-    private SsiSettings ssiSettings;
-    private Vault vault;
+  private SsiSettings ssiSettings;
+  private Vault vault;
 
-    @BeforeEach
-    public void setUp() {
-        ssiSettings = Mockito.mock(SsiSettings.class);
-        vault = Mockito.mock(Vault.class);
-        ssiVaultStorageWallet = new SsiVaultStorageWallet(vault, ssiSettings);
-    }
+  @BeforeEach
+  public void setUp() {
+    ssiSettings = Mockito.mock(SsiSettings.class);
+    vault = Mockito.mock(Vault.class);
+    ssiVaultStorageWallet = new SsiVaultStorageWallet(vault, ssiSettings);
+  }
 
-    @SneakyThrows
-    @Test
-    public void getMembershipCredentialSuccess() {
+  @SneakyThrows
+  @Test
+  public void getMembershipCredentialSuccess() {
 
-        // given
-        final TestIdentity issuer = TestIdentityFactory.newIdentity();
+    // given
+    final TestIdentity issuer = TestIdentityFactory.newIdentity();
 
-        final VerifiableCredential verifiableCredential = TestCredentialFactory.generateCredential(issuer, VerifiableCredentialType.MEMBERSHIP_CREDENTIAL);
-        final String serializedVerifiableCredential = DanubTechMapper.map(verifiableCredential).toJson();
+    final VerifiableCredential verifiableCredential =
+        TestCredentialFactory.generateCredential(
+            issuer, VerifiableCredentialType.MEMBERSHIP_CREDENTIAL);
+    final String serializedVerifiableCredential =
+        DanubTechMapper.map(verifiableCredential).toJson();
 
+    final String vaultSecretAlias = "foo";
+    Mockito.when(ssiSettings.getMembershipVerifiableCredentialAlias()).thenReturn(vaultSecretAlias);
+    Mockito.when(vault.resolveSecret(vaultSecretAlias)).thenReturn(serializedVerifiableCredential);
 
-        final String vaultSecretAlias = "foo";
-        Mockito.when(ssiSettings.getMembershipVerifiableCredentialAlias()).thenReturn(vaultSecretAlias);
-        Mockito.when(vault.resolveSecret(vaultSecretAlias)).thenReturn(serializedVerifiableCredential);
+    // when
+    VerifiableCredential result = ssiVaultStorageWallet.getMembershipCredential();
 
-        // when
-        VerifiableCredential result = ssiVaultStorageWallet.getMembershipCredential();
+    System.out.println(verifiableCredential);
+    System.out.println(result);
 
-        System.out.println(verifiableCredential);
-        System.out.println(result);
-
-        // then
-        Assertions.assertEquals(verifiableCredential, result);
-    }
-
+    // then
+    Assertions.assertEquals(verifiableCredential, result);
+  }
 }
-

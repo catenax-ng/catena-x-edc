@@ -25,46 +25,62 @@ import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWallet;
 import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWalletRegistry;
 
-@Requires({Vault.class, VerifiableCredentialWalletRegistry.class, DidDocumentResolverRegistry.class})
+@Requires({
+  Vault.class,
+  VerifiableCredentialWalletRegistry.class,
+  DidDocumentResolverRegistry.class
+})
 @Provides({IdentityService.class})
 public class SsiIdentityServiceExtension implements ServiceExtension {
-    public static final String EXTENSION_NAME = "SSI Identity Service Extension";
+  public static final String EXTENSION_NAME = "SSI Identity Service Extension";
 
-    @Override
-    public String name() {
-        return EXTENSION_NAME;
-    }
+  @Override
+  public String name() {
+    return EXTENSION_NAME;
+  }
 
-    @Override
-    public void start() {
-        // TODO Check whether configured wallet was registered during initialize phase
-        // TODO Check whether verifiable presentation signing key is supported / valid
-    }
+  @Override
+  public void start() {
+    // TODO Check whether configured wallet was registered during initialize phase
+    // TODO Check whether verifiable presentation signing key is supported / valid
+  }
 
-    @Override
-    public void initialize(ServiceExtensionContext context) {
-        final Monitor monitor = context.getMonitor();
-        final Vault vault = context.getService(Vault.class);
-        final SsiSettingsFactory settingsFactory = new SsiSettingsFactoryImpl(monitor, context);
-        final SsiSettings settings = settingsFactory.createSettings();
+  @Override
+  public void initialize(ServiceExtensionContext context) {
+    final Monitor monitor = context.getMonitor();
+    final Vault vault = context.getService(Vault.class);
+    final SsiSettingsFactory settingsFactory = new SsiSettingsFactoryImpl(monitor, context);
+    final SsiSettings settings = settingsFactory.createSettings();
 
-        final VerifiableCredentialWalletRegistry walletRegistry = context.getService(VerifiableCredentialWalletRegistry.class);
-        final DidDocumentResolverRegistry didDocumentResolverRegistry = context.getService(DidDocumentResolverRegistry.class);
+    final VerifiableCredentialWalletRegistry walletRegistry =
+        context.getService(VerifiableCredentialWalletRegistry.class);
+    final DidDocumentResolverRegistry didDocumentResolverRegistry =
+        context.getService(DidDocumentResolverRegistry.class);
 
-        final VerifiableCredentialWallet credentialWallet = walletRegistry.get(settings.getWalletIdentifier());
-        final JsonLdSerializer jsonLdSerializer = new JsonLdSerializerImpl();
-        final SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry, monitor);
-        final SignedJwtValidator jwtValidator = new SignedJwtValidator(settings);
-        final LinkedDataProofValidation linkedDataProofValidation = LinkedDataProofValidation.create(didDocumentResolverRegistry, monitor);
-        final JsonLdValidatorImpl jsonLdValidator = new JsonLdValidatorImpl();
-        final SigningKeyResolver signingKeyResolver = new SigningKeyResolver(vault, settings);
-        final SignedJwtFactory signedJwtFactory = new SignedJwtFactory(settings, signingKeyResolver);
-        final SerializedJwtPresentationFactory serializedJwtPresentationFactory = new SerializedJwtPresentationFactoryImpl(signedJwtFactory, jsonLdSerializer);
+    final VerifiableCredentialWallet credentialWallet =
+        walletRegistry.get(settings.getWalletIdentifier());
+    final JsonLdSerializer jsonLdSerializer = new JsonLdSerializerImpl();
+    final SignedJwtVerifier jwtVerifier =
+        new SignedJwtVerifier(didDocumentResolverRegistry, monitor);
+    final SignedJwtValidator jwtValidator = new SignedJwtValidator(settings);
+    final LinkedDataProofValidation linkedDataProofValidation =
+        LinkedDataProofValidation.create(didDocumentResolverRegistry, monitor);
+    final JsonLdValidatorImpl jsonLdValidator = new JsonLdValidatorImpl();
+    final SigningKeyResolver signingKeyResolver = new SigningKeyResolver(vault, settings);
+    final SignedJwtFactory signedJwtFactory = new SignedJwtFactory(settings, signingKeyResolver);
+    final SerializedJwtPresentationFactory serializedJwtPresentationFactory =
+        new SerializedJwtPresentationFactoryImpl(signedJwtFactory, jsonLdSerializer);
 
-        final IdentityService identityService = new SsiIdentityService(serializedJwtPresentationFactory, credentialWallet, jsonLdSerializer, jwtVerifier, jwtValidator, linkedDataProofValidation, jsonLdValidator);
+    final IdentityService identityService =
+        new SsiIdentityService(
+            serializedJwtPresentationFactory,
+            credentialWallet,
+            jsonLdSerializer,
+            jwtVerifier,
+            jwtValidator,
+            linkedDataProofValidation,
+            jsonLdValidator);
 
-        context.registerService(IdentityService.class, identityService);
-    }
-
-
+    context.registerService(IdentityService.class, identityService);
+  }
 }

@@ -1,9 +1,14 @@
 package org.eclipse.tractusx.ssi.extensions.core.jwt;
 
+import static org.mockito.Mockito.doReturn;
+
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.extensions.core.jwt.SignedJwtValidator;
 import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettings;
 import org.eclipse.tractusx.ssi.spi.did.Did;
 import org.junit.jupiter.api.Assertions;
@@ -11,12 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import static org.mockito.Mockito.doReturn;
 public class SignedJwtValidatorTest {
 
   SsiSettings ssiSettings;
@@ -25,16 +24,16 @@ public class SignedJwtValidatorTest {
   SignedJwtValidator signedJwtValidator;
 
   @BeforeEach
-  public void init(){
+  public void init() {
     ssiSettings = Mockito.mock(SsiSettings.class);
     jwt = Mockito.mock(SignedJWT.class);
   }
 
   @Test
   @SneakyThrows
-  public void validateSuccess(){
+  public void validateSuccess() {
     // given
-    List<String> audiences = Arrays.asList("WrongAudience","CorrectAudience");
+    List<String> audiences = Arrays.asList("WrongAudience", "CorrectAudience");
     Date futureDate = getFutureDate();
     Did didMock = Mockito.mock(Did.class);
     JWTClaimsSet claimsSetMock = Mockito.mock(JWTClaimsSet.class);
@@ -52,9 +51,9 @@ public class SignedJwtValidatorTest {
 
   @Test
   @SneakyThrows
-  public void validateInvalidAudience(){
+  public void validateInvalidAudience() {
     // given
-    List<String> audiences = Arrays.asList("WrongAudience","WrongAudience");
+    List<String> audiences = Arrays.asList("WrongAudience", "WrongAudience");
     Date date = getFutureDate();
     Did didMock = Mockito.mock(Did.class);
     JWTClaimsSet claimsSetMock = Mockito.mock(JWTClaimsSet.class);
@@ -72,9 +71,9 @@ public class SignedJwtValidatorTest {
 
   @Test
   @SneakyThrows
-  public void validateInvalidExpiration(){
+  public void validateInvalidExpiration() {
     // given
-    List<String> audiences = Arrays.asList("WrongAudience","CorrectAudience");
+    List<String> audiences = Arrays.asList("WrongAudience", "CorrectAudience");
     Date date = new Date();
     Did didMock = Mockito.mock(Did.class);
     JWTClaimsSet claimsSetMock = Mockito.mock(JWTClaimsSet.class);
@@ -92,7 +91,7 @@ public class SignedJwtValidatorTest {
 
   @Test
   @SneakyThrows
-  public void validateEmptyAudience(){
+  public void validateEmptyAudience() {
     // given
     String expectedMsg = "java.lang.NullPointerException";
     Date date = new Date();
@@ -103,16 +102,15 @@ public class SignedJwtValidatorTest {
     doReturn(date).when(claimsSetMock).getExpirationTime();
     // when
     NullPointerException nullPointerException =
-            Assertions.assertThrows(NullPointerException.class,
-                    () -> signedJwtValidator.validate(jwt));
+        Assertions.assertThrows(NullPointerException.class, () -> signedJwtValidator.validate(jwt));
     // then
     Assertions.assertTrue(nullPointerException.toString().contains(expectedMsg));
   }
 
   @Test
-  public void validateEmptyExpiration(){
+  public void validateEmptyExpiration() {
     // given
-    List<String> audiences = Arrays.asList("WrongAudience","CorrectAudience");
+    List<String> audiences = Arrays.asList("WrongAudience", "CorrectAudience");
     String expectedMsg = "java.lang.NullPointerException";
     Did didMock = Mockito.mock(Did.class);
     JWTClaimsSet claimsSetMock = Mockito.mock(JWTClaimsSet.class);
@@ -121,13 +119,12 @@ public class SignedJwtValidatorTest {
     doReturn(null).when(claimsSetMock).getExpirationTime();
     // when
     NullPointerException nullPointerException =
-            Assertions.assertThrows(NullPointerException.class,
-                    () -> signedJwtValidator.validate(jwt));
+        Assertions.assertThrows(NullPointerException.class, () -> signedJwtValidator.validate(jwt));
     // then
     Assertions.assertTrue(nullPointerException.toString().contains(expectedMsg));
   }
 
-  private Date getFutureDate(){
+  private Date getFutureDate() {
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());
     cal.add(Calendar.DATE, 1);

@@ -14,23 +14,23 @@ import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWalletRegistry;
 @Requires({Vault.class, VerifiableCredentialWalletRegistry.class})
 public class SsiVaultWalletExtension implements ServiceExtension {
 
-    public static final String EXTENSION_NAME = "Vault Wallet Extension";
+  public static final String EXTENSION_NAME = "Vault Wallet Extension";
 
-    @Override
-    public String name() {
-        return EXTENSION_NAME;
-    }
+  @Override
+  public String name() {
+    return EXTENSION_NAME;
+  }
 
-    @Override
-    public void initialize(ServiceExtensionContext context) {
-        final Monitor monitor = context.getMonitor();
-        final Vault vault = context.getService(Vault.class);
-        final SsiSettingsFactory settingsFactory = new SsiSettingsFactoryImpl(monitor, context);
-        final SsiSettings settings = settingsFactory.createSettings();
-        final VerifiableCredentialWallet wallet = new SsiVaultStorageWallet(vault, settings);
+  @Override
+  public void initialize(ServiceExtensionContext context) {
+    final Monitor monitor = context.getMonitor();
+    final Vault vault = context.getService(Vault.class);
+    final SsiSettingsFactory settingsFactory = new SsiSettingsFactoryImpl(monitor, context);
+    final SsiSettings settings = settingsFactory.createSettings();
+    final VerifiableCredentialWallet wallet = new SsiVaultStorageWallet(vault, settings);
 
-        VerifiableCredentialWalletRegistry walletRegistry =
-                context.getService(VerifiableCredentialWalletRegistry.class);
-        walletRegistry.register(wallet);
-    }
+    VerifiableCredentialWalletRegistry walletRegistry =
+        context.getService(VerifiableCredentialWalletRegistry.class);
+    walletRegistry.register(wallet);
+  }
 }

@@ -1,13 +1,9 @@
 package org.eclipse.tractusx.ssi.spi.verifiable.credential;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.net.URI;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
-
-import java.net.URI;
-
 
 @Value
 @Builder

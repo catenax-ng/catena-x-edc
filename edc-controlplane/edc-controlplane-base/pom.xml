@@ -71,11 +71,11 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-            <artifactId>cx-oauth2</artifactId>
+            <artifactId>custom-jsonld</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.tractusx.edc.extensions</groupId>
-            <artifactId>custom-jsonld</artifactId>
+            <artifactId>self-sovereign-identity</artifactId>
         </dependency>
 
         <!-- Core -->
@@ -88,20 +88,6 @@
         <dependency>
             <groupId>org.eclipse.edc</groupId>
             <artifactId>configuration-filesystem</artifactId>
-        </dependency>
-
-        <!-- Security -->
-        <dependency>
-            <groupId>org.eclipse.edc</groupId>
-            <artifactId>auth-tokenbased</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.edc</groupId>
-            <artifactId>oauth2-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.edc</groupId>
-            <artifactId>oauth2-daps</artifactId>
         </dependency>
 
         <!-- APIs -->

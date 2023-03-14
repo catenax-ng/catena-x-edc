@@ -10,7 +10,7 @@ public class JsonLdSerializerImpl implements JsonLdSerializer {
       VerifiablePresentation verifiablePresentation) {
 
     final com.danubetech.verifiablecredentials.VerifiablePresentation dtPresentation =
-            DanubTechMapper.map(verifiablePresentation);
+        DanubTechMapper.map(verifiablePresentation);
     final String dtPresentationJson = dtPresentation.toJson();
 
     return new SerializedVerifiablePresentation(dtPresentationJson);

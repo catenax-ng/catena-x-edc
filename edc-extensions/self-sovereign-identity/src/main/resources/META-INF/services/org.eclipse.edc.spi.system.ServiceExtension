@@ -17,6 +17,7 @@
 #
 #  SPDX-License-Identifier: Apache-2.0
 #
+
 org.eclipse.tractusx.ssi.extensions.core.SsiCoreExtension
 org.eclipse.tractusx.ssi.extensions.core.SsiIdentityServiceExtension
 org.eclipse.tractusx.ssi.extensions.wallet.fileSystem.SsiFileSystemWalletExtension

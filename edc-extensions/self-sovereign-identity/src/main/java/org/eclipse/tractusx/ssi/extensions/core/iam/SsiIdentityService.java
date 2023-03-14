@@ -3,6 +3,8 @@ package org.eclipse.tractusx.ssi.extensions.core.iam;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import foundation.identity.jsonld.JsonLDObject;
+import java.text.ParseException;
+import java.util.List;
 import org.eclipse.edc.spi.iam.ClaimToken;
 import org.eclipse.edc.spi.iam.IdentityService;
 import org.eclipse.edc.spi.iam.TokenParameters;
@@ -20,9 +22,6 @@ import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.spi.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWallet;
-
-import java.text.ParseException;
-import java.util.List;
 
 public class SsiIdentityService implements IdentityService {
 

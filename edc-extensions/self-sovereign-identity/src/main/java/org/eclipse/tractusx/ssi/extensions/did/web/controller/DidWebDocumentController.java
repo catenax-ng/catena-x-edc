@@ -29,8 +29,8 @@ public class DidWebDocumentController {
     return getDidDoc();
   }
 
-  private String getDidDoc(){
-    if(this.didDocument != null){
+  private String getDidDoc() {
+    if (this.didDocument != null) {
       return this.didDocument;
     }
     String didDocumentVaultAlias = settings.getDidDocumentAlias();

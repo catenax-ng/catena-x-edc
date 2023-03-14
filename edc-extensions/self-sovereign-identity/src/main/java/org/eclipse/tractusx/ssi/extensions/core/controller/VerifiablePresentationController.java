@@ -32,7 +32,7 @@ public class VerifiablePresentationController {
   @GET
   @Path("/verifiable-presentation/{requestedCredentialType}")
   public String request(@PathParam("requestedCredentialType") String requestedCredentialType) {
-    
+
     // TODO Don't just give out credentials to anybody. There should be some check here for the
     // requestor
     final String audience = "TODO";

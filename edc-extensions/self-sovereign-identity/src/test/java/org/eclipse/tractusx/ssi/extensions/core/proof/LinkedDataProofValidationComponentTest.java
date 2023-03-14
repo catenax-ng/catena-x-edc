@@ -1,5 +1,8 @@
 package org.eclipse.tractusx.ssi.extensions.core.proof;
 
+import java.net.URI;
+import java.time.Instant;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.core.proof.hash.LinkedDataHasher;
@@ -17,63 +20,60 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-
 public class LinkedDataProofValidationComponentTest {
 
-    private LinkedDataProofValidation linkedDataProofValidation;
+  private LinkedDataProofValidation linkedDataProofValidation;
 
-    private TestIdentity credentialIssuer;
+  private TestIdentity credentialIssuer;
 
-    @BeforeEach
-    public void setup() {
+  @BeforeEach
+  public void setup() {
 
-        final Monitor monitor = Mockito.mock(Monitor.class);
-        final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
+    final Monitor monitor = Mockito.mock(Monitor.class);
+    final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
 
-        credentialIssuer = TestIdentityFactory.newIdentity();
-        didDocumentResolver.register(credentialIssuer);
+    credentialIssuer = TestIdentityFactory.newIdentity();
+    didDocumentResolver.register(credentialIssuer);
 
-        linkedDataProofValidation =
-                new LinkedDataProofValidation(
-                        new LinkedDataHasher(),
-                        new LinkedDataTransformer(),
-                        new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor),
-                        new LinkedDataSigner(),
-                        monitor);
-    }
+    linkedDataProofValidation =
+        new LinkedDataProofValidation(
+            new LinkedDataHasher(),
+            new LinkedDataTransformer(),
+            new LinkedDataVerifier(didDocumentResolver.withRegistry(), monitor),
+            new LinkedDataSigner(),
+            monitor);
+  }
 
-    @Test
-    public void testLinkedDataProofCheck() {
+  @Test
+  public void testLinkedDataProofCheck() {
 
-        // prepare key
-        URI verificationMethod = credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
-        byte[] privateKey = credentialIssuer.getPrivateKey();
+    // prepare key
+    URI verificationMethod =
+        credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+    byte[] privateKey = credentialIssuer.getPrivateKey();
 
-        VerifiableCredential credential = createCredential(null);
+    VerifiableCredential credential = createCredential(null);
 
-        final Ed25519Proof proof =
-                linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
+    final Ed25519Proof proof =
+        linkedDataProofValidation.createProof(credential, verificationMethod, privateKey);
 
-        credential = createCredential(proof);
+    credential = createCredential(proof);
 
-        var isOk = linkedDataProofValidation.checkProof(credential);
+    var isOk = linkedDataProofValidation.checkProof(credential);
 
-        Assertions.assertTrue(isOk);
-    }
+    Assertions.assertTrue(isOk);
+  }
 
-    @SneakyThrows
-    private VerifiableCredential createCredential(Ed25519Proof proof) {
-        return VerifiableCredential.builder()
-                .id(URI.create("did:test:id"))
-                .types(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
-                .issuer(credentialIssuer.getDid().toUri())
-                .expirationDate(Instant.parse("2023-02-15T17:21:42Z").plusSeconds(3600))
-                .issuanceDate(Instant.parse("2023-02-15T17:21:42Z"))
-                .proof(proof)
-                .credentialStatus(null)
-                .build();
-    }
+  @SneakyThrows
+  private VerifiableCredential createCredential(Ed25519Proof proof) {
+    return VerifiableCredential.builder()
+        .id(URI.create("did:test:id"))
+        .types(List.of(VerifiableCredentialType.VERIFIABLE_CREDENTIAL))
+        .issuer(credentialIssuer.getDid().toUri())
+        .expirationDate(Instant.parse("2023-02-15T17:21:42Z").plusSeconds(3600))
+        .issuanceDate(Instant.parse("2023-02-15T17:21:42Z"))
+        .proof(proof)
+        .credentialStatus(null)
+        .build();
+  }
 }

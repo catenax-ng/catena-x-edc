@@ -1,9 +1,8 @@
 package org.eclipse.tractusx.ssi.extensions.core.setting;
 
+import java.util.List;
 import lombok.Value;
 import org.eclipse.tractusx.ssi.spi.did.Did;
-
-import java.util.List;
 
 @Value
 public class SsiSettings {

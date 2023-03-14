@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class DidMethodIdentifierTest {
 
   @Test
-  public void createDidMethodIdentifierTestSuccess(){
+  public void createDidMethodIdentifierTestSuccess() {
     // given
     String methodIdentifier = "testIdentifier";
     // when
@@ -16,27 +16,28 @@ public class DidMethodIdentifierTest {
   }
 
   @Test
-  public void createDidMethodIdentifierTestFail(){
+  public void createDidMethodIdentifierTestFail() {
     // given
     String expectedMsg = "NullPointer";
     String methodIdentifier = null;
     // when
-    NullPointerException ex = Assertions.assertThrows(NullPointerException.class,
-            () -> new DidMethodIdentifier(methodIdentifier));
+    NullPointerException ex =
+        Assertions.assertThrows(
+            NullPointerException.class, () -> new DidMethodIdentifier(methodIdentifier));
     // then
     ex.toString().equals(expectedMsg);
   }
 
   @Test
-  public void createDidMethodIdentifierTestEmptyVal(){
+  public void createDidMethodIdentifierTestEmptyVal() {
     // given
     String expectedMsg = "Empty value not allowed";
     String methodIdentifier = "";
     // when
-    IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class,
-            () -> new DidMethodIdentifier(methodIdentifier));
+    IllegalArgumentException ex =
+        Assertions.assertThrows(
+            IllegalArgumentException.class, () -> new DidMethodIdentifier(methodIdentifier));
     // then
     ex.toString().equals(expectedMsg);
   }
-
 }

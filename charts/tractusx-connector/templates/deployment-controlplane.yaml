@@ -84,30 +84,13 @@ spec:
           env:
           {{- if .Values.controlplane.debug.enabled }}
             - name: "JAVA_TOOL_OPTIONS"
-            {{- if and .Values.controlplane.debug.enabled .Values.controlplane.debug.suspendOnStart }}
               value: >-
+            {{- if .Values.controlplane.debug.suspendOnStart }}
                 {{ printf "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=%v" .Values.controlplane.debug.port }}
             {{- else }}
-              value: >-
                 {{ printf "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=%v" .Values.controlplane.debug.port }}
             {{- end }}
           {{- end }}
-
-            ########################
-            ## DAPS CONFIGURATION ##
-            ########################
-
-            # see extension https://github.com/eclipse-edc/Connector/tree/main/extensions/iam/oauth2/oauth2-core
-            - name: EDC_OAUTH_CLIENT_ID
-              value: {{ .Values.daps.clientId | required ".Values.daps.clientId is required" | quote }}
-            - name: EDC_OAUTH_PROVIDER_JWKS_URL
-              value: {{ printf "%s%s" .Values.daps.url .Values.daps.paths.jwks }}
-            - name: EDC_OAUTH_TOKEN_URL
-              value: {{ printf "%s%s" .Values.daps.url .Values.daps.paths.token }}
-            - name: EDC_OAUTH_PRIVATE_KEY_ALIAS
-              value: {{ .Values.vault.secretNames.dapsPrivateKey | required ".Values.vault.secretNames.dapsPrivateKey is required" | quote }}
-            - name: EDC_OAUTH_PUBLIC_KEY_ALIAS
-              value: {{ .Values.vault.secretNames.dapsPublicKey | required ".Values.vault.secretNames.dapsPublicKey is required" | quote }}
 
             #######
             # API #

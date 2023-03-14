@@ -1,13 +1,5 @@
 package org.eclipse.tractusx.ssi.extensions.wallet.fileSystem;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.extensions.core.jsonLd.DanubTechMapper;
-import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialType;
-import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWallet;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -15,6 +7,13 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.extensions.core.jsonLd.DanubTechMapper;
+import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialType;
+import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWallet;
 
 @RequiredArgsConstructor
 public class SsiFileSystemWallet implements VerifiableCredentialWallet {

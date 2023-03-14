@@ -3,8 +3,6 @@ package org.eclipse.tractusx.ssi.extensions.did.web.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 import org.eclipse.tractusx.ssi.extensions.did.web.exception.DidWebException;
 import org.eclipse.tractusx.ssi.spi.did.Did;
 
@@ -24,13 +22,11 @@ public class DidWebParser {
     didUrl = String.join("/", didUrlArray);
     didUrl = java.net.URLDecoder.decode(didUrl, StandardCharsets.UTF_8);
 
-    if(didUrlArray.length > 1){
+    if (didUrlArray.length > 1) {
       didUri = "https://" + didUrl + optDidPath;
-    } else{
+    } else {
       didUri = "https://" + didUrl + didPath;
     }
-
-
 
     try {
       return new URL(didUri);

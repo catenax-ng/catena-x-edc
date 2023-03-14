@@ -24,7 +24,7 @@ public class Base58Flickr implements MultibaseString {
 
     return new Base58Flickr(base58, encoded);
   }
+
   byte @NonNull [] decoded;
-  @NonNull
-  String encoded;
+  @NonNull String encoded;
 }

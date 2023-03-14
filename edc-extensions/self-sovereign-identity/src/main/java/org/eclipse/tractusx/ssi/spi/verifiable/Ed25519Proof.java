@@ -1,13 +1,8 @@
 package org.eclipse.tractusx.ssi.spi.verifiable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
-import org.eclipse.tractusx.ssi.extensions.core.base.Base58Bitcoin;
-
 import java.net.URI;
 import java.time.Instant;
-import java.util.Date;
+import lombok.*;
 
 @Value
 @Builder
@@ -15,19 +10,12 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Ed25519Proof {
 
-    public static final String TYPE = "Ed25519Signature2020";
+  public static final String TYPE = "Ed25519Signature2020";
 
-    @NonNull
-    @Builder.Default
-    String type = "Ed25519Signature2020";
+  @NonNull @Builder.Default String type = "Ed25519Signature2020";
 
-    @NonNull
-    @Builder.Default
-    String proofPurpose = "assertionMethod";
-    @NonNull
-    Instant created;
-    @NonNull
-    URI verificationMethod;
-    @NonNull
-    MultibaseString proofValue;
+  @NonNull @Builder.Default String proofPurpose = "assertionMethod";
+  @NonNull Instant created;
+  @NonNull URI verificationMethod;
+  @NonNull MultibaseString proofValue;
 }

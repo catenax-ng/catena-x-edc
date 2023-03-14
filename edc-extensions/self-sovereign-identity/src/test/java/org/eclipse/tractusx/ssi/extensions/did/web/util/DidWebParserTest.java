@@ -1,5 +1,6 @@
 package org.eclipse.tractusx.ssi.extensions.did.web.util;
 
+import java.net.URL;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.extensions.did.web.exception.DidWebException;
 import org.eclipse.tractusx.ssi.spi.did.Did;
@@ -7,7 +8,6 @@ import org.eclipse.tractusx.ssi.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.spi.did.DidMethodIdentifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import java.net.URL;
 
 public class DidWebParserTest {
 
@@ -18,12 +18,11 @@ public class DidWebParserTest {
   // example.com%3A3000 -> :3000/.well-known/did.json
   // example.com%3A3000:user:alice -> :3000/user/alice.did.json**/
 
-
   private String didPath = "/.well-known/did.json";
 
   @Test
   @SneakyThrows
-  public void parseDidWebUrlVanillaDid(){
+  public void parseDidWebUrlVanillaDid() {
     // given
     String validDidMethod = "web";
     String vanillaDid = "example.com";
@@ -39,7 +38,7 @@ public class DidWebParserTest {
 
   @Test
   @SneakyThrows
-  public void parseDidWebUrlWithOptPath(){
+  public void parseDidWebUrlWithOptPath() {
     // given
     String validDidMethod = "web";
     String optPathDid = "example.com:user:alice";
@@ -55,7 +54,7 @@ public class DidWebParserTest {
 
   @Test
   @SneakyThrows
-  public void parseDidWebUrlWithPort(){
+  public void parseDidWebUrlWithPort() {
     // given
     String validDidMethod = "web";
     String portDid = "example.com%3A3000";
@@ -71,7 +70,7 @@ public class DidWebParserTest {
 
   @Test
   @SneakyThrows
-  public void parseDidWebUrlWithPercentInKey(){
+  public void parseDidWebUrlWithPercentInKey() {
     // given
     String validDidMethod = "web";
     String portOptPathDid = "example.com%3A3000:user:alice";
@@ -87,7 +86,7 @@ public class DidWebParserTest {
 
   @Test
   @SneakyThrows
-  public void parseDidWebUrlInvalidDidMethod(){
+  public void parseDidWebUrlInvalidDidMethod() {
     // given
     String inValidDidMethod = "web2";
     String validDidMethodId = "someurl.com";
@@ -96,8 +95,7 @@ public class DidWebParserTest {
     Did toTest = new Did(didMethod, didMethodIdentifier);
     String expected = "Did Method not allowed";
     // when
-    var result = Assertions.assertThrows(DidWebException.class,
-            () -> DidWebParser.parse(toTest));
+    var result = Assertions.assertThrows(DidWebException.class, () -> DidWebParser.parse(toTest));
     // then
     Assertions.assertTrue(result.getMessage().contains(expected));
   }

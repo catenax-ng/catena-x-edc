@@ -9,13 +9,12 @@ import lombok.Value;
 public class DidMethodIdentifier {
   @NonNull @EqualsAndHashCode.Include String value;
 
-  public DidMethodIdentifier(String val){
-    if(val.isEmpty()){
+  public DidMethodIdentifier(String val) {
+    if (val.isEmpty()) {
       throw new IllegalArgumentException("Empty value not allowed");
     }
     this.value = val;
   }
-
 
   @Override
   public String toString() {

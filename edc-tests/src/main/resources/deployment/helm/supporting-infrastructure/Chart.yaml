@@ -25,13 +25,6 @@ version: 0.1.0
 appVersion: "1.16.0"
 
 dependencies:
-  # IDS Dynamic Attribute Provisioning Service (IAM)
-  - name: ids-daps
-    version: 0.0.1
-    repository: "file://../omejdn"
-    alias: idsdaps
-    condition: install.daps
-
   # HashiCorp Vault
   - name: vault
     alias: vault

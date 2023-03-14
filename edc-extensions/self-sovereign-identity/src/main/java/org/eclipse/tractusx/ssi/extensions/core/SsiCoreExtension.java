@@ -19,31 +19,19 @@
  */
 package org.eclipse.tractusx.ssi.extensions.core;
 
-import org.eclipse.edc.runtime.metamodel.annotation.Inject;
+import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Provides;
-import org.eclipse.edc.spi.iam.IdentityService;
 import org.eclipse.edc.spi.monitor.Monitor;
-import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.system.ServiceExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
-import org.eclipse.tractusx.ssi.extensions.core.iam.SsiIdentityService;
-import org.eclipse.tractusx.ssi.extensions.core.jsonLd.JsonLdSerializer;
-import org.eclipse.tractusx.ssi.extensions.core.jsonLd.JsonLdValidatorImpl;
-import org.eclipse.tractusx.ssi.extensions.core.jwt.SignedJwtValidator;
-import org.eclipse.tractusx.ssi.extensions.core.jwt.SignedJwtVerifier;
-import org.eclipse.tractusx.ssi.extensions.core.proof.LinkedDataProofValidation;
 import org.eclipse.tractusx.ssi.extensions.core.resolver.did.DidDocumentResolverRegistryImpl;
 import org.eclipse.tractusx.ssi.extensions.core.resolver.key.SigningMethod;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettings;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettingsFactory;
-import org.eclipse.tractusx.ssi.extensions.core.setting.SsiSettingsFactoryImpl;
 import org.eclipse.tractusx.ssi.extensions.core.wallet.VerifiableCredentialWalletRegistryImpl;
 import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
-import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWallet;
 import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWalletRegistry;
-import org.eclipse.tractusx.ssi.spi.wallet.VerifiableCredentialWalletService;
 
-@Provides({VerifiableCredentialWalletRegistry.class, VerifiableCredentialWalletService.class})
+@Extension(value = SsiCoreExtension.EXTENSION_NAME)
+@Provides({VerifiableCredentialWalletRegistry.class, DidDocumentResolverRegistry.class})
 public class SsiCoreExtension implements ServiceExtension {
   public static final String EXTENSION_NAME = "SSI Core Extension";
 
@@ -53,11 +41,11 @@ public class SsiCoreExtension implements ServiceExtension {
   public static final String SETTING_VERIFIABLE_PRESENTATION_SIGNING_METHOD =
       "edc.ssi.verifiable.presentation.signing.method";
   public static final String SETTING_VERIFIABLE_PRESENTATION_SIGNING_KEY_ALIAS =
-          "edc.ssi.verifiable.presentation.signing.key.alias";
+      "edc.ssi.verifiable.presentation.signing.key.alias";
   public static final String SETTING_WALLET_STORAGE_MEMBERSHIP_CREDENTIAL_ALIAS =
-          "edc.ssi.wallet.storage.membership.credential.alias";
+      "edc.ssi.wallet.storage.membership.credential.alias";
   public static final String SETTING_WALLET_STORAGE_CREDENTIAL_ALIAS_LIST =
-          "edc.ssi.wallet.storage.credential.alias.list";
+      "edc.ssi.wallet.storage.credential.alias.list";
 
   public static final String SETTING_VERIFIABLE_PRESENTATION_SIGNING_METHOD_DEFAULT =
       SigningMethod.SIGNING_METHOD_ES256;
@@ -83,10 +71,9 @@ public class SsiCoreExtension implements ServiceExtension {
         new DidDocumentResolverRegistryImpl();
 
     final VerifiableCredentialWalletRegistry walletRegistry =
-            new VerifiableCredentialWalletRegistryImpl();
+        new VerifiableCredentialWalletRegistryImpl();
 
     context.registerService(DidDocumentResolverRegistry.class, documentResolverRegistry);
     context.registerService(VerifiableCredentialWalletRegistry.class, walletRegistry);
   }
-
 }
