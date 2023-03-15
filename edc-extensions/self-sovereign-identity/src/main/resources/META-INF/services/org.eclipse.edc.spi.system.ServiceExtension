@@ -20,5 +20,7 @@
 
 org.eclipse.tractusx.ssi.extensions.core.SsiCoreExtension
 org.eclipse.tractusx.ssi.extensions.core.SsiIdentityServiceExtension
-org.eclipse.tractusx.ssi.extensions.wallet.fileSystem.SsiFileSystemWalletExtension
-org.eclipse.tractusx.ssi.extensions.wallet.vaultStorage.SsiVaultWalletExtension
+org.eclipse.tractusx.ssi.extensions.agent.embedded.AgentCoreExtension
+org.eclipse.tractusx.ssi.extensions.agent.embedded.EmbeddedAgentExtension
+org.eclipse.tractusx.ssi.extensions.agent.embedded.wallet.fileSystem.SsiFileSystemWalletExtension
+org.eclipse.tractusx.ssi.extensions.agent.embedded.wallet.vaultStorage.SsiVaultWalletExtension

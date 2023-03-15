@@ -9,7 +9,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.security.PrivateKey;
 import java.util.Date;
 import java.util.UUID;
-import org.eclipse.tractusx.ssi.extensions.core.credentials.SerializedVerifiablePresentation;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.credentials.SerializedVerifiablePresentation;
 
 public class SignedJwtFactory {
 

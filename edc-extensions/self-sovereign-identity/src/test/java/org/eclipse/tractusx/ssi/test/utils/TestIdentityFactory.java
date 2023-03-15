@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Objects;
 import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.eclipse.tractusx.ssi.extensions.core.base.MultibaseFactory;
-import org.eclipse.tractusx.ssi.spi.did.Did;
-import org.eclipse.tractusx.ssi.spi.did.DidDocument;
-import org.eclipse.tractusx.ssi.spi.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.spi.verifiable.MultibaseString;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.MultibaseString;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidDocument;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Ed25519VerificationKey2020;
 
 public class TestIdentityFactory {
 

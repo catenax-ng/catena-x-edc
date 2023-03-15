@@ -4,10 +4,12 @@ import jakarta.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.eclipse.tractusx.ssi.extensions.core.resolver.did.DidDocumentResolverRegistryImpl;
-import org.eclipse.tractusx.ssi.spi.did.*;
-import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.spi.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.did.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidDocument;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 
 public class TestDidDocumentResolver implements DidDocumentResolver {
   private final Map<Did, DidDocument> documents = new HashMap<>();

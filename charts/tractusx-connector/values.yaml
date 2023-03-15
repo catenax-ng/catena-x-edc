@@ -451,6 +451,15 @@ dataplane:
     # -- Explicitly declared url for reaching the public api (e.g. if ingresses not used)
     public: ""
 
+ssi:
+  wallet: fileSystem
+  did:
+    value: ""
+    privateKey:
+      secretRef: ""
+  verifiablePresentation:
+    signingMethod: ES256
+
 postgresql:
   enabled: false
   jdbcUrl: ""

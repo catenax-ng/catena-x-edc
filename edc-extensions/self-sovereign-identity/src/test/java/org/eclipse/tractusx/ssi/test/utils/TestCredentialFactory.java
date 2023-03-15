@@ -4,8 +4,8 @@ import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.spi.verifiable.credential.VerifiableCredentialType;
+import org.eclipse.tractusx.ssi.extensions.core.spi.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.extensions.core.spi.verifiable.credential.VerifiableCredentialType;
 
 public class TestCredentialFactory {
 
