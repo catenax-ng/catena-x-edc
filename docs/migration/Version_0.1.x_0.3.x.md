@@ -11,6 +11,7 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 - Removed field `assetId` from `ContractOffer`. It was always null though, so there should be nothing to do about it.
 - on `POST /contractdefinitions` a `duration` field can be added to control the duration of the contract.
 - added the `GET /assets/{id}/address` endpoint to being able to retrieve the stored `DataAddress`
+- concerning the Business Partner Validation Extension a so called orconstraint must be used instead of an IN operator. More details in the [related documentation entry](https://github.com/catenax-ng/product-edc/tree/0.3.0/edc-extensions/business-partner-validation)
 
 ## Settings changes
 - Removed default value for setting `edc.transfer.proxy.token.verifier.publickey.alias` so it must be valued accordingly
