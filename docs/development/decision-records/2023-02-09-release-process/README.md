@@ -2,7 +2,7 @@
 
 ## Decision
 
-To improve stability, reproducibility and maintainability of releases, product-edc will undergo the following changes:
+To improve stability, reproducibility and maintainability of releases, tractusx-edc will undergo the following changes:
 
 - use EDC `SNAPSHOT` builds during development
 - use release versions of EDC in releases. Release branches must not change upstream dependency versions, unless there
@@ -23,7 +23,7 @@ Up until now, the only way out was cherry-picking, which is extremely cumbersome
 parallel build pipeline to publish the cherry-picked artifacts of EDC (and potentially others). With the approach
 presented here, cherry-picking is still an option, but there are easier alternatives to it. 
 
-Every release version published by product-edc must be reproducible at any time.
+Every release version published by tractusx-edc must be reproducible at any time.
 
 ## Approach
 
@@ -59,7 +59,7 @@ upstream's development has progressed to the point of breaking changes.
 
 ### Changes to the branching model
 
-Product-edc's branching model is already very close to
+Tractusx-edc's branching model is already very close to
 the [GitFlow branching model](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=What%20is%20Gitflow%3F,lived%20branches%20and%20larger%20commits)
 which is good. The following changes need to be made:
 
@@ -96,7 +96,7 @@ in [this Jira issue](https://jira.catena-x.net/browse/A1IDSC-408)). Upstream EDC
 builds as actual releases (as opposed to: snapshots) to a separate OSSRH-operated repository (see
 [this EDC decision record](https://github.com/eclipse-edc/Connector/tree/main/docs/developer/decision-records/2023-02-10-nightly-builds)).
 
-Unfortunately there is no way to automatically trigger the product-edc build whenever a new EDC nightly is
+Unfortunately there is no way to automatically trigger the tractusx-edc build whenever a new EDC nightly is
 created. The most reliable method is to periodically query for the latest EDC nightly, e.g. leveraging GitHub's `dependabot` feature, or using the method highlighted in the aforementioned Jira issue:
 
 ```shell
