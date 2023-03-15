@@ -2,9 +2,9 @@ package org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.did;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolverRegistry;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 
 public class DidDocumentResolverRegistryImpl implements DidDocumentResolverRegistry {

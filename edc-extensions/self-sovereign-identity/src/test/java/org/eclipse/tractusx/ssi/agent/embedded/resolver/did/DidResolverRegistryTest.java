@@ -2,10 +2,10 @@ package org.eclipse.tractusx.ssi.agent.embedded.resolver.did;
 
 import lombok.SneakyThrows;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.did.DidDocumentResolverRegistryImpl;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.resolver.DidWebDocumentResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

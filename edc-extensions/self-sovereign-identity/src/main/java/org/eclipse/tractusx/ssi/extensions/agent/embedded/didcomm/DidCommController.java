@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.controller;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.didcomm;
 
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.ws.rs.BadRequestException;
@@ -16,12 +16,12 @@ import org.eclipse.tractusx.ssi.extensions.core.spi.verifiable.credential.Verifi
 /** Internet facing API for other connector to request verifiable credentials */
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/ssi")
-public class VerifiablePresentationController {
+public class DidCommController {
 
   private final VerifiableCredentialWallet credentialStore;
   private final SerializedJwtPresentationFactory presentationFactory;
 
-  public VerifiablePresentationController(
+  public DidCommController(
       VerifiableCredentialWallet verifiableCredentialStore,
       SerializedJwtPresentationFactory presentationFactory) {
     this.credentialStore = verifiableCredentialStore;
@@ -30,7 +30,7 @@ public class VerifiablePresentationController {
 
   // maybe https://w3c-ccg.github.io/vp-request-spec/ ?
   @GET
-  @Path("/verifiable-presentation/{requestedCredentialType}")
+  @Path("/did/comm/{requestedCredentialType}")
   public String request(@PathParam("requestedCredentialType") String requestedCredentialType) {
 
     // TODO Don't just give out credentials to anybody. There should be some check here for the

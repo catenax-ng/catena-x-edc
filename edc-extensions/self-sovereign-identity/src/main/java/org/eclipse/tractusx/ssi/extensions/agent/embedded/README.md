@@ -28,9 +28,9 @@ https://w3c-ccg.github.io/did-method-web/
 
 ### File System Wallet
 
-| Name                                | Description                             | Mandatory |
-|:------------------------------------|:----------------------------------------|-----------|
-| edc.ssi.wallet.credential.directory | Path to verifiable credential directory | X         |
+| Name                                | Description                                                 | Mandatory |
+|:------------------------------------|:------------------------------------------------------------|-----------|
+| edc.ssi.wallet.credential.directory | Path to verifiable credential directory. Default `/tmp/vc/` |           |
 
 ### Vault Wallet
 

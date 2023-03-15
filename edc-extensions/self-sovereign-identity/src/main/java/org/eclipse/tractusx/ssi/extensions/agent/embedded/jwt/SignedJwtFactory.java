@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.credentials.SerializedVerifiablePresentation;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.key.SigningKeyResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiSettingException;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.key.SigningKeyResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.setting.SsiAgentSettings;
 import org.jetbrains.annotations.NotNull;
 

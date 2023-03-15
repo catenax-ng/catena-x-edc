@@ -17,6 +17,7 @@ public class SsiFileSystemWalletExtension implements ServiceExtension {
   public static final String EXTENSION_NAME = "File System Wallet Extension";
 
   public static final String SETTINGS_WALLET_PATH = "edc.ssi.wallet.credential.filepath";
+  public static final String SETTINGS_WALLET_PATH_DEFAULT = "/tmp/vc";
 
   private ServiceExtensionContext context;
 
@@ -54,7 +55,13 @@ public class SsiFileSystemWalletExtension implements ServiceExtension {
 
     final String credentialFilePath = context.getSetting(SETTINGS_WALLET_PATH, null);
     if (credentialFilePath == null) {
-      throw new IllegalArgumentException("Mandatory setting not provided: " + SETTINGS_WALLET_PATH);
+      context
+          .getMonitor()
+          .info(
+              String.format(
+                  "FileSystemWallet: No setting for %s provided. Using default path for credentials: %s",
+                  SETTINGS_WALLET_PATH, SETTINGS_WALLET_PATH_DEFAULT));
+      return Path.of(SETTINGS_WALLET_PATH_DEFAULT);
     }
     try {
       return Path.of(credentialFilePath);

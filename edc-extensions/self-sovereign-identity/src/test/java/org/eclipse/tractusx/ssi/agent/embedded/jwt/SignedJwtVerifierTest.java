@@ -2,12 +2,12 @@ package org.eclipse.tractusx.ssi.agent.embedded.jwt;
 
 import lombok.SneakyThrows;
 import org.eclipse.edc.spi.monitor.Monitor;
+import org.eclipse.tractusx.ssi.agent.embedded.jsonld.DanubCredentialFactory;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.credentials.SerializedVerifiablePresentation;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.jsonLd.DanubTechMapper;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.jsonLd.JsonLdSerializer;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.jwt.SignedJwtVerifier;
-import org.eclipse.tractusx.ssi.agent.embedded.jsonld.DanubCredentialFactory;
 import org.eclipse.tractusx.ssi.extensions.core.spi.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.test.utils.TestDidDocumentResolver;
 import org.eclipse.tractusx.ssi.test.utils.TestIdentity;
