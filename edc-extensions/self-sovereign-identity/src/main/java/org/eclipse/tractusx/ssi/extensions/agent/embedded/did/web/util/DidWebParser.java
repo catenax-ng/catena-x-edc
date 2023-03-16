@@ -1,10 +1,11 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.util;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.exception.DidWebException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.exception.DidWebException;
 
 public class DidWebParser {
 

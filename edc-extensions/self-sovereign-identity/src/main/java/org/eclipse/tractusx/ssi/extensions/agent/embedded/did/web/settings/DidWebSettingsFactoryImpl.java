@@ -1,9 +1,9 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings;
 
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.SsiDidWebExtension;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.exception.DidWebException;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.SsiDidWebExtension;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.exception.DidWebException;
 
 public class DidWebSettingsFactoryImpl implements DidWebSettingsFactory {
 

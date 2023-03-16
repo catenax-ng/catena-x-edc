@@ -1,12 +1,12 @@
-package org.eclipse.tractusx.ssi.agent.embedded.web.resolver.util;
+package org.eclipse.tractusx.ssi.agent.embedded.did.web.resolver.util;
 
 import java.net.URL;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethodIdentifier;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.exception.DidWebException;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.util.DidWebParser;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.exception.DidWebException;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.util.DidWebParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

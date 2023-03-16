@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web;
 
 import okhttp3.OkHttpClient;
 import org.eclipse.edc.runtime.metamodel.annotation.Requires;
@@ -7,13 +7,13 @@ import org.eclipse.edc.spi.security.Vault;
 import org.eclipse.edc.spi.system.ServiceExtension;
 import org.eclipse.edc.spi.system.ServiceExtensionContext;
 import org.eclipse.edc.web.spi.WebService;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings.DidWebSettings;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolverRegistry;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.controller.DidWebDocumentController;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.resolver.DidWebDocumentResolver;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings.DidWebSettings;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings.DidWebSettingsFactory;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings.DidWebSettingsFactoryImpl;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.controller.DidWebDocumentController;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.resolver.DidWebDocumentResolver;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings.DidWebSettingsFactory;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings.DidWebSettingsFactoryImpl;
 
 @Requires({DidDocumentResolverRegistry.class, Vault.class, WebService.class})
 public class SsiDidWebExtension implements ServiceExtension {

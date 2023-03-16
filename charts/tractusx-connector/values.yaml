@@ -462,8 +462,10 @@ ssi:
     filesystem:
       enabled: true
       path: /tmp/wallet
+      files:
+        - name: ""
+          content: ""
     vault:
-      enabled: false
       credentialsSecret: ""
 
 postgresql:

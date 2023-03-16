@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.resolver;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.resolver;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,15 +13,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.exception.DidWebException;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.util.Constants;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.exception.SsiException;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidDocument;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Ed25519VerificationKey2020;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.exception.DidWebException;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.util.Constants;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.util.DidWebParser;
 
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
@@ -99,12 +99,10 @@ public class DidWebDocumentResolver implements DidDocumentResolver {
               did, Ed25519VerificationKey2020.TYPE));
     }
 
-    var key =
-        Ed25519VerificationKey2020.builder()
-            .id(URI.create(verificationMethodId))
-            .controller(URI.create(verificationMethodController))
-            .multibase(MultibaseFactory.create(verificationMethodKey))
-            .build();
-    return key;
+    return Ed25519VerificationKey2020.builder()
+        .id(URI.create(verificationMethodId))
+        .controller(URI.create(verificationMethodController))
+        .multibase(MultibaseFactory.create(verificationMethodKey))
+        .build();
   }
 }

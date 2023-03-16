@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings;
 
 import lombok.Value;
 

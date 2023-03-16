@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.controller;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -6,7 +6,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.edc.spi.monitor.Monitor;
 import org.eclipse.edc.spi.security.Vault;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.settings.DidWebSettings;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.settings.DidWebSettings;
 
 @Produces({MediaType.APPLICATION_JSON})
 @Path("./well-known/did.json")

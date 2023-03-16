@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.util;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.util;
 
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 

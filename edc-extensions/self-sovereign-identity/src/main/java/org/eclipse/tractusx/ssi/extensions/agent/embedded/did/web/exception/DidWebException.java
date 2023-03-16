@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.extensions.agent.embedded.web.exception;
+package org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.exception;
 
 public class DidWebException extends RuntimeException {
 

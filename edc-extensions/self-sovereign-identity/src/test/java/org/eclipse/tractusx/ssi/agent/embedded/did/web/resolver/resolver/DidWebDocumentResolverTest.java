@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.ssi.agent.embedded.web.resolver.resolver;
+package org.eclipse.tractusx.ssi.agent.embedded.did.web.resolver.resolver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -10,7 +10,7 @@ import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.Did;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidDocument;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethod;
 import org.eclipse.tractusx.ssi.extensions.agent.embedded.spi.did.DidMethodIdentifier;
-import org.eclipse.tractusx.ssi.extensions.agent.embedded.web.resolver.DidWebDocumentResolver;
+import org.eclipse.tractusx.ssi.extensions.agent.embedded.did.web.resolver.DidWebDocumentResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
