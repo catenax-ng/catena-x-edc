@@ -1,5 +1,7 @@
 # Migration from 0.1.x to 0.3.x
 
+## Deprecation
+- the `edc-controlplane` and `edc-dataplane` charts are deprecated, please use `tractusx-connector` which combines the former ones
 
 ## Management API changes
 
@@ -27,3 +29,4 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 - Supported `/public` data plane endpoint without trailing slash, that can be eventually removed from the configuration
 - packages name changed from `org.eclipse.dataspaceconnector` to `org.eclipse.edc`
 - To specify multiple BPN into Policies the operator `OR` can be used. More details in the [business-partner-validation extension documentation](../../edc-extensions/business-partner-validation)
+- HTTP Dynamic Endpoint Data Reference: The URL for Endpoint Data Reference can be also provided via the call for starting the transfer process. More details [Http Dynamic EDR receiver](https://github.com/eclipse-edc/Connector/tree/main/extensions/control-plane/transfer/transfer-pull-http-dynamic-receiver)
