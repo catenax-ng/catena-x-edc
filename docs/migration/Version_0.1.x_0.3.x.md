@@ -14,9 +14,14 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 - concerning the Business Partner Validation Extension a so called orconstraint must be used instead of an IN operator. More details in the [related documentation entry](https://github.com/catenax-ng/product-edc/tree/0.3.0/edc-extensions/business-partner-validation)
 
 ## Settings changes
+- refactored the HTTP server contexts (more details on the [related decision record](https://eclipse-edc.github.io/docs/#/submodule/Connector/docs/developer/decision-records/2022-11-09-api-refactoring/renaming)). They need to be refactored as:
+  - `web.http.data` becomes `web.http.management`
+  - `web.http.ids` becomes `web.http.protocol`
+  - `web.http.validation`, `web.http.controlplane` and `web.http.dataplane` become `web.http.control`
+- Healthcheck api now it's exposed under the `management` context.
 - Removed default value for setting `edc.transfer.proxy.token.verifier.publickey.alias` so it must be valued accordingly
 - made the state machine settings configurable so it will be possible to tune them accordingly. More details in the [related documentation entry](https://eclipse-edc.github.io/docs/#/submodule/Connector/docs/developer/performance-tuning).
-- refactored the HTTP server contexts, they can be configured with the settings group `web.http.management`, `web.http.control`, `web.http.protocol`, `web.http.public`. More details on the [related decision record](https://eclipse-edc.github.io/docs/#/submodule/Connector/docs/developer/decision-records/2022-11-09-api-refactoring/renaming)
+- renamed `edc.receiver.http.endpoint` to `edc.receiver.http.dynamic.endpoint`
 - renamed `edc.oauth.public.key.alias` setting to `edc.oauth.certificate.alias`
 
 ## Other changes:
