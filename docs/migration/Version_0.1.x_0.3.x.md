@@ -27,3 +27,4 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 ## Other changes:
 - Supported `/public` data plane endpoint without trailing slash, that can be eventually removed from the configuration
 - packages name changed from `org.eclipse.dataspaceconnector` to `org.eclipse.edc`
+- To specify multiple BPN into policies the operator `OR` can be used. More details in the [business-partner-validation extension documentation](../../edc-extensions/business-partner-validation)
