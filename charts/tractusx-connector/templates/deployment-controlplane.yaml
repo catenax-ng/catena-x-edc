@@ -288,12 +288,13 @@ spec:
             - name: "EDC_VAULT_NAME"
               value: {{ .Values.vault.azure.name | required ".Values.vault.azure.name is required" | quote }}
             - name: "EDC_VAULT_CLIENTSECRET"
-              value: {{ .Values.vault.azure.secret | required ".Values.vault.azure.secret is required" | quote }}
+              value: {{ .Values.vault.azure.secret | quote }}
             - name: "EDC_VAULT_CERTIFICATE"
-              value: {{ .Values.vault.azure.certificate | required ".Values.vault.azure.certificate is required" | quote }}
+              value: {{ .Values.vault.azure.certificate | quote }}
           {{- end }}
 
             #####################
+
             ## DATA ENCRYPTION ##
             #####################
 
