@@ -5,9 +5,6 @@ description: 'Connector Kit'
 sidebar_position: 2
 ---
 
-:::info TBD
-This information is taken from the [eclipse-edc](https://github.com/eclipse-edc/Connector/blob/main/docs/developer/architecture/domain-model.md) project.
-:::
 
 ![domain-model](images/domain-model.png)
 > The shown picture illustrates only a generic view of the Domain Model and is not intended to show all aspects of the project.
@@ -19,7 +16,7 @@ organizations. For each asset, a [`DataAddress`](#data-address) needs to be reso
 
 ## Data address
 
-A data address is a pointer into the physical storage location where an asset will be stored
+A data address is a pointer into the physical storage location where an asset will be stored.
 
 ## Contract
 
@@ -57,8 +54,7 @@ passes several stages which are explained below:
 ## Policy
 
 Contract policies represent permitted and prohibited actions over a certain asset. These actions can be limited further
-by constraints (temporal or spatial) and duties ("e.g. deletion of the data after 30 days"). Further information is
-provided in a separate [section](usage-control/policies.md).
+by constraints (temporal or spatial) and duties ("e.g. deletion of the data after 30 days").
 
 ## Data request
 
