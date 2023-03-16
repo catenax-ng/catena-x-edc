@@ -11,7 +11,6 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 - Removed field `assetId` from `ContractOffer`. It was always null though, so there should be nothing to do about it.
 - on `POST /contractdefinitions` a `duration` field can be added to control the duration of the contract.
 - added the `GET /assets/{id}/address` endpoint to being able to retrieve the stored `DataAddress`
-- concerning the Business Partner Validation Extension a so called orconstraint must be used instead of an IN operator. More details in the [related documentation entry](https://github.com/catenax-ng/product-edc/tree/0.3.0/edc-extensions/business-partner-validation)
 
 ## Settings changes
 - refactored the HTTP server contexts (more details on the [related decision record](https://eclipse-edc.github.io/docs/#/submodule/Connector/docs/developer/decision-records/2022-11-09-api-refactoring/renaming)). They need to be refactored as:
@@ -27,4 +26,4 @@ details at the [official documentation on swaggerhub](https://app.swaggerhub.com
 ## Other changes:
 - Supported `/public` data plane endpoint without trailing slash, that can be eventually removed from the configuration
 - packages name changed from `org.eclipse.dataspaceconnector` to `org.eclipse.edc`
-- To specify multiple BPN into policies the operator `OR` can be used. More details in the [business-partner-validation extension documentation](../../edc-extensions/business-partner-validation)
+- To specify multiple BPN into Policies the operator `OR` can be used. More details in the [business-partner-validation extension documentation](../../edc-extensions/business-partner-validation)
