@@ -1,3 +1,5 @@
+# :warning: ** Product EDC is deprecated and is currently in migration process. Please Refer to the new [Repository](https://github.com/eclipse-tractusx/tractusx-edc)**
+
 <a name="readme-top"></a>
 
 <!-- Project Shields -->
